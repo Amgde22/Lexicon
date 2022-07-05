@@ -132,7 +132,9 @@ exports.playerModel = playerModel;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.strike = exports.basicAttackCardClass = void 0;
+exports.strike = exports.basicAttackCardClass = exports.bash = void 0;
+
+var _cardsManager = require("./01cardsManager");
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
@@ -150,20 +152,31 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var basicAttackCardClass = /*#__PURE__*/function () {
+  function basicAttackCardClass(damage, energyCost) {
+    _classCallCheck(this, basicAttackCardClass);
 
-var basicAttackCardClass = /*#__PURE__*/_createClass(function basicAttackCardClass(damage, energyCost) {
-  _classCallCheck(this, basicAttackCardClass);
+    this.damage = damage;
+    this.energyCost = energyCost;
+    this.target = "enemy";
+    this.type = "attack";
+  }
 
-  this.damage = damage;
-  this.energyCost = energyCost;
-  this.target = "enemy";
-  this.type = "attack";
-});
+  _createClass(basicAttackCardClass, [{
+    key: "play",
+    value: function play() {
+      console.log(this.name, " got played");
+    }
+  }]);
+
+  return basicAttackCardClass;
+}();
 
 exports.basicAttackCardClass = basicAttackCardClass;
 
@@ -177,7 +190,7 @@ var strike = /*#__PURE__*/function (_basicAttackCardClass) {
 
     _classCallCheck(this, strike);
 
-    _this = _super.call(this, damage, energyCost);
+    _this = _super.call(this, 7, 1);
     _this.name = "Strike";
     return _this;
   }
@@ -186,29 +199,142 @@ var strike = /*#__PURE__*/function (_basicAttackCardClass) {
 }(basicAttackCardClass);
 
 exports.strike = strike;
-},{}],"jscripts/cards/skillCardClass.js":[function(require,module,exports) {
+
+var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
+  _inherits(bash, _basicAttackCardClass2);
+
+  var _super2 = _createSuper(bash);
+
+  function bash(damage, energyCost) {
+    var _this2;
+
+    _classCallCheck(this, bash);
+
+    _this2 = _super2.call(this, 10, 2);
+    _this2.name = "Bash";
+    return _this2;
+  }
+
+  _createClass(bash, [{
+    key: "play",
+    value: function play() {
+      console.log("".concat(this.name, " attacked for ").concat(this.damage, " "));
+    }
+  }]);
+
+  return bash;
+}(basicAttackCardClass); // export class card extends basicAttackCardClass{
+//   constructor(damage,energyCost){
+//     super(1 , 1) 
+//     this.name = ""
+//   }
+//   play(){
+//     console.log(`${this.name} attacked for ${this.damage}`) 
+//   }
+// }
+
+
+exports.bash = bash;
+},{"./01cardsManager":"jscripts/cards/01cardsManager.js"}],"jscripts/cards/skillCardClass.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.basicSkillCardClass = void 0;
+exports.defend = exports.card = exports.basicSkillCardClass = void 0;
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var basicSkillCardClass = /*#__PURE__*/function () {
+  function basicSkillCardClass(energyCost) {
+    _classCallCheck(this, basicSkillCardClass);
 
-var basicSkillCardClass = /*#__PURE__*/_createClass(function basicSkillCardClass(energyCost) {
-  _classCallCheck(this, basicSkillCardClass);
+    this.energyCost = energyCost;
+    this.target = "player";
+    this.type = "skill";
+  }
 
-  this.energyCost = energyCost;
-  this.target = "player";
-  this.type = "skill";
-});
+  _createClass(basicSkillCardClass, [{
+    key: "play",
+    value: function play() {
+      console.log(this.name, " got played");
+    }
+  }]);
+
+  return basicSkillCardClass;
+}();
 
 exports.basicSkillCardClass = basicSkillCardClass;
+
+var defend = /*#__PURE__*/function (_basicSkillCardClass) {
+  _inherits(defend, _basicSkillCardClass);
+
+  var _super = _createSuper(defend);
+
+  function defend(energyCost) {
+    _classCallCheck(this, defend);
+
+    return _super.call(this, 1);
+  }
+
+  _createClass(defend, [{
+    key: "play",
+    value: function play() {
+      console.log("".concat(this.name, " add 5 block"));
+    }
+  }]);
+
+  return defend;
+}(basicSkillCardClass);
+
+exports.defend = defend;
+
+var card = /*#__PURE__*/function (_basicSkillCardClass2) {
+  _inherits(card, _basicSkillCardClass2);
+
+  var _super2 = _createSuper(card);
+
+  function card(energyCost) {
+    var _this;
+
+    _classCallCheck(this, card);
+
+    _this.energyCost = energyCost;
+    _this.name = "";
+    return _possibleConstructorReturn(_this);
+  }
+
+  _createClass(card, [{
+    key: "play",
+    value: function play() {
+      console.log("".concat(this.name));
+    }
+  }]);
+
+  return card;
+}(basicSkillCardClass);
+
+exports.card = card;
 },{}],"jscripts/cards/powerCardClasses.js":[function(require,module,exports) {
 "use strict";
 
@@ -238,7 +364,7 @@ exports.basicPowerCardClass = basicPowerCardClass;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.playerStartingDeck = exports.drawPile = exports.discardPile = void 0;
+exports.playerStartingDeck = exports.playerHand = exports.drawPile = exports.discardPile = void 0;
 
 var attackCardClasses = _interopRequireWildcard(require("./attackCardClasses.js"));
 
@@ -254,7 +380,9 @@ var drawPile = [];
 exports.drawPile = drawPile;
 var discardPile = [];
 exports.discardPile = discardPile;
-var playerStartingDeck = [new attackCardClasses.strike(7, 1), new attackCardClasses.strike(7, 1), new attackCardClasses.strike(7, 1)];
+var playerHand = [];
+exports.playerHand = playerHand;
+var playerStartingDeck = [new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new skillCardClasses.defend(), new skillCardClasses.defend(), new skillCardClasses.defend(), new attackCardClasses.bash()];
 exports.playerStartingDeck = playerStartingDeck;
 },{"./attackCardClasses.js":"jscripts/cards/attackCardClasses.js","./skillCardClass.js":"jscripts/cards/skillCardClass.js","./powerCardClasses.js":"jscripts/cards/powerCardClasses.js"}],"jscripts/player.js":[function(require,module,exports) {
 "use strict";
@@ -337,8 +465,10 @@ function shuffle(array) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.drawCardsIntoHand = drawCardsIntoHand;
 exports.setDrawPile = setDrawPile;
 exports.shuffle = shuffle;
+exports.shuffleDrawPile = shuffleDrawPile;
 
 var _player = require("../player.js");
 
@@ -362,8 +492,25 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 function setDrawPile(deck) {
   var shuffled_deck = shuffle(deck);
-  deck = shuffled_deck;
-  return deck;
+  cardsManager.drawPile = shuffled_deck;
+  console.log(cardsManager.drawPile);
+}
+
+function drawCardsIntoHand(draw) {
+  var _player$buffs$draw;
+
+  var bonusDrawBuff = (_player$buffs$draw = _player.player.buffs.draw) !== null && _player$buffs$draw !== void 0 ? _player$buffs$draw : 0;
+  var playerDraw = 5;
+  var totalDraw = draw !== null && draw !== void 0 ? draw : playerDraw + bonusDrawBuff;
+
+  for (var i = 1; i <= totalDraw; i++) {
+    if (cardsManager.drawPile == 0) {
+      shuffleDrawPile();
+    }
+
+    var drawnCard = cardsManager.drawPile.pop();
+    cardsManager.playerHand.push(drawnCard);
+  }
 }
 
 function shuffle(array) {
@@ -376,6 +523,12 @@ function shuffle(array) {
   }
 
   return shuffled_array;
+}
+
+function shuffleDrawPile() {
+  // asuming drawPile has 0 cards
+  var shuffled_discard = shuffle(cardsManager.discardPile);
+  cardsManager.drawPile = _toConsumableArray(shuffled_discard);
 }
 },{"../player.js":"jscripts/player.js","../cards/01cardsManager.js":"jscripts/cards/01cardsManager.js"}],"jscripts/battle.js":[function(require,module,exports) {
 "use strict";
@@ -397,6 +550,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 function battleInit() {
   cardFunctions.setDrawPile(_player.player.deck);
+  cardFunctions.drawCardsIntoHand();
 }
 },{"./player.js":"jscripts/player.js","./functions/battleFunctions.js":"jscripts/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/functions/cardFunctions.js"}],"jscripts/main.js":[function(require,module,exports) {
 "use strict";
@@ -405,8 +559,16 @@ var _player = require("./player.js");
 
 var _battle = require("./battle.js");
 
+var cardsManager = _interopRequireWildcard(require("./cards/01cardsManager.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
 (0, _battle.battleInit)();
-},{"./player.js":"jscripts/player.js","./battle.js":"jscripts/battle.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+console.log(cardsManager.playerHand);
+console.log(cardsManager.drawPile);
+},{"./player.js":"jscripts/player.js","./battle.js":"jscripts/battle.js","./cards/01cardsManager.js":"jscripts/cards/01cardsManager.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

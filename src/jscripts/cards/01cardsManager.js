@@ -4,9 +4,15 @@ import * as powerCardClasses from "./powerCardClasses.js"
 
 let drawPile = []
 let discardPile = []
+let playerHand =  []
 const playerStartingDeck = [
-  new attackCardClasses.strike(7,1),
-  new attackCardClasses.strike(7,1),
-  new attackCardClasses.strike(7,1), 
+  new attackCardClasses.strike(),
+  new attackCardClasses.strike(),
+  new attackCardClasses.strike(),
+  new skillCardClasses.defend(),
+  new skillCardClasses.defend(),
+  new skillCardClasses.defend(),
+  new attackCardClasses.bash(),
+
 ]
-export {playerStartingDeck , drawPile , discardPile}
+export {playerStartingDeck , drawPile , discardPile , playerHand}
