@@ -1,0 +1,1 @@
+export const playerModel = document.querySelector(".player")
