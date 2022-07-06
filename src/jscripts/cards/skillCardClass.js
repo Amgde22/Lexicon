@@ -1,4 +1,8 @@
+import * as domFunctions from "../functions/domFunctions.js"
+
 export class basicSkillCardClass{
+static generatedCardType = "skill"
+
   constructor(energyCost){
     this.energyCost = energyCost
 
@@ -13,6 +17,10 @@ export class basicSkillCardClass{
 export class defend extends basicSkillCardClass{
   constructor(energyCost){
     super(1)
+
+    this.name = "Defend"
+    
+    this.element = domFunctions.generateCardDomElement(this)
   }
   play(){
     console.log(`${this.name} add 5 block`);
@@ -24,6 +32,8 @@ export class card extends basicSkillCardClass{
     this.energyCost = energyCost
 
     this.name = ""
+
+    this.element = domFunctions.generateCardDomElement(this)
   }
   play(){
     console.log(`${this.name}`);

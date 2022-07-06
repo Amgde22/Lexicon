@@ -1,12 +1,14 @@
 import {player} from "../player.js"
 import * as cardsManager from "../cards/01cardsManager.js"
+import * as domFunctions from "../functions/domFunctions.js"
+
  
 
 export function setDrawPile(deck) {
   let shuffled_deck = shuffle(deck)
 
   cardsManager.drawPile = shuffled_deck
-  console.log(cardsManager.drawPile);
+
 
 } 
 
@@ -23,8 +25,10 @@ export function drawCardsIntoHand(draw){
 
     let drawnCard = cardsManager.drawPile.pop()
     cardsManager.playerHand.push(drawnCard)
-
+  
+    domFunctions.renderCardIntoHand(drawnCard)
   }
+
 
 }
 
@@ -40,9 +44,13 @@ export function drawCardsIntoHand(draw){
       return shuffled_array
     }
 
-    export function shuffleDrawPile(){
-      // asuming drawPile has 0 cards
-      
-      let shuffled_discard = shuffle(cardsManager.discardPile)
-      cardsManager.drawPile = [...shuffled_discard]
-    }
+export function shuffleDrawPile(){
+  // asuming drawPile has 0 cards
+  
+  let shuffled_discard = shuffle(cardsManager.discardPile)
+  cardsManager.drawPile = [...shuffled_discard]
+}
+
+export function determineCardType(card) {
+  return card.constructor.generatedCardType
+}

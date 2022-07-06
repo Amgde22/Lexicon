@@ -126,7 +126,123 @@ Object.defineProperty(exports, "__esModule", {
 exports.playerModel = void 0;
 var playerModel = document.querySelector(".player");
 exports.playerModel = playerModel;
-},{}],"jscripts/cards/attackCardClasses.js":[function(require,module,exports) {
+},{}],"jscripts/functions/cardFunctions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.determineCardType = determineCardType;
+exports.drawCardsIntoHand = drawCardsIntoHand;
+exports.setDrawPile = setDrawPile;
+exports.shuffle = shuffle;
+exports.shuffleDrawPile = shuffleDrawPile;
+
+var _player = require("../player.js");
+
+var cardsManager = _interopRequireWildcard(require("../cards/01cardsManager.js"));
+
+var domFunctions = _interopRequireWildcard(require("../functions/domFunctions.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function setDrawPile(deck) {
+  var shuffled_deck = shuffle(deck);
+  cardsManager.drawPile = shuffled_deck;
+}
+
+function drawCardsIntoHand(draw) {
+  var _player$buffs$draw;
+
+  var bonusDrawBuff = (_player$buffs$draw = _player.player.buffs.draw) !== null && _player$buffs$draw !== void 0 ? _player$buffs$draw : 0;
+  var playerDraw = 5;
+  var totalDraw = draw !== null && draw !== void 0 ? draw : playerDraw + bonusDrawBuff;
+
+  for (var i = 1; i <= totalDraw; i++) {
+    if (cardsManager.drawPile == 0) {
+      shuffleDrawPile();
+    }
+
+    var drawnCard = cardsManager.drawPile.pop();
+    cardsManager.playerHand.push(drawnCard);
+    domFunctions.renderCardIntoHand(drawnCard);
+  }
+}
+
+function shuffle(array) {
+  var our_array = Array.from(array);
+  var shuffled_array = [];
+
+  for (var i = 0; i < array.length; i++) {
+    var random_index = Math.floor(Math.random() * our_array.length);
+    shuffled_array.push.apply(shuffled_array, _toConsumableArray(our_array.splice(random_index, 1)));
+  }
+
+  return shuffled_array;
+}
+
+function shuffleDrawPile() {
+  // asuming drawPile has 0 cards
+  var shuffled_discard = shuffle(cardsManager.discardPile);
+  cardsManager.drawPile = _toConsumableArray(shuffled_discard);
+}
+
+function determineCardType(card) {
+  return card.constructor.generatedCardType;
+}
+},{"../player.js":"jscripts/player.js","../cards/01cardsManager.js":"jscripts/cards/01cardsManager.js","../functions/domFunctions.js":"jscripts/functions/domFunctions.js"}],"jscripts/functions/domFunctions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.generateCardDomElement = generateCardDomElement;
+exports.handElement = void 0;
+exports.renderCardIntoHand = renderCardIntoHand;
+
+var _player = require("../player.js");
+
+var cardsManager = _interopRequireWildcard(require("../cards/01cardsManager.js"));
+
+var cardFunctions = _interopRequireWildcard(require("../functions/cardFunctions.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+var handElement = document.querySelector(".hand");
+exports.handElement = handElement;
+
+function generateCardDomElement(card) {
+  var cardElement = document.createElement("div");
+  var cardType = cardFunctions.determineCardType(card);
+  var cardName = card.name.replaceAll(" ", "");
+  cardElement.classList.add("card");
+  cardElement.classList.add(cardType);
+  cardElement.classList.add(cardName);
+  cardElement.cardObject = card;
+  return cardElement;
+}
+
+function renderCardIntoHand(card) {
+  var cardElement = card.element;
+  handElement.append(cardElement);
+}
+},{"../player.js":"jscripts/player.js","../cards/01cardsManager.js":"jscripts/cards/01cardsManager.js","../functions/cardFunctions.js":"jscripts/functions/cardFunctions.js"}],"jscripts/cards/attackCardClasses.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -134,7 +250,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.strike = exports.basicAttackCardClass = exports.bash = void 0;
 
-var _cardsManager = require("./01cardsManager");
+var cardsManager = _interopRequireWildcard(require("../cards/01cardsManager.js"));
+
+var domFunctions = _interopRequireWildcard(require("../functions/domFunctions.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
@@ -157,6 +279,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var basicAttackCardClass = /*#__PURE__*/function () {
   function basicAttackCardClass(damage, energyCost) {
@@ -180,6 +304,8 @@ var basicAttackCardClass = /*#__PURE__*/function () {
 
 exports.basicAttackCardClass = basicAttackCardClass;
 
+_defineProperty(basicAttackCardClass, "generatedCardType", "attack");
+
 var strike = /*#__PURE__*/function (_basicAttackCardClass) {
   _inherits(strike, _basicAttackCardClass);
 
@@ -192,6 +318,7 @@ var strike = /*#__PURE__*/function (_basicAttackCardClass) {
 
     _this = _super.call(this, 7, 1);
     _this.name = "Strike";
+    _this.element = domFunctions.generateCardDomElement(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -212,6 +339,7 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
 
     _this2 = _super2.call(this, 10, 2);
     _this2.name = "Bash";
+    _this2.element = domFunctions.generateCardDomElement(_assertThisInitialized(_this2));
     return _this2;
   }
 
@@ -227,6 +355,7 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
 //   constructor(damage,energyCost){
 //     super(1 , 1) 
 //     this.name = ""
+//     this.element = domFunctions.generateCardDomElement(this)
 //   }
 //   play(){
 //     console.log(`${this.name} attacked for ${this.damage}`) 
@@ -235,13 +364,19 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
 
 
 exports.bash = bash;
-},{"./01cardsManager":"jscripts/cards/01cardsManager.js"}],"jscripts/cards/skillCardClass.js":[function(require,module,exports) {
+},{"../cards/01cardsManager.js":"jscripts/cards/01cardsManager.js","../functions/domFunctions.js":"jscripts/functions/domFunctions.js"}],"jscripts/cards/skillCardClass.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.defend = exports.card = exports.basicSkillCardClass = void 0;
+
+var domFunctions = _interopRequireWildcard(require("../functions/domFunctions.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
@@ -265,6 +400,8 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var basicSkillCardClass = /*#__PURE__*/function () {
   function basicSkillCardClass(energyCost) {
     _classCallCheck(this, basicSkillCardClass);
@@ -286,15 +423,22 @@ var basicSkillCardClass = /*#__PURE__*/function () {
 
 exports.basicSkillCardClass = basicSkillCardClass;
 
+_defineProperty(basicSkillCardClass, "generatedCardType", "skill");
+
 var defend = /*#__PURE__*/function (_basicSkillCardClass) {
   _inherits(defend, _basicSkillCardClass);
 
   var _super = _createSuper(defend);
 
   function defend(energyCost) {
+    var _this;
+
     _classCallCheck(this, defend);
 
-    return _super.call(this, 1);
+    _this = _super.call(this, 1);
+    _this.name = "Defend";
+    _this.element = domFunctions.generateCardDomElement(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(defend, [{
@@ -315,13 +459,14 @@ var card = /*#__PURE__*/function (_basicSkillCardClass2) {
   var _super2 = _createSuper(card);
 
   function card(energyCost) {
-    var _this;
+    var _this2;
 
     _classCallCheck(this, card);
 
-    _this.energyCost = energyCost;
-    _this.name = "";
-    return _possibleConstructorReturn(_this);
+    _this2.energyCost = energyCost;
+    _this2.name = "";
+    _this2.element = domFunctions.generateCardDomElement(_assertThisInitialized(_this2));
+    return _possibleConstructorReturn(_this2);
   }
 
   _createClass(card, [{
@@ -335,7 +480,7 @@ var card = /*#__PURE__*/function (_basicSkillCardClass2) {
 }(basicSkillCardClass);
 
 exports.card = card;
-},{}],"jscripts/cards/powerCardClasses.js":[function(require,module,exports) {
+},{"../functions/domFunctions.js":"jscripts/functions/domFunctions.js"}],"jscripts/cards/powerCardClasses.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -343,22 +488,43 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.basicPowerCardClass = void 0;
 
+var domFunctions = _interopRequireWildcard(require("../functions/domFunctions.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var basicPowerCardClass = /*#__PURE__*/_createClass(function basicPowerCardClass(energyCost) {
-  _classCallCheck(this, basicPowerCardClass);
+var basicPowerCardClass = /*#__PURE__*/function () {
+  function basicPowerCardClass(energyCost) {
+    _classCallCheck(this, basicPowerCardClass);
 
-  this.energyCost = energyCost;
-  this.target = "player";
-  this.type = "power";
-});
+    this.energyCost = energyCost;
+    this.target = "player";
+    this.type = "power";
+  }
+
+  _createClass(basicPowerCardClass, [{
+    key: "play",
+    value: function play() {
+      console.log(this.name, " got played");
+    }
+  }]);
+
+  return basicPowerCardClass;
+}();
 
 exports.basicPowerCardClass = basicPowerCardClass;
-},{}],"jscripts/cards/01cardsManager.js":[function(require,module,exports) {
+
+_defineProperty(basicPowerCardClass, "generatedCardType", "power");
+},{"../functions/domFunctions.js":"jscripts/functions/domFunctions.js"}],"jscripts/cards/01cardsManager.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -429,108 +595,8 @@ var playerClass = /*#__PURE__*/function () {
 var player = new playerClass(73, _cardsManager.playerStartingDeck, {});
 exports.player = player;
 },{"./dom.js":"jscripts/dom.js","./cards/01cardsManager.js":"jscripts/cards/01cardsManager.js"}],"jscripts/functions/battleFunctions.js":[function(require,module,exports) {
-"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.shuffle = shuffle;
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function shuffle(array) {
-  var our_array = Array.from(array);
-  var shuffled_array = [];
-
-  for (var i = 0; i < array.length; i++) {
-    var random_index = Math.floor(Math.random() * our_array.length);
-    shuffled_array.push.apply(shuffled_array, _toConsumableArray(our_array.splice(random_index, 1)));
-  }
-
-  return shuffled_array;
-}
-},{}],"jscripts/functions/cardFunctions.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.drawCardsIntoHand = drawCardsIntoHand;
-exports.setDrawPile = setDrawPile;
-exports.shuffle = shuffle;
-exports.shuffleDrawPile = shuffleDrawPile;
-
-var _player = require("../player.js");
-
-var cardsManager = _interopRequireWildcard(require("../cards/01cardsManager.js"));
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function setDrawPile(deck) {
-  var shuffled_deck = shuffle(deck);
-  cardsManager.drawPile = shuffled_deck;
-  console.log(cardsManager.drawPile);
-}
-
-function drawCardsIntoHand(draw) {
-  var _player$buffs$draw;
-
-  var bonusDrawBuff = (_player$buffs$draw = _player.player.buffs.draw) !== null && _player$buffs$draw !== void 0 ? _player$buffs$draw : 0;
-  var playerDraw = 5;
-  var totalDraw = draw !== null && draw !== void 0 ? draw : playerDraw + bonusDrawBuff;
-
-  for (var i = 1; i <= totalDraw; i++) {
-    if (cardsManager.drawPile == 0) {
-      shuffleDrawPile();
-    }
-
-    var drawnCard = cardsManager.drawPile.pop();
-    cardsManager.playerHand.push(drawnCard);
-  }
-}
-
-function shuffle(array) {
-  var our_array = Array.from(array);
-  var shuffled_array = [];
-
-  for (var i = 0; i < array.length; i++) {
-    var random_index = Math.floor(Math.random() * our_array.length);
-    shuffled_array.push.apply(shuffled_array, _toConsumableArray(our_array.splice(random_index, 1)));
-  }
-
-  return shuffled_array;
-}
-
-function shuffleDrawPile() {
-  // asuming drawPile has 0 cards
-  var shuffled_discard = shuffle(cardsManager.discardPile);
-  cardsManager.drawPile = _toConsumableArray(shuffled_discard);
-}
-},{"../player.js":"jscripts/player.js","../cards/01cardsManager.js":"jscripts/cards/01cardsManager.js"}],"jscripts/battle.js":[function(require,module,exports) {
+},{}],"jscripts/battle.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -568,6 +634,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 (0, _battle.battleInit)();
 console.log(cardsManager.playerHand);
 console.log(cardsManager.drawPile);
+console.log(cardsManager.playerHand[0].element.cardObject);
 },{"./player.js":"jscripts/player.js","./battle.js":"jscripts/battle.js","./cards/01cardsManager.js":"jscripts/cards/01cardsManager.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

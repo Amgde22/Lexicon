@@ -1,9 +1,14 @@
-import { drawPile } from "./01cardsManager";
+import * as cardsManager from "../cards/01cardsManager.js"
+import * as domFunctions from "../functions/domFunctions.js"
 
 export class basicAttackCardClass{
+static generatedCardType = "attack"
+
   constructor(damage,energyCost){
     this.damage = damage
     this.energyCost = energyCost
+    
+
 
     this.target = "enemy"
     this.type = "attack"
@@ -18,6 +23,8 @@ export class strike extends basicAttackCardClass {
     super(7 , 1)
 
     this.name = "Strike"
+
+    this.element = domFunctions.generateCardDomElement(this)
   }
 }
 
@@ -26,6 +33,8 @@ export class bash extends basicAttackCardClass{
     super(10 , 2) 
 
     this.name = "Bash"
+
+    this.element = domFunctions.generateCardDomElement(this)
   }
 
   play(){
@@ -39,6 +48,8 @@ export class bash extends basicAttackCardClass{
 //     super(1 , 1) 
 
 //     this.name = ""
+    
+//     this.element = domFunctions.generateCardDomElement(this)
 //   }
 
 //   play(){
