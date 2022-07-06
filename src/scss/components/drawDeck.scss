@@ -38,18 +38,18 @@
   z-index: 0;
 
 
-  &:hover , &:focus {
+  &:hover , &:focus-within {
     transform: translateY(-30%) scale(1.2);
-    z-index: 1;
+    z-index: 2;
   }
   &:nth-of-type(1){
     margin-left: 0;
   }
+}
 
-  // &:nth-of-type(3){
-  //   transform: translateY(-70%)  ;
-  //   background-color: red;
-  // }
+.card.selectedCard {
+box-shadow: 0 0 10px 10px rgb(126, 213, 241);
+z-index: 1;
 }
 
 @media (max-width:500px){
@@ -71,7 +71,7 @@
 
     &:hover , &:focus {
     transform: translateY(-40%) scale(.85);
-    z-index: 1;
+    z-index: 2;
   }
   }
 }

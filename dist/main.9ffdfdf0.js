@@ -123,10 +123,39 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.playerModel = void 0;
+exports.domInit = domInit;
+exports.playerModel = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemy_box1 = void 0;
+
+var playerjs = _interopRequireWildcard(require("./player.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+// seting up player module
 var playerModel = document.querySelector(".player");
 exports.playerModel = playerModel;
-},{}],"jscripts/functions/cardFunctions.js":[function(require,module,exports) {
+playerModel.entityObject = playerjs.player; // all enemy boxes (check side it goes reall long this way => )
+
+var enemy_box1 = document.querySelector(".enemy-grid").children[0];
+exports.enemy_box1 = enemy_box1;
+var enemy_box2 = document.querySelector(".enemy-grid").children[1];
+exports.enemy_box2 = enemy_box2;
+var enemy_box3 = document.querySelector(".enemy-grid").children[2];
+exports.enemy_box3 = enemy_box3;
+var enemy_box4 = document.querySelector(".enemy-grid").children[3];
+exports.enemy_box4 = enemy_box4;
+var enemy_box5 = document.querySelector(".enemy-grid").children[4];
+exports.enemy_box5 = enemy_box5;
+var enemy_box6 = document.querySelector(".enemy-grid").children[5];
+exports.enemy_box6 = enemy_box6;
+var enemy_box7 = document.querySelector(".enemy-grid").children[6];
+exports.enemy_box7 = enemy_box7;
+var enemy_box8 = document.querySelector(".enemy-grid").children[7];
+exports.enemy_box8 = enemy_box8;
+
+function domInit() {}
+},{"./player.js":"jscripts/player.js"}],"jscripts/functions/cardFunctions.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -210,9 +239,13 @@ function determineCardType(card) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.deSelectAllCards = deSelectAllCards;
 exports.generateCardDomElement = generateCardDomElement;
 exports.handElement = void 0;
 exports.renderCardIntoHand = renderCardIntoHand;
+exports.selectCard = selectCard;
+exports.selectCardOnClick = selectCardOnClick;
+exports.selectedCard = void 0;
 
 var _player = require("../player.js");
 
@@ -226,6 +259,8 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 var handElement = document.querySelector(".hand");
 exports.handElement = handElement;
+var selectedCard;
+exports.selectedCard = selectedCard;
 
 function generateCardDomElement(card) {
   var cardElement = document.createElement("div");
@@ -235,12 +270,35 @@ function generateCardDomElement(card) {
   cardElement.classList.add(cardType);
   cardElement.classList.add(cardName);
   cardElement.cardObject = card;
+  selectCardOnClick(cardElement);
   return cardElement;
 }
 
 function renderCardIntoHand(card) {
   var cardElement = card.element;
   handElement.append(cardElement);
+}
+
+function selectCardOnClick(cardElement) {
+  var cardObject = cardElement.cardObject;
+  cardElement.addEventListener("pointerdown", function (e) {
+    selectCard(cardElement);
+    cardObject.play();
+  });
+}
+
+function selectCard(cardElement) {
+  deSelectAllCards();
+  cardElement.classList.add("selectedCard");
+  exports.selectedCard = selectedCard = cardElement;
+}
+
+function deSelectAllCards() {
+  var allCards = document.querySelectorAll(".card");
+  allCards.forEach(function (card) {
+    card.classList.remove("selectedCard");
+  });
+  exports.selectedCard = selectedCard = null;
 }
 },{"../player.js":"jscripts/player.js","../cards/01cardsManager.js":"jscripts/cards/01cardsManager.js","../functions/cardFunctions.js":"jscripts/functions/cardFunctions.js"}],"jscripts/cards/attackCardClasses.js":[function(require,module,exports) {
 "use strict";
@@ -631,10 +689,9 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-(0, _battle.battleInit)();
-console.log(cardsManager.playerHand);
-console.log(cardsManager.drawPile);
-console.log(cardsManager.playerHand[0].element.cardObject);
+(0, _battle.battleInit)(); // console.log(cardsManager.playerHand);
+// console.log(cardsManager.drawPile);
+// console.log(cardsManager.playerHand[0].element.cardObject);
 },{"./player.js":"jscripts/player.js","./battle.js":"jscripts/battle.js","./cards/01cardsManager.js":"jscripts/cards/01cardsManager.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -663,7 +720,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57015" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51376" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

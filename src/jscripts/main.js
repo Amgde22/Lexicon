@@ -3,8 +3,9 @@ import {battleInit} from "./battle.js"
 import * as cardsManager from "./cards/01cardsManager.js"
 
 battleInit()
-console.log(cardsManager.playerHand);
-console.log(cardsManager.drawPile);
-console.log(cardsManager.playerHand[0].element.cardObject);
+
+// console.log(cardsManager.playerHand);
+// console.log(cardsManager.drawPile);
+// console.log(cardsManager.playerHand[0].element.cardObject);
 
 
