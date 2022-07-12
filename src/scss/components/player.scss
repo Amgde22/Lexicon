@@ -1,0 +1,18 @@
+.player{
+  position: absolute;
+  left: 10%; bottom: 40%;
+
+  height: 200px; width: 145px;
+  background-color: rgb(162, 162, 231);
+}
+
+@media (max-width:500px){
+  .player{
+    height: 150px; width: 100px;
+  }
+}
+@media (max-width:1000px){
+  .player{
+    height: 150px; width: 100px;
+  }
+}

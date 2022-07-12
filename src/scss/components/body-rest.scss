@@ -1,0 +1,26 @@
+*{
+  box-sizing: border-box;
+}
+
+.rest-of-page{
+  position: absolute;
+  top: 0;right: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgb(0, 10, 66);
+
+  overflow: hidden;
+
+  transform-origin: top right;
+  transition: all 250ms ,
+             transform 500ms ease-in ;
+}
+
+
+@media (max-width:500px){
+
+  .rest-of-page{
+    width: 100vh; height: 100vw;
+    transform: rotate(90deg) translateX(100%);
+  }
+  
+}
