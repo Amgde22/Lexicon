@@ -50,7 +50,20 @@
 .card.selectedCard {
 box-shadow: 0 0 10px 10px rgb(126, 213, 241);
 z-index: 1;
+
+  transform: translateY(-30%) scale(1.2);
 }
+
+.Strike{
+  background-color: red;
+}
+.Defend{
+  background-color: rgb(52, 183, 226);
+}
+.Bash{
+  background-color: orange;
+}
+
 
 @media (max-width:500px){
   .hand{
@@ -73,5 +86,11 @@ z-index: 1;
     transform: translateY(-40%) scale(.85);
     z-index: 2;
   }
+  }
+  .card.selectedCard {
+    box-shadow: 0 0 10px 10px rgb(126, 213, 241);
+    z-index: 1;
+    
+    transform: translateY(-40%) scale(.85);
   }
 }

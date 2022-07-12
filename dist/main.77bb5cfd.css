@@ -89,6 +89,19 @@
 .card.selectedCard {
   box-shadow: 0 0 10px 10px rgb(126, 213, 241);
   z-index: 1;
+  transform: translateY(-30%) scale(1.2);
+}
+
+.Strike {
+  background-color: red;
+}
+
+.Defend {
+  background-color: rgb(52, 183, 226);
+}
+
+.Bash {
+  background-color: orange;
 }
 
 @media (max-width: 500px) {
@@ -104,7 +117,52 @@
     transform: translateY(-40%) scale(0.85);
     z-index: 2;
   }
+  .card.selectedCard {
+    box-shadow: 0 0 10px 10px rgb(126, 213, 241);
+    z-index: 1;
+    transform: translateY(-40%) scale(0.85);
+  }
 }
+img {
+  display: none;
+}
+
+.enemy {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  isolation: isolate;
+}
+.enemy img {
+  display: initial;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  inset: 0;
+  margin: auto;
+  object-fit: contain;
+}
+
+.tiger {
+  width: 95%;
+}
+
+.enemySelector, .friendlySelector {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  border: 5px dotted rgb(255, 217, 0);
+  transition: transform 300ms ease-out;
+  transform: scale(0);
+}
+
+.enemySelector.show, .friendlySelector.show {
+  transform: scale(1.2);
+}
+
 .enemy-grid {
   position: absolute;
   right: 0;
@@ -119,10 +177,12 @@
 }
 
 .enemy-box {
+  position: relative;
   width: 100%;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.363);
   border: 3px solid black;
+  display: flex;
 }
 
 .enemy-box[data-enemy-box1=""] {

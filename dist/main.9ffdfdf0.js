@@ -117,13 +117,546 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"jscripts/components/cards/attackCardClasses.js":[function(require,module,exports) {
+})({"jscripts/components/dom.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.domInit = domInit;
+exports.restOfPage = exports.playerModel = exports.handElement = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemyGrid = exports.enemyBoxes = void 0;
+var restOfPage = document.querySelector(".rest-of-page");
+exports.restOfPage = restOfPage;
+var playerModel = document.querySelector(".player");
+exports.playerModel = playerModel;
+var handElement = document.querySelector(".hand");
+exports.handElement = handElement;
+var enemyGrid = document.querySelector(".enemy-grid"); // all enemy boxes (check side it goes reall long this way => )
+
+exports.enemyGrid = enemyGrid;
+var enemy_box1 = document.querySelector(".enemy-grid").children[0];
+var enemy_box2 = document.querySelector(".enemy-grid").children[1];
+exports.enemy_box2 = enemy_box2;
+var enemy_box3 = document.querySelector(".enemy-grid").children[2];
+exports.enemy_box3 = enemy_box3;
+var enemy_box4 = document.querySelector(".enemy-grid").children[3];
+exports.enemy_box4 = enemy_box4;
+var enemy_box5 = document.querySelector(".enemy-grid").children[4];
+exports.enemy_box5 = enemy_box5;
+var enemy_box6 = document.querySelector(".enemy-grid").children[5];
+exports.enemy_box6 = enemy_box6;
+var enemy_box7 = document.querySelector(".enemy-grid").children[6];
+exports.enemy_box7 = enemy_box7;
+var enemy_box8 = document.querySelector(".enemy-grid").children[7];
+exports.enemy_box8 = enemy_box8;
+var enemyBoxes = {
+  enemyBox1: enemy_box1,
+  enemyBox2: enemy_box2,
+  enemyBox3: enemy_box3,
+  enemyBox4: enemy_box4,
+  enemyBox5: enemy_box5,
+  enemyBox6: enemy_box6,
+  enemyBox7: enemy_box7,
+  enemyBox8: enemy_box8
+};
+exports.enemyBoxes = enemyBoxes;
+
+function domInit() {}
+},{}],"jscripts/components/enemies/enemyClass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.tiger = exports.g = exports.bruv = exports.bat = exports.basicEnemy = void 0;
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var basicEnemy = /*#__PURE__*/_createClass(function basicEnemy(health) {
+  _classCallCheck(this, basicEnemy);
+
+  this.health = health;
+});
+
+exports.basicEnemy = basicEnemy;
+
+var bat = /*#__PURE__*/function (_basicEnemy) {
+  _inherits(bat, _basicEnemy);
+
+  var _super = _createSuper(bat);
+
+  function bat() {
+    var _this;
+
+    _classCallCheck(this, bat);
+
+    _this = _super.call(this, 12);
+    _this.name = "bat";
+    generateEnemyElement(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  return _createClass(bat);
+}(basicEnemy);
+
+exports.bat = bat;
+
+var tiger = /*#__PURE__*/function (_basicEnemy2) {
+  _inherits(tiger, _basicEnemy2);
+
+  var _super2 = _createSuper(tiger);
+
+  function tiger() {
+    var _this2;
+
+    _classCallCheck(this, tiger);
+
+    _this2 = _super2.call(this, 89);
+    _this2.name = "tiger";
+    generateEnemyElement(_assertThisInitialized(_this2));
+    return _this2;
+  }
+
+  return _createClass(tiger);
+}(basicEnemy);
+
+exports.tiger = tiger;
+
+var bruv = /*#__PURE__*/function (_basicEnemy3) {
+  _inherits(bruv, _basicEnemy3);
+
+  var _super3 = _createSuper(bruv);
+
+  function bruv() {
+    var _this3;
+
+    _classCallCheck(this, bruv);
+
+    _this3 = _super3.call(this, 33);
+    _this3.name = "bruv";
+    generateEnemyElement(_assertThisInitialized(_this3));
+    return _this3;
+  }
+
+  return _createClass(bruv);
+}(basicEnemy);
+
+exports.bruv = bruv;
+
+var g = /*#__PURE__*/function (_basicEnemy4) {
+  _inherits(g, _basicEnemy4);
+
+  var _super4 = _createSuper(g);
+
+  function g() {
+    var _this4;
+
+    _classCallCheck(this, g);
+
+    _this4 = _super4.call(this, 2);
+    _this4.name = "";
+    generateEnemyElement(_assertThisInitialized(_this4));
+    return _this4;
+  }
+
+  return _createClass(g);
+}(basicEnemy);
+
+exports.g = g;
+
+function generateEnemyElement(enemy) {
+  var enemyModal = document.createElement("div");
+  var enemySelector = document.createElement("div");
+  var graphix = document.querySelector(".g".concat(enemy.name)).cloneNode(true);
+  enemySelector.classList.add("enemySelector");
+  enemyModal.classList.add("enemy");
+  enemyModal.classList.add(enemy.name);
+  enemyModal.append(graphix);
+  enemyModal.append(enemySelector);
+  enemyModal.entity = enemy;
+  enemy.modal = enemyModal;
+}
+},{}],"jscripts/components/functions/battleFunctions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getRandomEnemyBoxes = getRandomEnemyBoxes;
+exports.initEnemies = initEnemies;
+
+var _dom = require("../dom.js");
+
+var enemyClass = _interopRequireWildcard(require("../enemies/enemyClass.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function initEnemies() {
+  var randomEnemyBoxes = getRandomEnemyBoxes(3);
+  var enemy1 = new enemyClass.bat();
+  var enemy2 = new enemyClass.tiger();
+  var enemy3 = new enemyClass.bruv();
+  randomEnemyBoxes[0].append(enemy1.modal);
+  randomEnemyBoxes[1].append(enemy2.modal);
+  randomEnemyBoxes[2].append(enemy3.modal);
+}
+
+function getRandomEnemyBoxes(num) {
+  var all_EnemyBoxes = Object.values(_dom.enemyBoxes);
+  var random_Boxes = [];
+
+  for (var i = 1; i <= num; i++) {
+    var random_index = Math.floor(Math.random() * (all_EnemyBoxes.length - 1));
+    random_Boxes.push.apply(random_Boxes, _toConsumableArray(all_EnemyBoxes.splice(random_index, 1)));
+  }
+
+  return random_Boxes;
+}
+},{"../dom.js":"jscripts/components/dom.js","../enemies/enemyClass.js":"jscripts/components/enemies/enemyClass.js"}],"jscripts/components/functions/cardFunctions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.determineCardType = determineCardType;
+exports.resetDrawPile = resetDrawPile;
+exports.shuffle = shuffle;
+exports.shuffleDrawPile = shuffleDrawPile;
+
+var _player = require("../player.js");
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function resetDrawPile() {
+  var shuffled_deck = shuffle(_player.player.deck);
+  _player.player.discardPile = [];
+  _player.player.playerHand = [];
+  _player.player.drawPile = shuffled_deck;
+}
+
+function shuffle(array) {
+  var our_array = Array.from(array);
+  var shuffled_array = [];
+
+  for (var i = 0; i < array.length; i++) {
+    var random_index = Math.floor(Math.random() * our_array.length);
+    shuffled_array.push.apply(shuffled_array, _toConsumableArray(our_array.splice(random_index, 1)));
+  }
+
+  return shuffled_array;
+}
+
+function determineCardType(card) {
+  return card.constructor.generatedCardType;
+}
+
+function shuffleDrawPile() {
+  // asuming drawPile has 0 cards
+  var shuffled_discard = shuffle(_player.player.discardPile);
+  _player.player.drawPile = _toConsumableArray(shuffled_discard);
+}
+},{"../player.js":"jscripts/components/player.js"}],"jscripts/components/functions/domFunctions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.checkElement = checkElement;
+exports.deSelectAllCards = deSelectAllCards;
+exports.deSelectAllEntities = deSelectAllEntities;
+exports.determineCardType = determineCardType;
+exports.generateCardDomElement = generateCardDomElement;
+exports.linkElementtToEntity = linkElementtToEntity;
+exports.renderCardIntoHand = renderCardIntoHand;
+exports.selectAllEnemies = selectAllEnemies;
+exports.selectAllFriendlies = selectAllFriendlies;
+exports.selectCard = selectCard;
+exports.selectCardOnClick = selectCardOnClick;
+exports.selectedCard = void 0;
+exports.visualyRemoveCard = visualyRemoveCard;
+exports.visualyRenderCard = visualyRenderCard;
+
+var _dom = require("../dom.js");
+
+var selectedCard;
+exports.selectedCard = selectedCard;
+
+(function () {
+  _dom.restOfPage.addEventListener("pointerdown", function (e) {
+    if (!checkElement(e.target, _dom.restOfPage)) {
+      return;
+    }
+
+    deSelectAllCards();
+  });
+})();
+
+function generateCardDomElement(card) {
+  var cardElement = document.createElement("div");
+  var cardType = determineCardType(card);
+  var cardName = card.name.replaceAll(" ", "");
+  cardElement.classList.add("card");
+  cardElement.classList.add(cardType);
+  cardElement.classList.add(cardName);
+  cardElement.setAttribute("tabindex", "0");
+  card.element = cardElement;
+  cardElement.cardObject = card;
+  selectCardOnClick(cardElement);
+}
+
+function determineCardType(card) {
+  return card.constructor.generatedCardType;
+}
+
+function renderCardIntoHand(card) {
+  var cardElement = card.element;
+
+  _dom.handElement.append(cardElement);
+}
+
+function selectCardOnClick(cardElement) {
+  var cardObject = cardElement.cardObject;
+  cardElement.addEventListener("pointerdown", function (e) {
+    selectCard(cardElement); // cardObject.play()
+  });
+}
+
+function selectCard(cardElement) {
+  deSelectAllCards();
+  cardElement.classList.add("selectedCard");
+  exports.selectedCard = selectedCard = cardElement;
+}
+
+function deSelectAllCards() {
+  var allCards = document.querySelectorAll(".card");
+  allCards.forEach(function (card) {
+    card.classList.remove("selectedCard");
+  });
+  exports.selectedCard = selectedCard = null;
+}
+
+function linkElementtToEntity(Element, entity) {
+  Element.entityObject = entity;
+}
+
+function visualyRenderCard(card) {
+  if (card.element == undefined) {
+    generateCardDomElement(card);
+  }
+
+  _dom.handElement.append(card.element);
+}
+
+function visualyRemoveCard(card) {
+  card.element.remove();
+}
+
+function checkElement(thiselement, wantedElement) {
+  return thiselement === wantedElement;
+}
+
+function deSelectAllEntities() {
+  selectAllEnemies(false);
+  selectAllFriendlies(false);
+}
+
+function selectAllEnemies() {
+  var status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+  var selectors = _dom.enemyGrid.querySelectorAll(".enemySelector");
+
+  selectors.forEach(function (selector) {
+    selector.classList.toggle("show", status);
+  });
+}
+
+function selectAllFriendlies() {
+  var status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+  // de select all enemies if we switch cards
+  var selectors = document.querySelectorAll(".friendlySelector");
+  selectors.forEach(function (selector) {
+    selector.classList.toggle("show", status);
+  });
+}
+},{"../dom.js":"jscripts/components/dom.js"}],"jscripts/components/functions/playerFuctions.js":[function(require,module,exports) {
+
+},{}],"jscripts/components/functions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.cardfunctions = exports.battlefunctions = void 0;
+exports.discardCard = discardCard;
+exports.domfunctions = void 0;
+exports.drawCardsIntoHand = drawCardsIntoHand;
+exports.render = exports.playerfunctions = void 0;
+exports.selectionHandler = selectionHandler;
+
+var _player = require("./player.js");
+
+var _dom = require("./dom.js");
+
+var battlefunctions = _interopRequireWildcard(require("./functions/battleFunctions.js"));
+
+exports.battlefunctions = battlefunctions;
+
+var cardfunctions = _interopRequireWildcard(require("./functions/cardFunctions.js"));
+
+exports.cardfunctions = cardfunctions;
+
+var domfunctions = _interopRequireWildcard(require("./functions/domFunctions.js"));
+
+exports.domfunctions = domfunctions;
+
+var playerfunctions = _interopRequireWildcard(require("./functions/playerFuctions.js"));
+
+exports.playerfunctions = playerfunctions;
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+(function () {
+  _dom.restOfPage.addEventListener("pointerdown", function (e) {
+    selectionHandler();
+  });
+})();
+
+var render = function () {
+  var previous_hand = [];
+  return function () {
+    var hand = _player.player.hand;
+    var discarded_card_array = previous_hand.filter(function (x) {
+      return !hand.includes(x);
+    });
+    var drawn_card_array = hand.filter(function (x) {
+      return !previous_hand.includes(x);
+    });
+    previous_hand = Array.from(_player.player.hand);
+    drawn_card_array.forEach(function (card) {
+      domfunctions.visualyRenderCard(card);
+    });
+    discarded_card_array.forEach(function (card) {
+      domfunctions.visualyRemoveCard(card);
+    });
+  };
+}();
+
+exports.render = render;
+
+function drawCardsIntoHand(draw) {
+  var _player$buffs$draw;
+
+  var bonusDrawBuff = (_player$buffs$draw = _player.player.buffs.draw) !== null && _player$buffs$draw !== void 0 ? _player$buffs$draw : 0;
+  var playerDraw = 5;
+  var totalDraw = draw !== null && draw !== void 0 ? draw : playerDraw + bonusDrawBuff;
+
+  for (var i = 1; i <= totalDraw; i++) {
+    if (_player.player.drawPile.length == 0) {
+      cardfunctions.shuffleDrawPile();
+    }
+
+    var drawnCard = _player.player.drawPile.pop();
+
+    _player.player.hand.push(drawnCard);
+  }
+
+  render(); // this will throw an error but its here to remind you to add a way to render cards
+}
+
+function discardCard(card) {
+  var index = _player.player.hand.findIndex(function (x) {
+    return x === card;
+  });
+
+  var discardedCard = _player.player.hand.splice(index, 1);
+
+  _player.player.discardPile.push(discardedCard);
+
+  render();
+}
+
+function selectionHandler() {
+  if (!domfunctions.selectedCard) {
+    domfunctions.deSelectAllEntities();
+    return;
+  }
+
+  var selected_card = domfunctions.selectedCard.cardObject;
+
+  if (selected_card.target === "enemy") {
+    console.log("play on enemy"); // de select friends if we switch cards
+
+    domfunctions.selectAllFriendlies(false);
+    domfunctions.selectAllEnemies();
+  } else if (selected_card.target === "player") {
+    console.log("play on player"); // de select all enemies if we switch cards
+
+    domfunctions.selectAllEnemies(false);
+    domfunctions.selectAllFriendlies();
+  } //fall back
+  else {
+    alert("selected card", domfunctions.selectedCard, "no have target");
+  }
+}
+},{"./player.js":"jscripts/components/player.js","./dom.js":"jscripts/components/dom.js","./functions/battleFunctions.js":"jscripts/components/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/components/functions/cardFunctions.js","./functions/domFunctions.js":"jscripts/components/functions/domFunctions.js","./functions/playerFuctions.js":"jscripts/components/functions/playerFuctions.js"}],"jscripts/components/cards/attackCardClasses.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.strike = exports.basicAttackCardClass = exports.bash = void 0;
+
+var f = _interopRequireWildcard(require("../functions.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
@@ -164,6 +697,11 @@ var basicAttackCardClass = /*#__PURE__*/function () {
     value: function play() {
       console.log(this.name, " got played");
     }
+  }, {
+    key: "discard",
+    value: function discard() {
+      f.discardCard(this);
+    }
   }]);
 
   return basicAttackCardClass;
@@ -188,7 +726,15 @@ var strike = /*#__PURE__*/function (_basicAttackCardClass) {
     return _this;
   }
 
-  return _createClass(strike);
+  _createClass(strike, [{
+    key: "play",
+    value: function play() {
+      console.log(this.name, " got played");
+      this.discard();
+    }
+  }]);
+
+  return strike;
 }(basicAttackCardClass);
 
 exports.strike = strike;
@@ -228,13 +774,19 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
 
 
 exports.bash = bash;
-},{}],"jscripts/components/cards/skillCardClass.js":[function(require,module,exports) {
+},{"../functions.js":"jscripts/components/functions.js"}],"jscripts/components/cards/skillCardClass.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.defend = exports.card = exports.basicSkillCardClass = void 0;
+
+var f = _interopRequireWildcard(require("../functions.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
@@ -336,13 +888,19 @@ var card = /*#__PURE__*/function (_basicSkillCardClass2) {
 }(basicSkillCardClass);
 
 exports.card = card;
-},{}],"jscripts/components/cards/powerCardClasses.js":[function(require,module,exports) {
+},{"../functions.js":"jscripts/components/functions.js"}],"jscripts/components/cards/powerCardClasses.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.basicPowerCardClass = void 0;
+
+var f = _interopRequireWildcard(require("../functions.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -374,7 +932,7 @@ var basicPowerCardClass = /*#__PURE__*/function () {
 exports.basicPowerCardClass = basicPowerCardClass;
 
 _defineProperty(basicPowerCardClass, "generatedCardType", "power");
-},{}],"jscripts/components/cards/01cardsManager.js":[function(require,module,exports) {
+},{"../functions.js":"jscripts/components/functions.js"}],"jscripts/components/cards/01cardsManager.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -451,245 +1009,7 @@ var playerClass = /*#__PURE__*/function () {
 
 var player = new playerClass(73, _cardsManager.playerStartingDeck, {});
 exports.player = player;
-},{"./cards/01cardsManager.js":"jscripts/components/cards/01cardsManager.js"}],"jscripts/components/functions/battleFunctions.js":[function(require,module,exports) {
-
-},{}],"jscripts/components/functions/cardFunctions.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.determineCardType = determineCardType;
-exports.resetDrawPile = resetDrawPile;
-exports.shuffle = shuffle;
-exports.shuffleDrawPile = shuffleDrawPile;
-
-var _player = require("../player.js");
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function resetDrawPile() {
-  var shuffled_deck = shuffle(_player.player.deck);
-  _player.player.discardPile = [];
-  _player.player.playerHand = [];
-  _player.player.drawPile = shuffled_deck;
-}
-
-function shuffle(array) {
-  var our_array = Array.from(array);
-  var shuffled_array = [];
-
-  for (var i = 0; i < array.length; i++) {
-    var random_index = Math.floor(Math.random() * our_array.length);
-    shuffled_array.push.apply(shuffled_array, _toConsumableArray(our_array.splice(random_index, 1)));
-  }
-
-  return shuffled_array;
-}
-
-function determineCardType(card) {
-  return card.constructor.generatedCardType;
-}
-
-function shuffleDrawPile() {
-  // asuming drawPile has 0 cards
-  var shuffled_discard = shuffle(_player.player.discardPile);
-  _player.player.drawPile = _toConsumableArray(shuffled_discard);
-}
-},{"../player.js":"jscripts/components/player.js"}],"jscripts/components/dom.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.domInit = domInit;
-exports.playerModel = exports.handElement = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemy_box1 = void 0;
-var playerModel = document.querySelector(".player");
-exports.playerModel = playerModel;
-var handElement = document.querySelector(".hand"); // all enemy boxes (check side it goes reall long this way => )
-
-exports.handElement = handElement;
-var enemy_box1 = document.querySelector(".enemy-grid").children[0];
-exports.enemy_box1 = enemy_box1;
-var enemy_box2 = document.querySelector(".enemy-grid").children[1];
-exports.enemy_box2 = enemy_box2;
-var enemy_box3 = document.querySelector(".enemy-grid").children[2];
-exports.enemy_box3 = enemy_box3;
-var enemy_box4 = document.querySelector(".enemy-grid").children[3];
-exports.enemy_box4 = enemy_box4;
-var enemy_box5 = document.querySelector(".enemy-grid").children[4];
-exports.enemy_box5 = enemy_box5;
-var enemy_box6 = document.querySelector(".enemy-grid").children[5];
-exports.enemy_box6 = enemy_box6;
-var enemy_box7 = document.querySelector(".enemy-grid").children[6];
-exports.enemy_box7 = enemy_box7;
-var enemy_box8 = document.querySelector(".enemy-grid").children[7];
-exports.enemy_box8 = enemy_box8;
-
-function domInit() {}
-},{}],"jscripts/components/functions/domFunctions.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.deSelectAllCards = deSelectAllCards;
-exports.determineCardType = determineCardType;
-exports.generateCardDomElement = generateCardDomElement;
-exports.linkElementtToEntity = linkElementtToEntity;
-exports.renderCardIntoHand = renderCardIntoHand;
-exports.selectCard = selectCard;
-exports.selectCardOnClick = selectCardOnClick;
-exports.selectedCard = void 0;
-exports.visualyRenderCard = visualyRenderCard;
-
-var _dom = require("../dom.js");
-
-var selectedCard;
-exports.selectedCard = selectedCard;
-
-function generateCardDomElement(card) {
-  var cardElement = document.createElement("div");
-  var cardType = determineCardType(card);
-  var cardName = card.name.replaceAll(" ", "");
-  cardElement.classList.add("card");
-  cardElement.classList.add(cardType);
-  cardElement.classList.add(cardName);
-  card.element = cardElement;
-  cardElement.cardObject = card;
-  selectCardOnClick(cardElement);
-  return cardElement;
-}
-
-function determineCardType(card) {
-  return card.constructor.generatedCardType;
-}
-
-function renderCardIntoHand(card) {
-  var cardElement = card.element;
-
-  _dom.handElement.append(cardElement);
-}
-
-function selectCardOnClick(cardElement) {
-  var cardObject = cardElement.cardObject;
-  cardElement.addEventListener("pointerdown", function (e) {
-    selectCard(cardElement);
-    cardObject.play();
-  });
-}
-
-function selectCard(cardElement) {
-  deSelectAllCards();
-  cardElement.classList.add("selectedCard");
-  exports.selectedCard = selectedCard = cardElement;
-}
-
-function deSelectAllCards() {
-  var allCards = document.querySelectorAll(".card");
-  allCards.forEach(function (card) {
-    card.classList.remove("selectedCard");
-  });
-  exports.selectedCard = selectedCard = null;
-}
-
-function linkElementtToEntity(Element, entity) {
-  Element.entityObject = entity;
-}
-
-function visualyRenderCard(card) {
-  _dom.handElement.append(card.element);
-}
-},{"../dom.js":"jscripts/components/dom.js"}],"jscripts/components/functions/playerFuctions.js":[function(require,module,exports) {
-
-},{}],"jscripts/components/functions.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.domfunctions = exports.cardfunctions = exports.battlefunctions = void 0;
-exports.drawCardsIntoHand = drawCardsIntoHand;
-exports.generateAllCardsDomElement = generateAllCardsDomElement;
-exports.render = exports.playerfunctions = void 0;
-
-var _player = require("./player.js");
-
-var battlefunctions = _interopRequireWildcard(require("./functions/battleFunctions.js"));
-
-exports.battlefunctions = battlefunctions;
-
-var cardfunctions = _interopRequireWildcard(require("./functions/cardFunctions.js"));
-
-exports.cardfunctions = cardfunctions;
-
-var domfunctions = _interopRequireWildcard(require("./functions/domFunctions.js"));
-
-exports.domfunctions = domfunctions;
-
-var playerfunctions = _interopRequireWildcard(require("./functions/playerFuctions.js"));
-
-exports.playerfunctions = playerfunctions;
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-var render = function () {
-  var previous_hand = [];
-  return function () {
-    var hand = _player.player.hand;
-    var discarded_card_array = previous_hand.filter(function (x) {
-      return !hand.includes(x);
-    });
-    var drawn_card_array = hand.filter(function (x) {
-      return !previous_hand.includes(x);
-    });
-    previous_hand = _player.player.hand;
-    drawn_card_array.forEach(function (card) {
-      domfunctions.visualyRenderCard(card);
-    });
-  };
-}();
-
-exports.render = render;
-
-function drawCardsIntoHand(draw) {
-  var _player$buffs$draw;
-
-  var bonusDrawBuff = (_player$buffs$draw = _player.player.buffs.draw) !== null && _player$buffs$draw !== void 0 ? _player$buffs$draw : 0;
-  var playerDraw = 5;
-  var totalDraw = draw !== null && draw !== void 0 ? draw : playerDraw + bonusDrawBuff;
-
-  for (var i = 1; i <= totalDraw; i++) {
-    if (_player.player.drawPile.length == 0) {
-      cardfunctions.shuffleDrawPile();
-    }
-
-    var drawnCard = _player.player.drawPile.pop();
-
-    _player.player.hand.push(drawnCard);
-  }
-
-  render(); // this will throw an error but its here to remind you to add a way to render cards
-}
-
-function generateAllCardsDomElement() {
-  _player.player.deck.forEach(function (card) {
-    domfunctions.generateCardDomElement(card);
-  });
-}
-},{"./player.js":"jscripts/components/player.js","./functions/battleFunctions.js":"jscripts/components/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/components/functions/cardFunctions.js","./functions/domFunctions.js":"jscripts/components/functions/domFunctions.js","./functions/playerFuctions.js":"jscripts/components/functions/playerFuctions.js"}],"jscripts/logics/battle.js":[function(require,module,exports) {
+},{"./cards/01cardsManager.js":"jscripts/components/cards/01cardsManager.js"}],"jscripts/logics/battle.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -706,14 +1026,16 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function battleInit() {
+  f.battlefunctions.initEnemies();
   f.cardfunctions.resetDrawPile();
-  f.generateAllCardsDomElement();
   f.drawCardsIntoHand();
 }
 },{"../components/player.js":"jscripts/components/player.js","../components/functions.js":"jscripts/components/functions.js"}],"jscripts/main.js":[function(require,module,exports) {
 "use strict";
 
 var battle = _interopRequireWildcard(require("./logics/battle.js"));
+
+var _dom = require("./components/dom.js");
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -723,7 +1045,7 @@ battle.battleInit(); // will throw error bcause not importing and no render func
 // console.log(cardsManager.playerHand);
 // console.log(cardsManager.drawPile);
 // console.log(cardsManager.playerHand[0].element.cardObject);
-},{"./logics/battle.js":"jscripts/logics/battle.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./logics/battle.js":"jscripts/logics/battle.js","./components/dom.js":"jscripts/components/dom.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -751,7 +1073,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62925" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61875" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
