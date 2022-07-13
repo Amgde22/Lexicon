@@ -210,7 +210,7 @@ var bat = /*#__PURE__*/function (_basicEnemy) {
 
     _classCallCheck(this, bat);
 
-    _this = _super.call(this, 12);
+    _this = _super.call(this, 26);
     _this.name = "bat";
     generateEnemyElement(_assertThisInitialized(_this));
     return _this;
@@ -231,7 +231,7 @@ var tiger = /*#__PURE__*/function (_basicEnemy2) {
 
     _classCallCheck(this, tiger);
 
-    _this2 = _super2.call(this, 89);
+    _this2 = _super2.call(this, 63);
     _this2.name = "tiger";
     generateEnemyElement(_assertThisInitialized(_this2));
     return _this2;
@@ -252,7 +252,7 @@ var bruv = /*#__PURE__*/function (_basicEnemy3) {
 
     _classCallCheck(this, bruv);
 
-    _this3 = _super3.call(this, 33);
+    _this3 = _super3.call(this, 36);
     _this3.name = "bruv";
     generateEnemyElement(_assertThisInitialized(_this3));
     return _this3;
@@ -280,21 +280,46 @@ var g = /*#__PURE__*/function (_basicEnemy4) {
   }
 
   return _createClass(g);
-}(basicEnemy);
+}(basicEnemy); // modal > { grapgix + selector + healthBar }
+
 
 exports.g = g;
 
 function generateEnemyElement(enemy) {
+  setUpModal(enemy);
+  setUpSelector(enemy);
+  setUpHealthBar(enemy);
+}
+
+function setUpModal(enemy) {
   var enemyModal = document.createElement("div");
-  var enemySelector = document.createElement("div");
-  var graphix = document.querySelector(".g".concat(enemy.name)).cloneNode(true);
-  enemySelector.classList.add("enemySelector");
-  enemyModal.classList.add("enemy");
-  enemyModal.classList.add(enemy.name);
-  enemyModal.append(graphix);
-  enemyModal.append(enemySelector);
   enemyModal.entity = enemy;
   enemy.modal = enemyModal;
+  enemyModal.classList.add("enemy");
+  enemyModal.classList.add(enemy.name);
+}
+
+function setUpSelector(enemy) {
+  var enemySelector = document.createElement("div");
+  enemySelector.classList.add("enemySelector");
+  enemy.modal.append(enemySelector);
+}
+
+function setUpHealthBar(enemy) {
+  var enemyHealthBar = document.createElement("div");
+  enemyHealthBar.classList.add("healthBar");
+  var healthDisplay = document.createElement("div");
+  healthDisplay.classList.add("healthDisplay");
+  var healthDrag = document.createElement("div");
+  healthDrag.classList.add("healthDrag");
+  var healthCount = document.createElement("span");
+  healthCount.classList.add("healthCount");
+  healthCount.append(enemy.health);
+  enemyHealthBar.style.width = enemy.health + 40 + "px";
+  enemyHealthBar.append(healthDrag, healthDisplay);
+  enemyHealthBar.append(healthCount, " / ".concat(enemy.health));
+  enemy.modal.append(enemyHealthBar);
+  enemy.healthBar = enemyHealthBar; // for easy access
 }
 },{}],"jscripts/components/functions/battleFunctions.js":[function(require,module,exports) {
 "use strict";
@@ -427,7 +452,12 @@ exports.selectedCard = selectedCard;
 
 (function () {
   _dom.restOfPage.addEventListener("pointerdown", function (e) {
-    if (!checkElement(e.target, _dom.restOfPage)) {
+    var is_restOfPage = checkElement(e.target, _dom.restOfPage);
+    var is_seleted_enemy = Array.from(e.target.parentNode.classList);
+    is_seleted_enemy = is_seleted_enemy.includes("enemy");
+    console.log(is_seleted_enemy); // how me do ds man
+
+    if (!is_restOfPage) {
       return;
     }
 
@@ -1073,7 +1103,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61875" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52639" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

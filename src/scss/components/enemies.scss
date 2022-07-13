@@ -1,10 +1,15 @@
+
+
 img{display: none;}
 .enemy{
 position: absolute;
-inset: 0;margin: auto;
+inset: 0;margin: auto ;
 width: 100%;
 isolation: isolate;
-// background-color: red;
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center;
+// border: 3px solid red;
 
 & img {
   display: initial;
@@ -18,12 +23,48 @@ isolation: isolate;
 
 .tiger{
   width: 95%;
+  background-image: url("./components/enemies/basicTiger.jpg");
+
+}
+.bat{
+
+  background-image: url("./components/enemies/basicBat.gif");
+}
+.bruv{
+  background-image: url("./components/enemies/basicBruv.gif");
 }
 
+// bars
+.healthBar{
+  position: absolute; top: 0; left: 0;right: 0; margin: auto;
+  color: wheat;
+  border: 2px solid black;
+  text-align: center;
+  font-family: 'Akshar', sans-serif;
 
+  min-width: 30%;
+  max-width: 100%;
+  height: 20px;
 
+  transform: scale(1);
+  opacity: .85;
+  isolation: isolate;
 
-// enem boxes
+  & .healthDisplay{
+    position: absolute;
+    height: 100%; width: 100%;
+    background-color: red;
+    z-index: -1;
+  }
+  & .healthDrag{
+    position: absolute;
+    height: 100%; width: 100%;
+    background-color: rgb(255, 217, 0);
+    z-index: -2;
+  }
+
+}
+// selectors
 .enemySelector , .friendlySelector {
   position: absolute;
   inset: 0;margin: auto;
@@ -31,11 +72,13 @@ isolation: isolate;
   border: 5px dotted rgb(255, 217, 0);
   transition: transform 300ms ease-out;
   transform: scale(0);
+
 }
 .enemySelector.show ,.friendlySelector.show {
   transform: scale(1.2);
 }
 
+// enem boxes
 .enemy-grid{
   position: absolute;
   right: 0;top: 20px;
@@ -43,7 +86,7 @@ isolation: isolate;
   border: 3px solid red;
 
   transform-origin: bottom right;
-
+  isolation: isolate;
   display: grid;
   grid-template-columns: repeat(4,1fr);
   grid-template-rows: repeat(2,1fr);
@@ -53,8 +96,7 @@ isolation: isolate;
   width: 100%;height: 100%;background-color: rgba(255, 255, 255, 0.363);
   border: 3px solid black;
   display: flex;
-  // justify-content: center;
-  // align-items: center;
+  z-index: 10;
 }
 
 .enemy-box[data-enemy-box1=""]{
@@ -92,6 +134,9 @@ isolation: isolate;
 
 @media (max-width: 1000px) {
 .enemy-grid{
+  transform: scale(.85);
+}
+.healthBar{
   transform: scale(.85);
 }
 }

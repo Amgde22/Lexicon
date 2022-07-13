@@ -133,6 +133,9 @@ img {
   margin: auto;
   width: 100%;
   isolation: isolate;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .enemy img {
   display: initial;
@@ -146,6 +149,47 @@ img {
 
 .tiger {
   width: 95%;
+  background-image: url("/basicTiger.f740a3a7.jpg");
+}
+
+.bat {
+  background-image: url("/basicBat.6d717bf4.gif");
+}
+
+.bruv {
+  background-image: url("/basicBruv.60940ee0.gif");
+}
+
+.healthBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  color: wheat;
+  border: 2px solid black;
+  text-align: center;
+  font-family: "Akshar", sans-serif;
+  min-width: 30%;
+  max-width: 100%;
+  height: 20px;
+  transform: scale(1);
+  opacity: 0.85;
+  isolation: isolate;
+}
+.healthBar .healthDisplay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: red;
+  z-index: -1;
+}
+.healthBar .healthDrag {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgb(255, 217, 0);
+  z-index: -2;
 }
 
 .enemySelector, .friendlySelector {
@@ -171,6 +215,7 @@ img {
   height: 60%;
   border: 3px solid red;
   transform-origin: bottom right;
+  isolation: isolate;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
@@ -183,6 +228,7 @@ img {
   background-color: rgba(255, 255, 255, 0.363);
   border: 3px solid black;
   display: flex;
+  z-index: 10;
 }
 
 .enemy-box[data-enemy-box1=""] {
@@ -229,6 +275,12 @@ img {
   .enemy-grid {
     transform: scale(0.85);
   }
+  .healthBar {
+    transform: scale(0.85);
+  }
+}
+body {
+  font-family: "Roboto Slab", serif;
 }
 
 /*# sourceMappingURL=/main.77bb5cfd.css.map */
