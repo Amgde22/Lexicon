@@ -136,6 +136,7 @@ img {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  transform-origin: bottom left;
 }
 .enemy img {
   display: initial;
@@ -145,6 +146,13 @@ img {
   inset: 0;
   margin: auto;
   object-fit: contain;
+}
+.enemy .oneByTwo {
+  height: 200%;
+  transform: translateY(-25%);
+}
+.enemy .twoByTwo {
+  transform: scale(2);
 }
 
 .tiger {
@@ -204,7 +212,7 @@ img {
 }
 
 .enemySelector.show, .friendlySelector.show {
-  transform: scale(1.2);
+  transform: scale(1);
 }
 
 .enemy-grid {
@@ -215,10 +223,10 @@ img {
   height: 60%;
   border: 3px solid red;
   transform-origin: bottom right;
-  isolation: isolate;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(2, 1fr);
+  isolation: isolate;
 }
 
 .enemy-box {
@@ -228,47 +236,55 @@ img {
   background-color: rgba(255, 255, 255, 0.363);
   border: 3px solid black;
   display: flex;
-  z-index: 10;
+  isolation: isolate;
 }
 
 .enemy-box[data-enemy-box1=""] {
   grid-column: 4/5;
   grid-row: 2/3;
+  z-index: 2;
 }
 
 .enemy-box[data-enemy-box2=""] {
   grid-column: 3/4;
   grid-row: 2/3;
+  z-index: 2;
 }
 
 .enemy-box[data-enemy-box3=""] {
   grid-column: 2/3;
   grid-row: 2/3;
+  z-index: 2;
 }
 
 .enemy-box[data-enemy-box4=""] {
   grid-column: 1/2;
   grid-row: 2/3;
+  z-index: 2;
 }
 
 .enemy-box[data-enemy-box5=""] {
   grid-column: 4/5;
   grid-row: 1/2;
+  z-index: 1;
 }
 
 .enemy-box[data-enemy-box6=""] {
   grid-column: 3/4;
   grid-row: 1/2;
+  z-index: 1;
 }
 
 .enemy-box[data-enemy-box7=""] {
   grid-column: 2/3;
   grid-row: 1/2;
+  z-index: 1;
 }
 
 .enemy-box[data-enemy-box8=""] {
   grid-column: 1/2;
   grid-row: 1/2;
+  z-index: 1;
 }
 
 @media (max-width: 1000px) {

@@ -295,12 +295,14 @@ function setUpModal(enemy) {
   var enemyModal = document.createElement("div");
   enemyModal.entity = enemy;
   enemy.modal = enemyModal;
+  enemyModal.classList.add("entity");
   enemyModal.classList.add("enemy");
   enemyModal.classList.add(enemy.name);
 }
 
 function setUpSelector(enemy) {
   var enemySelector = document.createElement("div");
+  enemySelector.classList.add("selector");
   enemySelector.classList.add("enemySelector");
   enemy.modal.append(enemySelector);
 }
@@ -431,6 +433,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.checkElement = checkElement;
+exports.checkIfIncludesClass = checkIfIncludesClass;
 exports.deSelectAllCards = deSelectAllCards;
 exports.deSelectAllEntities = deSelectAllEntities;
 exports.determineCardType = determineCardType;
@@ -441,6 +444,7 @@ exports.selectAllEnemies = selectAllEnemies;
 exports.selectAllFriendlies = selectAllFriendlies;
 exports.selectCard = selectCard;
 exports.selectCardOnClick = selectCardOnClick;
+exports.selectPlayer = selectPlayer;
 exports.selectedCard = void 0;
 exports.visualyRemoveCard = visualyRemoveCard;
 exports.visualyRenderCard = visualyRenderCard;
@@ -452,18 +456,10 @@ exports.selectedCard = selectedCard;
 
 (function () {
   _dom.restOfPage.addEventListener("pointerdown", function (e) {
-    var is_restOfPage = checkElement(e.target, _dom.restOfPage);
-    var is_seleted_enemy = Array.from(e.target.parentNode.classList);
-    is_seleted_enemy = is_seleted_enemy.includes("enemy");
-    console.log(is_seleted_enemy); // how me do ds man
-
-    if (!is_restOfPage) {
-      return;
-    }
-
-    deSelectAllCards();
+    deSelectHandler(e);
   });
-})();
+})(); // small renders
+
 
 function generateCardDomElement(card) {
   var cardElement = document.createElement("div");
@@ -478,20 +474,51 @@ function generateCardDomElement(card) {
   selectCardOnClick(cardElement);
 }
 
-function determineCardType(card) {
-  return card.constructor.generatedCardType;
-}
-
 function renderCardIntoHand(card) {
   var cardElement = card.element;
 
   _dom.handElement.append(cardElement);
 }
 
+function visualyRenderCard(card) {
+  if (card.element == undefined) {
+    generateCardDomElement(card);
+  }
+
+  _dom.handElement.append(card.element);
+}
+
+function visualyRemoveCard(card) {
+  card.element.remove();
+} // /small renders
+// checks
+
+
+function checkElement(thiselement, wantedElement) {
+  return thiselement === wantedElement;
+}
+
+function checkIfIncludesClass(element, classs) {
+  return Array.from(element.classList).includes(classs);
+} // /checks
+// selection
+
+
+function deSelectHandler(e) {
+  var _checkIfIncludesClass;
+
+  var is_restOfPage = checkElement(e.target, _dom.restOfPage);
+  var is_enemyBox = (_checkIfIncludesClass = checkIfIncludesClass(e.target, "enemy-box")) !== null && _checkIfIncludesClass !== void 0 ? _checkIfIncludesClass : !checkIfIncludesClass(e.target.firstElementChild, "entity");
+
+  if (is_restOfPage || is_enemyBox) {
+    deSelectAllCards();
+  }
+}
+
 function selectCardOnClick(cardElement) {
   var cardObject = cardElement.cardObject;
   cardElement.addEventListener("pointerdown", function (e) {
-    selectCard(cardElement); // cardObject.play()
+    selectCard(cardElement);
   });
 }
 
@@ -509,29 +536,10 @@ function deSelectAllCards() {
   exports.selectedCard = selectedCard = null;
 }
 
-function linkElementtToEntity(Element, entity) {
-  Element.entityObject = entity;
-}
-
-function visualyRenderCard(card) {
-  if (card.element == undefined) {
-    generateCardDomElement(card);
-  }
-
-  _dom.handElement.append(card.element);
-}
-
-function visualyRemoveCard(card) {
-  card.element.remove();
-}
-
-function checkElement(thiselement, wantedElement) {
-  return thiselement === wantedElement;
-}
-
 function deSelectAllEntities() {
   selectAllEnemies(false);
   selectAllFriendlies(false);
+  selectPlayer(false);
 }
 
 function selectAllEnemies() {
@@ -546,12 +554,28 @@ function selectAllEnemies() {
 
 function selectAllFriendlies() {
   var status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-  // de select all enemies if we switch cards
   var selectors = document.querySelectorAll(".friendlySelector");
   selectors.forEach(function (selector) {
     selector.classList.toggle("show", status);
   });
 }
+
+function selectPlayer() {
+  var status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+  var playerModal = document.querySelector(".player");
+  var playerSelector = playerModal.querySelector(".friendlySelector");
+  playerSelector.classList.toggle("show", status);
+} // /selection
+// misc
+
+
+function determineCardType(card) {
+  return card.constructor.generatedCardType;
+}
+
+function linkElementtToEntity(Element, entity) {
+  Element.entityObject = entity;
+} // / misc
 },{"../dom.js":"jscripts/components/dom.js"}],"jscripts/components/functions/playerFuctions.js":[function(require,module,exports) {
 
 },{}],"jscripts/components/functions.js":[function(require,module,exports) {
@@ -564,6 +588,7 @@ exports.cardfunctions = exports.battlefunctions = void 0;
 exports.discardCard = discardCard;
 exports.domfunctions = void 0;
 exports.drawCardsIntoHand = drawCardsIntoHand;
+exports.playSelectedCard = playSelectedCard;
 exports.render = exports.playerfunctions = void 0;
 exports.selectionHandler = selectionHandler;
 
@@ -591,11 +616,16 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+// init
 (function () {
   _dom.restOfPage.addEventListener("pointerdown", function (e) {
     selectionHandler();
+    playSelectedCard(e);
   });
-})();
+})(); // /init
+// Dom Functions
+// render
+
 
 var render = function () {
   var previous_hand = [];
@@ -619,6 +649,54 @@ var render = function () {
 
 exports.render = render;
 
+function selectionHandler() {
+  if (!domfunctions.selectedCard) {
+    domfunctions.deSelectAllEntities();
+    return;
+  }
+
+  var selected_card = domfunctions.selectedCard.cardObject;
+
+  if (selected_card.target === "enemy") {
+    // console.log("play on enemy");
+    // de select friends if we switch cards
+    domfunctions.deSelectAllEntities(false);
+    domfunctions.selectAllEnemies();
+  } else if (selected_card.target === "friendly") {
+    // console.log("play on friendly");
+    // de select all enemies if we switch cards
+    domfunctions.deSelectAllEntities(false);
+    domfunctions.selectAllFriendlies();
+  } else if (selected_card.target === "player") {
+    // console.log("play on player");
+    // de select all enemies if we switch cards
+    domfunctions.deSelectAllEntities(false);
+    domfunctions.selectPlayer();
+  } //fall back
+  else {
+    alert("selected card", domfunctions.selectedCard, "no have target");
+  }
+} // /render
+// /Dom Functions
+// Battle Fucntion
+// play cardon enemy
+
+
+function playSelectedCard(e) {
+  var is_enemyselector = domfunctions.checkIfIncludesClass(e.target, "selector");
+
+  if (!is_enemyselector) {
+    return;
+  }
+
+  console.log(domfunctions.selectedCard);
+} // /play cardon enemy
+// /Battle Fucntion
+// Card Functions
+
+
+"";
+
 function drawCardsIntoHand(draw) {
   var _player$buffs$draw;
 
@@ -636,7 +714,7 @@ function drawCardsIntoHand(draw) {
     _player.player.hand.push(drawnCard);
   }
 
-  render(); // this will throw an error but its here to remind you to add a way to render cards
+  render();
 }
 
 function discardCard(card) {
@@ -649,31 +727,7 @@ function discardCard(card) {
   _player.player.discardPile.push(discardedCard);
 
   render();
-}
-
-function selectionHandler() {
-  if (!domfunctions.selectedCard) {
-    domfunctions.deSelectAllEntities();
-    return;
-  }
-
-  var selected_card = domfunctions.selectedCard.cardObject;
-
-  if (selected_card.target === "enemy") {
-    console.log("play on enemy"); // de select friends if we switch cards
-
-    domfunctions.selectAllFriendlies(false);
-    domfunctions.selectAllEnemies();
-  } else if (selected_card.target === "player") {
-    console.log("play on player"); // de select all enemies if we switch cards
-
-    domfunctions.selectAllEnemies(false);
-    domfunctions.selectAllFriendlies();
-  } //fall back
-  else {
-    alert("selected card", domfunctions.selectedCard, "no have target");
-  }
-}
+} // /Card Functions
 },{"./player.js":"jscripts/components/player.js","./dom.js":"jscripts/components/dom.js","./functions/battleFunctions.js":"jscripts/components/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/components/functions/cardFunctions.js","./functions/domFunctions.js":"jscripts/components/functions/domFunctions.js","./functions/playerFuctions.js":"jscripts/components/functions/playerFuctions.js"}],"jscripts/components/cards/attackCardClasses.js":[function(require,module,exports) {
 "use strict";
 
@@ -847,7 +901,7 @@ var basicSkillCardClass = /*#__PURE__*/function () {
     _classCallCheck(this, basicSkillCardClass);
 
     this.energyCost = energyCost;
-    this.target = "player";
+    this.target = "friendly";
     this.type = "skill";
   }
 
@@ -968,7 +1022,7 @@ _defineProperty(basicPowerCardClass, "generatedCardType", "power");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.skillCardClasses = exports.powerCardClasses = exports.playerStartingDeck = exports.playerHand = exports.drawPile = exports.discardPile = exports.attackCardClasses = void 0;
+exports.skillCardClasses = exports.powerCardClasses = exports.playerStartingDeck = exports.attackCardClasses = void 0;
 
 var attackCardClasses = _interopRequireWildcard(require("./attackCardClasses.js"));
 
@@ -987,12 +1041,10 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 var drawPile = [];
-exports.drawPile = drawPile;
 var discardPile = [];
-exports.discardPile = discardPile;
 var playerHand = [];
-exports.playerHand = playerHand;
-var playerStartingDeck = [new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new skillCardClasses.defend(), new skillCardClasses.defend(), new skillCardClasses.defend(), new attackCardClasses.bash()];
+var playerStartingDeck = [new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new skillCardClasses.defend(), new skillCardClasses.defend(), new skillCardClasses.defend(), new attackCardClasses.bash()]; // useless ?//, drawPile , discardPile , playerHand}
+
 exports.playerStartingDeck = playerStartingDeck;
 },{"./attackCardClasses.js":"jscripts/components/cards/attackCardClasses.js","./skillCardClass.js":"jscripts/components/cards/skillCardClass.js","./powerCardClasses.js":"jscripts/components/cards/powerCardClasses.js"}],"jscripts/components/player.js":[function(require,module,exports) {
 "use strict";
@@ -1103,7 +1155,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52639" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58981" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
