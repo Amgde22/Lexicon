@@ -83,7 +83,7 @@ z-index: 1;
 
 
     &:hover , &:focus {
-    transform: translateY(-40%) scale(.85);
+    transform: translateY(-30%) scale(.7);
     z-index: 2;
   }
   }
@@ -91,6 +91,6 @@ z-index: 1;
     box-shadow: 0 0 10px 10px rgb(126, 213, 241);
     z-index: 1;
     
-    transform: translateY(-40%) scale(.85);
+    transform: translateY(-30%) scale(0.7);
   }
 }

@@ -186,17 +186,33 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var basicEnemy = /*#__PURE__*/function () {
+  function basicEnemy(health) {
+    _classCallCheck(this, basicEnemy);
 
-var basicEnemy = /*#__PURE__*/_createClass(function basicEnemy(health) {
-  _classCallCheck(this, basicEnemy);
+    this.maxHealth = health;
+    this.health = health;
+    this.buffs = {};
+    this.debuffs = {};
+    this.dealDamageEffects = {};
+    this.recieveDamageEffects = {};
+    this.blockEffects = {};
+    this.turnEffects = {};
+  }
 
-  this.health = health;
-});
+  _createClass(basicEnemy, [{
+    key: "apply",
+    value: function apply(effectObj) {}
+  }]);
+
+  return basicEnemy;
+}();
 
 exports.basicEnemy = basicEnemy;
 
@@ -210,7 +226,7 @@ var bat = /*#__PURE__*/function (_basicEnemy) {
 
     _classCallCheck(this, bat);
 
-    _this = _super.call(this, 26);
+    _this = _super.call(this, 13);
     _this.name = "bat";
     generateEnemyElement(_assertThisInitialized(_this));
     return _this;
@@ -317,9 +333,12 @@ function setUpHealthBar(enemy) {
   var healthCount = document.createElement("span");
   healthCount.classList.add("healthCount");
   healthCount.append(enemy.health);
-  enemyHealthBar.style.width = enemy.health + 40 + "px";
+  var maxHealthCount = document.createElement("span");
+  maxHealthCount.classList.add("maxHealthCount");
+  maxHealthCount.append(enemy.maxHealth);
+  enemyHealthBar.style.width = enemy.maxHealth + 40 + "px";
   enemyHealthBar.append(healthDrag, healthDisplay);
-  enemyHealthBar.append(healthCount, " / ".concat(enemy.health));
+  enemyHealthBar.append(healthCount, " / ", maxHealthCount);
   enemy.modal.append(enemyHealthBar);
   enemy.healthBar = enemyHealthBar; // for easy access
 }
@@ -329,6 +348,7 @@ function setUpHealthBar(enemy) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.damage = damage;
 exports.getRandomEnemyBoxes = getRandomEnemyBoxes;
 exports.initEnemies = initEnemies;
 
@@ -372,6 +392,10 @@ function getRandomEnemyBoxes(num) {
   }
 
   return random_Boxes;
+}
+
+function damage(entity, damage) {
+  entity.health -= damage;
 }
 },{"../dom.js":"jscripts/components/dom.js","../enemies/enemyClass.js":"jscripts/components/enemies/enemyClass.js"}],"jscripts/components/functions/cardFunctions.js":[function(require,module,exports) {
 "use strict";
@@ -438,8 +462,12 @@ exports.deSelectAllCards = deSelectAllCards;
 exports.deSelectAllEntities = deSelectAllEntities;
 exports.determineCardType = determineCardType;
 exports.generateCardDomElement = generateCardDomElement;
+exports.getEntityHealthModals = getEntityHealthModals;
 exports.linkElementtToEntity = linkElementtToEntity;
 exports.renderCardIntoHand = renderCardIntoHand;
+exports.renderHealthBar = renderHealthBar;
+exports.renderHealthCount = renderHealthCount;
+exports.renderHealthD = renderHealthD;
 exports.selectAllEnemies = selectAllEnemies;
 exports.selectAllFriendlies = selectAllFriendlies;
 exports.selectCard = selectCard;
@@ -490,6 +518,24 @@ function visualyRenderCard(card) {
 
 function visualyRemoveCard(card) {
   card.element.remove();
+}
+
+function renderHealthBar(entity) {
+  var healthInfo = getEntityHealthModals(entity);
+  var healthBar = healthInfo.healthBar;
+  healthBar.style.width = entity.maxHealth + 40 + "px";
+}
+
+function renderHealthCount(entity) {
+  var healthInfo = getEntityHealthModals(entity);
+  var healthCount = healthInfo.healthCount;
+  var maxHealthCount = healthInfo.maxHealthCount;
+  maxHealthCount.innerText = entity.maxHealth;
+  healthCount.innerText = entity.health < 0 ? 0 : entity.health;
+}
+
+function renderHealthD(healthD, percent) {
+  healthD.style.transform = "scaleX( max(0 ,".concat(percent, "))");
 } // /small renders
 // checks
 
@@ -575,6 +621,21 @@ function determineCardType(card) {
 
 function linkElementtToEntity(Element, entity) {
   Element.entityObject = entity;
+}
+
+function getEntityHealthModals(entity) {
+  var healthBar = entity.modal.querySelector(".healthBar");
+  var maxHealthCount = healthBar.querySelector(".maxHealthCount");
+  var healthCount = healthBar.querySelector(".healthCount");
+  var healthDisplay = healthBar.querySelector(".healthDisplay");
+  var healthDrag = healthBar.querySelector(".healthDrag");
+  return {
+    healthBar: healthBar,
+    maxHealthCount: maxHealthCount,
+    healthCount: healthCount,
+    healthDisplay: healthDisplay,
+    healthDrag: healthDrag
+  };
 } // / misc
 },{"../dom.js":"jscripts/components/dom.js"}],"jscripts/components/functions/playerFuctions.js":[function(require,module,exports) {
 
@@ -585,11 +646,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.cardfunctions = exports.battlefunctions = void 0;
+exports.damage = damage;
 exports.discardCard = discardCard;
 exports.domfunctions = void 0;
 exports.drawCardsIntoHand = drawCardsIntoHand;
 exports.playSelectedCard = playSelectedCard;
 exports.render = exports.playerfunctions = void 0;
+exports.renderHealth = renderHealth;
 exports.selectionHandler = selectionHandler;
 
 var _player = require("./player.js");
@@ -649,6 +712,19 @@ var render = function () {
 
 exports.render = render;
 
+function renderHealth(entity) {
+  var maxHealth = entity.maxHealth;
+  var health = entity.health;
+  var healthInfo = domfunctions.getEntityHealthModals(entity);
+  var health_percent = health / maxHealth;
+  domfunctions.renderHealthBar(entity);
+  domfunctions.renderHealthCount(entity);
+  domfunctions.renderHealthD(healthInfo.healthDisplay, health_percent);
+  setTimeout(function () {
+    domfunctions.renderHealthD(healthInfo.healthDrag, health_percent);
+  }, 700);
+}
+
 function selectionHandler() {
   if (!domfunctions.selectedCard) {
     domfunctions.deSelectAllEntities();
@@ -683,13 +759,21 @@ function selectionHandler() {
 
 
 function playSelectedCard(e) {
-  var is_enemyselector = domfunctions.checkIfIncludesClass(e.target, "selector");
+  var is_selector = domfunctions.checkIfIncludesClass(e.target, "selector");
 
-  if (!is_enemyselector) {
+  if (!is_selector) {
     return;
   }
 
-  console.log(domfunctions.selectedCard);
+  var selector = e.target;
+  var card = domfunctions.selectedCard.cardObject;
+  var entity = selector.parentNode.entity;
+  card.play(entity);
+}
+
+function damage(entity, damage) {
+  entity.health -= damage;
+  renderHealth(entity);
 } // /play cardon enemy
 // /Battle Fucntion
 // Card Functions
@@ -777,14 +861,21 @@ var basicAttackCardClass = /*#__PURE__*/function () {
   }
 
   _createClass(basicAttackCardClass, [{
-    key: "play",
-    value: function play() {
-      console.log(this.name, " got played");
+    key: "defaultPlay",
+    value: function defaultPlay(enemy) {
+      console.log(this.name, "attacked", enemy.name, "for", this.damage);
+      f.damage(enemy, this.damage);
+      this.discard();
     }
   }, {
     key: "discard",
     value: function discard() {
       f.discardCard(this);
+    }
+  }, {
+    key: "attack",
+    value: function attack(enemy) {
+      f.damage(enemy, this.damage);
     }
   }]);
 
@@ -812,9 +903,8 @@ var strike = /*#__PURE__*/function (_basicAttackCardClass) {
 
   _createClass(strike, [{
     key: "play",
-    value: function play() {
-      console.log(this.name, " got played");
-      this.discard();
+    value: function play(enemy) {
+      this.defaultPlay(enemy);
     }
   }]);
 
@@ -840,8 +930,8 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
 
   _createClass(bash, [{
     key: "play",
-    value: function play() {
-      console.log("".concat(this.name, " attacked for ").concat(this.damage, " "));
+    value: function play(enemy) {
+      this.defaultPlay(enemy);
     }
   }]);
 
@@ -1066,7 +1156,8 @@ var playerClass = /*#__PURE__*/function () {
   function playerClass(hp, deck, relics) {
     _classCallCheck(this, playerClass);
 
-    this.hp = hp;
+    this.maxHealth = hp;
+    this.health = hp;
     this.block = 0;
     this.energy = 3;
     this.hand = [];
@@ -1074,15 +1165,33 @@ var playerClass = /*#__PURE__*/function () {
     this.discardPile = [];
     this.buffs = {};
     this.debuffs = {};
+    this.dealDamageEffects = {};
+    this.recieveDamageEffects = {};
+    this.blockEffects = {};
+    this.cardEffects = {
+      playEffects: {},
+      drawEffects: {
+        prop: "Hi Im DrawEffects prop and I apply to ",
+        prop2: this
+      },
+      exaustEffects: {},
+      discardEffects: {}
+    };
+    this.turnEffects = {};
     this.deck = deck;
     this.relics = relics;
-    this.model = document.querySelector(".player");
+    this.modal = document.querySelector(".player");
   }
 
   _createClass(playerClass, [{
     key: "attack",
     value: function attack() {
       console.log("player attacked");
+    }
+  }, {
+    key: "test",
+    value: function test() {
+      console.log(this.cardEffects.drawEffects.prop, this.cardEffects.drawEffects.prop2);
     }
   }]);
 
