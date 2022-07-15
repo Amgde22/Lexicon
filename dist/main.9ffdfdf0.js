@@ -200,6 +200,10 @@ var basicEnemy = /*#__PURE__*/function () {
     this.health = health;
     this.buffs = {};
     this.debuffs = {};
+    this.str = 0;
+    this.dex = 0;
+    this.atkMod = 1;
+    this.defMod = 1;
     this.dealDamageEffects = {};
     this.recieveDamageEffects = {};
     this.blockEffects = {};
@@ -208,7 +212,17 @@ var basicEnemy = /*#__PURE__*/function () {
 
   _createClass(basicEnemy, [{
     key: "apply",
-    value: function apply(effectObj) {}
+    value: function apply(effectObj) {
+      effectObj.apply(this);
+    }
+  }, {
+    key: "remove",
+    value: function remove(effectName) {
+      var _this$buffs$effectNam, _this$debuffs$effectN;
+
+      (_this$buffs$effectNam = this.buffs[effectName]) === null || _this$buffs$effectNam === void 0 ? void 0 : _this$buffs$effectNam.remove();
+      (_this$debuffs$effectN = this.debuffs[effectName]) === null || _this$debuffs$effectN === void 0 ? void 0 : _this$debuffs$effectN.remove();
+    }
   }]);
 
   return basicEnemy;
@@ -348,7 +362,6 @@ function setUpHealthBar(enemy) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.damage = damage;
 exports.getRandomEnemyBoxes = getRandomEnemyBoxes;
 exports.initEnemies = initEnemies;
 
@@ -387,15 +400,11 @@ function getRandomEnemyBoxes(num) {
   var random_Boxes = [];
 
   for (var i = 1; i <= num; i++) {
-    var random_index = Math.floor(Math.random() * (all_EnemyBoxes.length - 1));
+    var random_index = Math.floor(Math.random() * all_EnemyBoxes.length);
     random_Boxes.push.apply(random_Boxes, _toConsumableArray(all_EnemyBoxes.splice(random_index, 1)));
   }
 
   return random_Boxes;
-}
-
-function damage(entity, damage) {
-  entity.health -= damage;
 }
 },{"../dom.js":"jscripts/components/dom.js","../enemies/enemyClass.js":"jscripts/components/enemies/enemyClass.js"}],"jscripts/components/functions/cardFunctions.js":[function(require,module,exports) {
 "use strict";
@@ -771,15 +780,14 @@ function playSelectedCard(e) {
   card.play(entity);
 }
 
-function damage(entity, damage) {
-  entity.health -= damage;
-  renderHealth(entity);
+function damage(recievingEntity, DealingEntity, damage) {
+  recievingEntity.health -= damage;
+  console.log(recievingEntity);
+  renderHealth(recievingEntity);
 } // /play cardon enemy
 // /Battle Fucntion
 // Card Functions
 
-
-"";
 
 function drawCardsIntoHand(draw) {
   var _player$buffs$draw;
@@ -812,7 +820,414 @@ function discardCard(card) {
 
   render();
 } // /Card Functions
-},{"./player.js":"jscripts/components/player.js","./dom.js":"jscripts/components/dom.js","./functions/battleFunctions.js":"jscripts/components/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/components/functions/cardFunctions.js","./functions/domFunctions.js":"jscripts/components/functions/domFunctions.js","./functions/playerFuctions.js":"jscripts/components/functions/playerFuctions.js"}],"jscripts/components/cards/attackCardClasses.js":[function(require,module,exports) {
+},{"./player.js":"jscripts/components/player.js","./dom.js":"jscripts/components/dom.js","./functions/battleFunctions.js":"jscripts/components/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/components/functions/cardFunctions.js","./functions/domFunctions.js":"jscripts/components/functions/domFunctions.js","./functions/playerFuctions.js":"jscripts/components/functions/playerFuctions.js"}],"jscripts/components/buffs/effectsHandler.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.applyEffectHandler = applyEffectHandler;
+exports.reduceEffectDuration = reduceEffectDuration;
+exports.reduceEffectUses = reduceEffectUses;
+
+function applyEffectHandler(effect, entity) {
+  var type_of_effect = effect.constructor.generatedEffect;
+  var effect_list = entity[type_of_effect];
+  var effectName = effect.name;
+  var effectDuration = effect.duration;
+  var effectUses = effect.effectUses; // link 'em
+
+  effect.hostingEntity = entity;
+
+  if (effect_list[effectName]) {
+    // reinforce effect if exists
+    reinforceEffect(effect_list[effectName], effectDuration, effectUses);
+  } else {
+    // add effect if it doesn't exist
+    effect_list[effectName] = effect;
+  }
+}
+
+function reduceEffectDuration(effect) {
+  if (typeof effect.duration !== "number") {
+    return;
+  }
+
+  effect.duration--;
+  console.log(effect.hostingEntity);
+
+  if (effect.duration <= 0) {
+    effect.remove();
+  }
+}
+
+function reduceEffectUses(effect) {
+  if (typeof effect.uses !== "number") {
+    return;
+  }
+
+  effect.uses--;
+
+  if (effect.uses <= 0) {
+    effect.remove();
+  }
+}
+
+function reinforceEffect(exactEffect, bonusDuration, bonusUses) {
+  reinforceDuration(exactEffect, bonusDuration);
+  reinforceUses(exactEffect, bonusUses);
+}
+
+function reinforceDuration(exactEffect, bonusDuration) {
+  if (exactEffect.duration === "inf") {
+    return;
+  } else if (bonusDuration === "inf") {
+    exactEffect.duration = "inf";
+    return;
+  } else if (typeof bonusDuration === "number") {
+    exactEffect.duration += bonusDuration;
+    return;
+  } // fall back
+  else {
+    alert("effectsHandler : type of effect duration not intended , chack consle");
+    console.log(bonusDuration, " added to ", exactEffect);
+  }
+}
+
+function reinforceUses(exactEffect, bonusUses) {
+  if (exactEffect.uses === "inf") {
+    return;
+  } else if (bonusUses === "inf") {
+    exactEffect.uses = "inf";
+    return;
+  } else if (typeof bonusUses === "number") {
+    exactEffect.uses += bonusUses;
+    return;
+  } // fall back
+  else {
+    alert("effectsHandler : type of effect duration not intended , chack consle");
+    console.log(bonusDuration, " added to ", exactEffect);
+  }
+}
+},{}],"jscripts/components/buffs/buffClasses.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.basicBuff = void 0;
+
+var _effectsHandler = require("./effectsHandler.js");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var basicBuff = /*#__PURE__*/function () {
+  function basicBuff(name, duration, uses) {
+    _classCallCheck(this, basicBuff);
+
+    this.name = name;
+    this.duration = duration !== null && duration !== void 0 ? duration : "inf";
+    this.uses = uses !== null && uses !== void 0 ? uses : "ind";
+  }
+
+  _createClass(basicBuff, [{
+    key: "apply",
+    value: function apply(entity) {
+      this.init(entity);
+    }
+  }, {
+    key: "remove",
+    value: function remove() {
+      this.defaultRemove();
+    }
+  }, {
+    key: "defaultInit",
+    value: function defaultInit(entity) {
+      // for when first applied
+      entity.buffs[this.name] = this;
+      this.hostingEntity = entity;
+    }
+  }, {
+    key: "effect",
+    value: function effect() {// subs to pubsub event and triggers
+    }
+  }, {
+    key: "defaultRemove",
+    value: function defaultRemove() {
+      // for removal
+      delete this.hostingEntity.buffs[this.name];
+      delete this;
+    }
+  }]);
+
+  return basicBuff;
+}();
+
+exports.basicBuff = basicBuff;
+
+_defineProperty(basicBuff, "generatedEffect", "buffs");
+},{"./effectsHandler.js":"jscripts/components/buffs/effectsHandler.js"}],"jscripts/components/pubsub.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var pubsub = function () {
+  var turn = 0;
+  var events = {
+    "turnEnded": [],
+    "turnStarted": []
+  };
+
+  function on(event, obj) {
+    events[event] = events[event] || [];
+    events[event].push(obj);
+  }
+
+  function off(event, obj) {
+    if (!(event in events)) {
+      alert("trying to off event that doesn't exist");
+      console.log(event, obj);
+      return;
+    }
+
+    for (var i = 0; i < events[event].length; i++) {
+      if (events[event][i] === obj) {
+        events[event].splice(i, 1);
+        break;
+      }
+    }
+  }
+
+  function emit(event, data) {
+    events[event] = events[event] || [];
+    events[event].forEach(function (evenObject) {
+      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(data);
+    });
+  }
+
+  function turnEnded() {
+    events["turnEnded"].forEach(function (evenObject) {
+      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
+    });
+  }
+
+  function turnStarted(params) {
+    events["turnStarted"].forEach(function (evenObject) {
+      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
+    });
+    turn++;
+    console.log(turn);
+  }
+
+  function resetTurns() {
+    turn = 0;
+  }
+
+  return {
+    events: events,
+    on: on,
+    off: off,
+    emit: emit,
+    turnEnded: turnEnded,
+    turnStarted: turnStarted,
+    resetTurns: resetTurns
+  };
+}();
+
+var _default = pubsub;
+exports.default = _default;
+},{}],"jscripts/components/buffs/debuffClasses.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.vulnerable = exports.d = exports.basicDebuff = void 0;
+
+var _effectsHandler = require("./effectsHandler.js");
+
+var _pubsub = _interopRequireDefault(require("../pubsub.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var basicDebuff = /*#__PURE__*/function () {
+  function basicDebuff(name, duration, uses) {
+    _classCallCheck(this, basicDebuff);
+
+    this.name = name;
+    this.duration = duration !== null && duration !== void 0 ? duration : "inf";
+    this.uses = uses !== null && uses !== void 0 ? uses : "ind";
+  }
+
+  _createClass(basicDebuff, [{
+    key: "apply",
+    value: function apply(entity) {
+      this.init(entity);
+    }
+  }, {
+    key: "remove",
+    value: function remove() {
+      this.defaultRemove();
+    }
+  }, {
+    key: "defaultInit",
+    value: function defaultInit(entity) {
+      // for when first applied
+      (0, _effectsHandler.applyEffectHandler)(this, entity);
+    }
+  }, {
+    key: "effect",
+    value: function effect() {// subs to pubsub event and triggers
+    }
+  }, {
+    key: "defaultRemove",
+    value: function defaultRemove() {
+      // for removal
+      delete this.hostingEntity.debuffs[this.name];
+      delete this;
+    }
+  }]);
+
+  return basicDebuff;
+}();
+
+exports.basicDebuff = basicDebuff;
+
+_defineProperty(basicDebuff, "generatedEffect", "debuffs");
+
+var vulnerable = /*#__PURE__*/function (_basicDebuff) {
+  _inherits(vulnerable, _basicDebuff);
+
+  var _super = _createSuper(vulnerable);
+
+  function vulnerable(duration) {
+    _classCallCheck(this, vulnerable);
+
+    return _super.call(this, "Vulnurable", duration, "inf");
+  }
+
+  _createClass(vulnerable, [{
+    key: "init",
+    value: function init(entity) {
+      this.defaultInit(entity);
+
+      _pubsub.default.on("turnStarted", this);
+
+      entity.defMod += 0.5;
+    }
+  }, {
+    key: "effect",
+    value: function effect(entity) {
+      (0, _effectsHandler.reduceEffectDuration)(this);
+    }
+  }, {
+    key: "remove",
+    value: function remove() {
+      this.hostingEntity.defMod -= 0.5;
+
+      _pubsub.default.off("turnStarted", this);
+
+      this.defaultRemove();
+    }
+  }]);
+
+  return vulnerable;
+}(basicDebuff);
+
+exports.vulnerable = vulnerable;
+
+var d = /*#__PURE__*/function (_basicDebuff2) {
+  _inherits(d, _basicDebuff2);
+
+  var _super2 = _createSuper(d);
+
+  function d(name, duration, uses) {
+    _classCallCheck(this, d);
+
+    return _super2.call(this, "", duration, uses);
+  }
+
+  _createClass(d, [{
+    key: "init",
+    value: function init(entity) {
+      this.defaultInit(entity);
+
+      _pubsub.default.on("turnStarted", this);
+    }
+  }, {
+    key: "effect",
+    value: function effect(entity) {}
+  }, {
+    key: "remove",
+    value: function remove() {
+      this.defaultRemove();
+    }
+  }]);
+
+  return d;
+}(basicDebuff);
+
+exports.d = d;
+},{"./effectsHandler.js":"jscripts/components/buffs/effectsHandler.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/buffsManager.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var buffs = _interopRequireWildcard(require("./buffs/buffClasses.js"));
+
+var debuffs = _interopRequireWildcard(require("./buffs/debuffClasses.js"));
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var effect = _objectSpread(_objectSpread({}, buffs), debuffs);
+
+var _default = effect;
+exports.default = _default;
+},{"./buffs/buffClasses.js":"jscripts/components/buffs/buffClasses.js","./buffs/debuffClasses.js":"jscripts/components/buffs/debuffClasses.js"}],"jscripts/components/cards/attackCardClasses.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -821,6 +1236,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.strike = exports.basicAttackCardClass = exports.bash = void 0;
 
 var f = _interopRequireWildcard(require("../functions.js"));
+
+var _player = require("../player.js");
+
+var _buffsManager = _interopRequireDefault(require("../buffsManager.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -864,7 +1285,7 @@ var basicAttackCardClass = /*#__PURE__*/function () {
     key: "defaultPlay",
     value: function defaultPlay(enemy) {
       console.log(this.name, "attacked", enemy.name, "for", this.damage);
-      f.damage(enemy, this.damage);
+      f.damage(enemy, _player.player, this.damage);
       this.discard();
     }
   }, {
@@ -875,7 +1296,7 @@ var basicAttackCardClass = /*#__PURE__*/function () {
   }, {
     key: "attack",
     value: function attack(enemy) {
-      f.damage(enemy, this.damage);
+      f.damage(enemy, _player.player, this.damage);
     }
   }]);
 
@@ -931,6 +1352,7 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
   _createClass(bash, [{
     key: "play",
     value: function play(enemy) {
+      enemy.apply(new _buffsManager.default.vulnerable(3));
       this.defaultPlay(enemy);
     }
   }]);
@@ -948,7 +1370,7 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
 
 
 exports.bash = bash;
-},{"../functions.js":"jscripts/components/functions.js"}],"jscripts/components/cards/skillCardClass.js":[function(require,module,exports) {
+},{"../functions.js":"jscripts/components/functions.js","../player.js":"jscripts/components/player.js","../buffsManager.js":"jscripts/components/buffsManager.js"}],"jscripts/components/cards/skillCardClass.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1178,6 +1600,10 @@ var playerClass = /*#__PURE__*/function () {
       discardEffects: {}
     };
     this.turnEffects = {};
+    this.str = 0;
+    this.dex = 0;
+    this.atkMod = 1;
+    this.defMod = 1;
     this.deck = deck;
     this.relics = relics;
     this.modal = document.querySelector(".player");
@@ -1187,6 +1613,19 @@ var playerClass = /*#__PURE__*/function () {
     key: "attack",
     value: function attack() {
       console.log("player attacked");
+    }
+  }, {
+    key: "apply",
+    value: function apply(effectObj) {
+      effectObj.apply(this);
+    }
+  }, {
+    key: "remove",
+    value: function remove(effectName) {
+      var _this$buffs$effectNam, _this$debuffs$effectN;
+
+      (_this$buffs$effectNam = this.buffs[effectName]) === null || _this$buffs$effectNam === void 0 ? void 0 : _this$buffs$effectNam.remove();
+      (_this$debuffs$effectN = this.debuffs[effectName]) === null || _this$debuffs$effectN === void 0 ? void 0 : _this$debuffs$effectN.remove();
     }
   }, {
     key: "test",
@@ -1210,33 +1649,49 @@ exports.battleInit = battleInit;
 
 var _player = require("../components/player.js");
 
+var _pubsub = _interopRequireDefault(require("../components/pubsub.js"));
+
 var f = _interopRequireWildcard(require("../components/functions.js"));
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function battleInit() {
   f.battlefunctions.initEnemies();
   f.cardfunctions.resetDrawPile();
-  f.drawCardsIntoHand();
+  f.drawCardsIntoHand(); // after everything is initialized start turn
+
+  _pubsub.default.turnStarted();
 }
-},{"../components/player.js":"jscripts/components/player.js","../components/functions.js":"jscripts/components/functions.js"}],"jscripts/main.js":[function(require,module,exports) {
+},{"../components/player.js":"jscripts/components/player.js","../components/pubsub.js":"jscripts/components/pubsub.js","../components/functions.js":"jscripts/components/functions.js"}],"jscripts/main.js":[function(require,module,exports) {
 "use strict";
 
 var battle = _interopRequireWildcard(require("./logics/battle.js"));
 
+var _pubsub = _interopRequireDefault(require("./components/pubsub.js"));
+
 var _dom = require("./components/dom.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+var endTurnButton = document.querySelector("button");
+endTurnButton.addEventListener("click", function () {
+  _pubsub.default.turnEnded();
+
+  _pubsub.default.turnStarted();
+});
 battle.battleInit(); // will throw error bcause not importing and no render function
 // console.log(cardsManager.playerHand);
 // console.log(cardsManager.drawPile);
 // console.log(cardsManager.playerHand[0].element.cardObject);
-},{"./logics/battle.js":"jscripts/logics/battle.js","./components/dom.js":"jscripts/components/dom.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./logics/battle.js":"jscripts/logics/battle.js","./components/pubsub.js":"jscripts/components/pubsub.js","./components/dom.js":"jscripts/components/dom.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
