@@ -168,7 +168,9 @@ function domInit() {}
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.tiger = exports.g = exports.bruv = exports.bat = exports.basicEnemy = void 0;
+exports.g = exports.bruv = exports.bat = exports.basicEnemy = void 0;
+exports.setUpHealthBar = setUpHealthBar;
+exports.tiger = void 0;
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
@@ -193,11 +195,15 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 var basicEnemy = /*#__PURE__*/function () {
-  function basicEnemy(health) {
+  function basicEnemy(name, health) {
+    var initBlock = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
     _classCallCheck(this, basicEnemy);
 
+    this.name = name;
     this.maxHealth = health;
     this.health = health;
+    this.block = initBlock;
     this.buffs = {};
     this.debuffs = {};
     this.str = 0;
@@ -208,6 +214,7 @@ var basicEnemy = /*#__PURE__*/function () {
     this.recieveDamageEffects = {};
     this.blockEffects = {};
     this.turnEffects = {};
+    generateEnemyElement(this);
   }
 
   _createClass(basicEnemy, [{
@@ -236,14 +243,9 @@ var bat = /*#__PURE__*/function (_basicEnemy) {
   var _super = _createSuper(bat);
 
   function bat() {
-    var _this;
-
     _classCallCheck(this, bat);
 
-    _this = _super.call(this, 13);
-    _this.name = "bat";
-    generateEnemyElement(_assertThisInitialized(_this));
-    return _this;
+    return _super.call(this, "bat", 13);
   }
 
   return _createClass(bat);
@@ -257,14 +259,9 @@ var tiger = /*#__PURE__*/function (_basicEnemy2) {
   var _super2 = _createSuper(tiger);
 
   function tiger() {
-    var _this2;
-
     _classCallCheck(this, tiger);
 
-    _this2 = _super2.call(this, 63);
-    _this2.name = "tiger";
-    generateEnemyElement(_assertThisInitialized(_this2));
-    return _this2;
+    return _super2.call(this, "tiger", 63);
   }
 
   return _createClass(tiger);
@@ -278,14 +275,9 @@ var bruv = /*#__PURE__*/function (_basicEnemy3) {
   var _super3 = _createSuper(bruv);
 
   function bruv() {
-    var _this3;
-
     _classCallCheck(this, bruv);
 
-    _this3 = _super3.call(this, 36);
-    _this3.name = "bruv";
-    generateEnemyElement(_assertThisInitialized(_this3));
-    return _this3;
+    return _super3.call(this, "bruv", 36);
   }
 
   return _createClass(bruv);
@@ -299,14 +291,13 @@ var g = /*#__PURE__*/function (_basicEnemy4) {
   var _super4 = _createSuper(g);
 
   function g() {
-    var _this4;
+    var _this;
 
     _classCallCheck(this, g);
 
-    _this4 = _super4.call(this, 2);
-    _this4.name = "";
-    generateEnemyElement(_assertThisInitialized(_this4));
-    return _this4;
+    _this = _super4.call(this, 2);
+    _this.name = "";
+    return _this;
   }
 
   return _createClass(g);
@@ -317,8 +308,8 @@ exports.g = g;
 
 function generateEnemyElement(enemy) {
   setUpModal(enemy);
-  setUpSelector(enemy);
   setUpHealthBar(enemy);
+  setUpSelector(enemy);
 }
 
 function setUpModal(enemy) {
@@ -350,8 +341,15 @@ function setUpHealthBar(enemy) {
   var maxHealthCount = document.createElement("span");
   maxHealthCount.classList.add("maxHealthCount");
   maxHealthCount.append(enemy.maxHealth);
+  var blockBar = document.createElement("div");
+  blockBar.classList.add("blockBar");
+  var blockCount = document.createElement("span");
+  blockCount.classList.add("blockCount");
+  blockCount.innerText = 0;
+  blockBar.append(blockCount);
   enemyHealthBar.style.width = enemy.maxHealth + 40 + "px";
   enemyHealthBar.append(healthDrag, healthDisplay);
+  enemyHealthBar.append(blockBar);
   enemyHealthBar.append(healthCount, " / ", maxHealthCount);
   enemy.modal.append(enemyHealthBar);
   enemy.healthBar = enemyHealthBar; // for easy access
@@ -473,6 +471,7 @@ exports.determineCardType = determineCardType;
 exports.generateCardDomElement = generateCardDomElement;
 exports.getEntityHealthModals = getEntityHealthModals;
 exports.linkElementtToEntity = linkElementtToEntity;
+exports.renderBlock = renderBlock;
 exports.renderCardIntoHand = renderCardIntoHand;
 exports.renderHealthBar = renderHealthBar;
 exports.renderHealthCount = renderHealthCount;
@@ -545,6 +544,19 @@ function renderHealthCount(entity) {
 
 function renderHealthD(healthD, percent) {
   healthD.style.transform = "scaleX( max(0 ,".concat(percent, "))");
+}
+
+function renderBlock(entity) {
+  var healthInfo = getEntityHealthModals(entity);
+  var blockBar = healthInfo.blockBar;
+  var blockCount = healthInfo.blockCount;
+
+  if (entity.block <= 0) {
+    blockBar.classList.toggle("show", false);
+  } else {
+    blockBar.classList.toggle("show", true);
+    blockCount.innerText = entity.block;
+  }
 } // /small renders
 // checks
 
@@ -633,208 +645,59 @@ function linkElementtToEntity(Element, entity) {
 }
 
 function getEntityHealthModals(entity) {
-  var healthBar = entity.modal.querySelector(".healthBar");
+  var healthBar = entity.healthBar;
   var maxHealthCount = healthBar.querySelector(".maxHealthCount");
   var healthCount = healthBar.querySelector(".healthCount");
   var healthDisplay = healthBar.querySelector(".healthDisplay");
   var healthDrag = healthBar.querySelector(".healthDrag");
+  var blockBar = healthBar.querySelector(".blockBar");
+  var blockCount = blockBar.querySelector(".blockCount");
   return {
     healthBar: healthBar,
     maxHealthCount: maxHealthCount,
     healthCount: healthCount,
     healthDisplay: healthDisplay,
-    healthDrag: healthDrag
+    healthDrag: healthDrag,
+    blockBar: blockBar,
+    blockCount: blockCount
   };
 } // / misc
 },{"../dom.js":"jscripts/components/dom.js"}],"jscripts/components/functions/playerFuctions.js":[function(require,module,exports) {
 
-},{}],"jscripts/components/functions.js":[function(require,module,exports) {
+},{}],"jscripts/components/buffs/effectsHandler.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.cardfunctions = exports.battlefunctions = void 0;
-exports.damage = damage;
-exports.discardCard = discardCard;
-exports.domfunctions = void 0;
-exports.drawCardsIntoHand = drawCardsIntoHand;
-exports.playSelectedCard = playSelectedCard;
-exports.render = exports.playerfunctions = void 0;
-exports.renderHealth = renderHealth;
-exports.selectionHandler = selectionHandler;
-
-var _player = require("./player.js");
-
-var _dom = require("./dom.js");
-
-var battlefunctions = _interopRequireWildcard(require("./functions/battleFunctions.js"));
-
-exports.battlefunctions = battlefunctions;
-
-var cardfunctions = _interopRequireWildcard(require("./functions/cardFunctions.js"));
-
-exports.cardfunctions = cardfunctions;
-
-var domfunctions = _interopRequireWildcard(require("./functions/domFunctions.js"));
-
-exports.domfunctions = domfunctions;
-
-var playerfunctions = _interopRequireWildcard(require("./functions/playerFuctions.js"));
-
-exports.playerfunctions = playerfunctions;
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-// init
-(function () {
-  _dom.restOfPage.addEventListener("pointerdown", function (e) {
-    selectionHandler();
-    playSelectedCard(e);
-  });
-})(); // /init
-// Dom Functions
-// render
-
-
-var render = function () {
-  var previous_hand = [];
-  return function () {
-    var hand = _player.player.hand;
-    var discarded_card_array = previous_hand.filter(function (x) {
-      return !hand.includes(x);
-    });
-    var drawn_card_array = hand.filter(function (x) {
-      return !previous_hand.includes(x);
-    });
-    previous_hand = Array.from(_player.player.hand);
-    drawn_card_array.forEach(function (card) {
-      domfunctions.visualyRenderCard(card);
-    });
-    discarded_card_array.forEach(function (card) {
-      domfunctions.visualyRemoveCard(card);
-    });
-  };
-}();
-
-exports.render = render;
-
-function renderHealth(entity) {
-  var maxHealth = entity.maxHealth;
-  var health = entity.health;
-  var healthInfo = domfunctions.getEntityHealthModals(entity);
-  var health_percent = health / maxHealth;
-  domfunctions.renderHealthBar(entity);
-  domfunctions.renderHealthCount(entity);
-  domfunctions.renderHealthD(healthInfo.healthDisplay, health_percent);
-  setTimeout(function () {
-    domfunctions.renderHealthD(healthInfo.healthDrag, health_percent);
-  }, 700);
-}
-
-function selectionHandler() {
-  if (!domfunctions.selectedCard) {
-    domfunctions.deSelectAllEntities();
-    return;
-  }
-
-  var selected_card = domfunctions.selectedCard.cardObject;
-
-  if (selected_card.target === "enemy") {
-    // console.log("play on enemy");
-    // de select friends if we switch cards
-    domfunctions.deSelectAllEntities(false);
-    domfunctions.selectAllEnemies();
-  } else if (selected_card.target === "friendly") {
-    // console.log("play on friendly");
-    // de select all enemies if we switch cards
-    domfunctions.deSelectAllEntities(false);
-    domfunctions.selectAllFriendlies();
-  } else if (selected_card.target === "player") {
-    // console.log("play on player");
-    // de select all enemies if we switch cards
-    domfunctions.deSelectAllEntities(false);
-    domfunctions.selectPlayer();
-  } //fall back
-  else {
-    alert("selected card", domfunctions.selectedCard, "no have target");
-  }
-} // /render
-// /Dom Functions
-// Battle Fucntion
-// play cardon enemy
-
-
-function playSelectedCard(e) {
-  var is_selector = domfunctions.checkIfIncludesClass(e.target, "selector");
-
-  if (!is_selector) {
-    return;
-  }
-
-  var selector = e.target;
-  var card = domfunctions.selectedCard.cardObject;
-  var entity = selector.parentNode.entity;
-  card.play(entity);
-}
-
-function damage(recievingEntity, DealingEntity, damage) {
-  recievingEntity.health -= damage;
-  renderHealth(recievingEntity);
-} // /play cardon enemy
-// /Battle Fucntion
-// Card Functions
-
-
-function drawCardsIntoHand(draw) {
-  var _player$buffs$draw;
-
-  var bonusDrawBuff = (_player$buffs$draw = _player.player.buffs.draw) !== null && _player$buffs$draw !== void 0 ? _player$buffs$draw : 0;
-  var playerDraw = 5;
-  var totalDraw = draw !== null && draw !== void 0 ? draw : playerDraw + bonusDrawBuff;
-
-  for (var i = 1; i <= totalDraw; i++) {
-    if (_player.player.drawPile.length == 0) {
-      cardfunctions.shuffleDrawPile();
-    }
-
-    var drawnCard = _player.player.drawPile.pop();
-
-    _player.player.hand.push(drawnCard);
-  }
-
-  render();
-}
-
-function discardCard(card) {
-  var index = _player.player.hand.findIndex(function (x) {
-    return x === card;
-  });
-
-  var discardedCard = _player.player.hand.splice(index, 1);
-
-  _player.player.discardPile.push(discardedCard);
-
-  render();
-} // /Card Functions
-},{"./player.js":"jscripts/components/player.js","./dom.js":"jscripts/components/dom.js","./functions/battleFunctions.js":"jscripts/components/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/components/functions/cardFunctions.js","./functions/domFunctions.js":"jscripts/components/functions/domFunctions.js","./functions/playerFuctions.js":"jscripts/components/functions/playerFuctions.js"}],"jscripts/components/buffs/effectsHandler.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+exports.addToblockEffects = addToblockEffects;
+exports.addTocardEffects = addTocardEffects;
+exports.addTodealDamageEffects = addTodealDamageEffects;
+exports.addTorecieveDamageEffects = addTorecieveDamageEffects;
+exports.addToturnEffects = addToturnEffects;
 exports.applyEffectHandler = applyEffectHandler;
+exports.applyStackingEffectHandler = applyStackingEffectHandler;
+exports.halfEffectDuration = halfEffectDuration;
 exports.reduceEffectDuration = reduceEffectDuration;
 exports.reduceEffectUses = reduceEffectUses;
+exports.removeFromblockEffects = removeFromblockEffects;
+exports.removeFromcardEffects = removeFromcardEffects;
+exports.removeFromdealDamageEffects = removeFromdealDamageEffects;
+exports.removeFromrecieveDamageEffects = removeFromrecieveDamageEffects;
+exports.removeFromturnEffects = removeFromturnEffects;
 
+var _buffsManager = _interopRequireDefault(require("../buffsManager"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// add effect
+// stacking
 function applyEffectHandler(effect, entity) {
   var type_of_effect = effect.constructor.generatedEffect;
   var effect_list = entity[type_of_effect];
   var effectName = effect.name;
   var effectDuration = effect.duration;
-  var effectUses = effect.effectUses; // link 'em
+  var effectUses = effect.uses; // link 'em
 
   effect.hostingEntity = entity;
 
@@ -845,6 +708,108 @@ function applyEffectHandler(effect, entity) {
   } else {
     // add effect if it doesn't exist
     effect_list[effectName] = effect;
+  }
+}
+
+function applyStackingEffectHandler(effect, entity) {
+  var type_of_effect = effect.constructor.generatedEffect;
+  var effect_list = entity[type_of_effect];
+  var effectName = effect.name;
+
+  if (effect_list[effectName]) {
+    for (var i = 0; i < 99; i++) {
+      if (effect_list[effectName + i] != undefined) {
+        continue;
+      }
+
+      effect.name = effectName + i;
+      break;
+    }
+  } // add effect with original / newname
+
+
+  effect_list[effectName] = effect;
+} // non stacking
+// adding effects to list
+// deal damae
+
+
+function addTodealDamageEffects(effect) {
+  effect.hostingEntity.dealDamageEffects[effect.name] = effect;
+}
+
+function removeFromdealDamageEffects(effect) {
+  delete effect.hostingEntity.dealDamageEffects[effect.name];
+} // recieve damage
+
+
+function addTorecieveDamageEffects(effect) {
+  effect.hostingEntity.recieveDamageEffects[effect.name] = effect;
+}
+
+function removeFromrecieveDamageEffects(effect) {
+  delete effect.hostingEntity.recieveDamageEffects[effect.name];
+} // block effects
+
+
+function addToblockEffects(effect) {
+  effect.hostingEntity.blockEffects[effect.name] = effect;
+}
+
+function removeFromblockEffects(effect) {
+  delete effect.hostingEntity.blockEffects[effect.name];
+} // card effects
+
+
+function addTocardEffects(effect, numOdList) {
+  var cardList = getListBasedOnNumber(numOdList);
+  effect.hostingEntity.cardEffects[cardList][effect.name] = effect;
+}
+
+function removeFromcardEffects(effect, numOdList) {
+  var cardList = getListBasedOnNumber(numOdList);
+  delete effect.hostingEntity.cardEffects[cardList][effect.name];
+}
+
+function getListBasedOnNumber(number) {
+  if (number === 1) {
+    return "playEffects";
+  }
+
+  if (number === 2) {
+    return "drawEffects";
+  }
+
+  if (number === 3) {
+    return "exaustEffects";
+  }
+
+  if (number === 4) {
+    return "discardEffects";
+  }
+} // turn effects
+
+
+function addToturnEffects(effect) {
+  effect.hostingEntity.turnEffects[effect.name] = effect;
+}
+
+function removeFromturnEffects(effect) {
+  delete effect.hostingEntity.turnEffects[effect.name];
+} // /add effect
+// effect timer
+
+
+function halfEffectDuration(effect) {
+  if (typeof effect.duration !== "number") {
+    throw new Error("inf effect want to be hallfed", effect);
+    return;
+  }
+
+  effect.duration = Math.floor(effect.duration / 2);
+
+  if (effect.duration <= 0) {
+    effect.remove();
   }
 }
 
@@ -870,7 +835,9 @@ function reduceEffectUses(effect) {
   if (effect.uses <= 0) {
     effect.remove();
   }
-}
+} // /effect timer
+// reinforce effect
+
 
 function reinforceEffect(exactEffect, bonusDuration, bonusUses) {
   reinforceDuration(exactEffect, bonusDuration);
@@ -888,27 +855,27 @@ function reinforceDuration(exactEffect, bonusDuration) {
     return;
   } // fall back
   else {
-    alert("effectsHandler : type of effect duration not intended , chack consle");
     console.log(bonusDuration, " added to ", exactEffect);
+    alert("effectsHandler : type of effect duration not intended , chack consle");
   }
 }
 
 function reinforceUses(exactEffect, bonusUses) {
   if (exactEffect.uses === "inf") {
     return;
-  } else if (bonusUses === "inf") {
+  } else if (bonusUses == "inf") {
     exactEffect.uses = "inf";
     return;
-  } else if (typeof bonusUses === "number") {
+  } else if (typeof bonusUses == "number") {
     exactEffect.uses += bonusUses;
     return;
   } // fall back
   else {
     alert("effectsHandler : type of effect duration not intended , chack consle");
-    console.log(bonusDuration, " added to ", exactEffect);
+    console.log(bonusUses, " added to ", exactEffect);
   }
-}
-},{}],"jscripts/components/pubsub.js":[function(require,module,exports) {
+} // /reinforce effect
+},{"../buffsManager":"jscripts/components/buffsManager.js"}],"jscripts/components/pubsub.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -945,19 +912,19 @@ var pubsub = function () {
 
   function emit(event, data) {
     events[event] = events[event] || [];
-    events[event].forEach(function (evenObject) {
+    Array.from(events[event]).forEach(function (evenObject) {
       evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(data);
     });
   }
 
   function turnEnded() {
-    events["turnEnded"].forEach(function (evenObject) {
+    Array.from(events["turnEnded"]).forEach(function (evenObject) {
       evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
     });
   }
 
   function turnStarted(params) {
-    events["turnStarted"].forEach(function (evenObject) {
+    Array.from(events["turnStarted"]).forEach(function (evenObject) {
       evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
     });
     turn++;
@@ -987,7 +954,7 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.d = exports.basicBuff = void 0;
+exports.d = exports.buffer = exports.basicBuff = void 0;
 
 var _effectsHandler = require("./effectsHandler.js");
 
@@ -1046,6 +1013,11 @@ var basicBuff = /*#__PURE__*/function () {
       (0, _effectsHandler.applyEffectHandler)(this, entity);
     }
   }, {
+    key: "defaultStackingInit",
+    value: function defaultStackingInit(entity) {
+      (0, _effectsHandler.applyStackingEffectHandler)(this.entity);
+    }
+  }, {
     key: "effect",
     value: function effect() {// subs to pubsub event and triggers
     }
@@ -1065,15 +1037,59 @@ exports.basicBuff = basicBuff;
 
 _defineProperty(basicBuff, "generatedEffect", "buffs");
 
-var d = /*#__PURE__*/function (_basicDebuff) {
-  _inherits(d, _basicDebuff);
+var buffer = /*#__PURE__*/function (_basicBuff) {
+  _inherits(buffer, _basicBuff);
 
-  var _super = _createSuper(d);
+  var _super = _createSuper(buffer);
 
-  function d(name, duration, uses) {
+  function buffer() {
+    _classCallCheck(this, buffer);
+
+    return _super.call(this, "buffer", null, 1);
+  }
+
+  _createClass(buffer, [{
+    key: "init",
+    value: function init(entity) {
+      this.defaultInit(entity);
+
+      if (this.alreadyAplied) {
+        return;
+      }
+
+      (0, _effectsHandler.addTorecieveDamageEffects)(this);
+    }
+  }, {
+    key: "listEffect",
+    value: function listEffect(damage) {
+      if (damage.val >= 0) {
+        damage.val = 0;
+      }
+
+      (0, _effectsHandler.reduceEffectUses)(this);
+    }
+  }, {
+    key: "remove",
+    value: function remove() {
+      this.defaultRemove();
+      (0, _effectsHandler.removeFromrecieveDamageEffects)(this);
+    }
+  }]);
+
+  return buffer;
+}(basicBuff);
+
+exports.buffer = buffer;
+
+var d = /*#__PURE__*/function (_basicBuff2) {
+  _inherits(d, _basicBuff2);
+
+  var _super2 = _createSuper(d);
+
+  function d(duration, uses) {
     _classCallCheck(this, d);
 
-    return _super.call(this, "", duration, uses);
+    return _super2.call(this, "", duration, uses);
   }
 
   _createClass(d, [{
@@ -1100,7 +1116,17 @@ var d = /*#__PURE__*/function (_basicDebuff) {
   }]);
 
   return d;
-}(basicDebuff);
+}(basicBuff);
+/*
+buffs that aply to list
+  on apply add itself to list and buffs
+  on remove remove itself from list
+
+on effects handler add 5 similar function
+that add buff to specififc list
+that means 5 specific functions that remove from each list
+*/
+
 
 exports.d = d;
 },{"./effectsHandler.js":"jscripts/components/buffs/effectsHandler.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/buffs/debuffClasses.js":[function(require,module,exports) {
@@ -1109,9 +1135,11 @@ exports.d = d;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.vulnerable = exports.d = exports.basicDebuff = void 0;
+exports.vulnerable = exports.poison = exports.d = exports.bleed = exports.basicDebuff = void 0;
 
 var _effectsHandler = require("./effectsHandler.js");
+
+var _functions = require("../functions.js");
 
 var _pubsub = _interopRequireDefault(require("../pubsub.js"));
 
@@ -1140,8 +1168,6 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var variable = 0;
 
 var basicDebuff = /*#__PURE__*/function () {
   function basicDebuff(name, duration, uses) {
@@ -1238,15 +1264,99 @@ var vulnerable = /*#__PURE__*/function (_basicDebuff) {
 
 exports.vulnerable = vulnerable;
 
-var d = /*#__PURE__*/function (_basicDebuff2) {
-  _inherits(d, _basicDebuff2);
+var poison = /*#__PURE__*/function (_basicDebuff2) {
+  _inherits(poison, _basicDebuff2);
 
-  var _super2 = _createSuper(d);
+  var _super2 = _createSuper(poison);
 
-  function d(name, duration, uses) {
+  function poison(duration) {
+    _classCallCheck(this, poison);
+
+    return _super2.call(this, "Poison", duration, "inf");
+  }
+
+  _createClass(poison, [{
+    key: "init",
+    value: function init(entity) {
+      this.defaultInit(entity);
+
+      if (this.alreadyAplied) {
+        return;
+      }
+
+      _pubsub.default.on("turnStarted", this);
+    }
+  }, {
+    key: "effect",
+    value: function effect(turn) {
+      (0, _functions.directlyDamage)(this.duration, this.hostingEntity);
+      (0, _effectsHandler.reduceEffectDuration)(this);
+    }
+  }, {
+    key: "remove",
+    value: function remove() {
+      _pubsub.default.off("turnStarted", this);
+
+      this.defaultRemove();
+    }
+  }]);
+
+  return poison;
+}(basicDebuff);
+
+exports.poison = poison;
+
+var bleed = /*#__PURE__*/function (_basicDebuff3) {
+  _inherits(bleed, _basicDebuff3);
+
+  var _super3 = _createSuper(bleed);
+
+  function bleed(duration) {
+    _classCallCheck(this, bleed);
+
+    return _super3.call(this, "Bleed", duration, "inf");
+  }
+
+  _createClass(bleed, [{
+    key: "init",
+    value: function init(entity) {
+      this.defaultInit(entity);
+
+      if (this.alreadyAplied) {
+        return;
+      }
+
+      _pubsub.default.on("turnStarted", this);
+    }
+  }, {
+    key: "effect",
+    value: function effect(turn) {
+      (0, _functions.directlyDamage)(this.duration, this.hostingEntity);
+      (0, _effectsHandler.halfEffectDuration)(this);
+    }
+  }, {
+    key: "remove",
+    value: function remove() {
+      _pubsub.default.off("turnStarted", this);
+
+      this.defaultRemove();
+    }
+  }]);
+
+  return bleed;
+}(basicDebuff);
+
+exports.bleed = bleed;
+
+var d = /*#__PURE__*/function (_basicDebuff4) {
+  _inherits(d, _basicDebuff4);
+
+  var _super4 = _createSuper(d);
+
+  function d(duration, uses) {
     _classCallCheck(this, d);
 
-    return _super2.call(this, "", duration, uses);
+    return _super4.call(this, "", duration, uses);
   }
 
   _createClass(d, [{
@@ -1276,7 +1386,7 @@ var d = /*#__PURE__*/function (_basicDebuff2) {
 }(basicDebuff);
 
 exports.d = d;
-},{"./effectsHandler.js":"jscripts/components/buffs/effectsHandler.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/buffsManager.js":[function(require,module,exports) {
+},{"./effectsHandler.js":"jscripts/components/buffs/effectsHandler.js","../functions.js":"jscripts/components/functions.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/buffsManager.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1298,11 +1408,242 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var effect = _objectSpread(_objectSpread({}, buffs), debuffs);
+var effects = _objectSpread(_objectSpread({}, buffs), debuffs);
 
-var _default = effect;
+var _default = effects;
 exports.default = _default;
-},{"./buffs/buffClasses.js":"jscripts/components/buffs/buffClasses.js","./buffs/debuffClasses.js":"jscripts/components/buffs/debuffClasses.js"}],"jscripts/components/cards/attackCardClasses.js":[function(require,module,exports) {
+},{"./buffs/buffClasses.js":"jscripts/components/buffs/buffClasses.js","./buffs/debuffClasses.js":"jscripts/components/buffs/debuffClasses.js"}],"jscripts/components/functions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.attackFriendly = attackFriendly;
+exports.basicDamageFormula = basicDamageFormula;
+exports.cardfunctions = exports.battlefunctions = void 0;
+exports.damage = damage;
+exports.damageBlock = damageBlock;
+exports.directlyDamage = directlyDamage;
+exports.discardCard = discardCard;
+exports.domfunctions = void 0;
+exports.drawCardsIntoHand = drawCardsIntoHand;
+exports.playSelectedCard = playSelectedCard;
+exports.render = exports.playerfunctions = void 0;
+exports.renderHealth = renderHealth;
+exports.selectionHandler = selectionHandler;
+
+var _player = require("./player.js");
+
+var _dom = require("./dom.js");
+
+var battlefunctions = _interopRequireWildcard(require("./functions/battleFunctions.js"));
+
+exports.battlefunctions = battlefunctions;
+
+var cardfunctions = _interopRequireWildcard(require("./functions/cardFunctions.js"));
+
+exports.cardfunctions = cardfunctions;
+
+var domfunctions = _interopRequireWildcard(require("./functions/domFunctions.js"));
+
+exports.domfunctions = domfunctions;
+
+var playerfunctions = _interopRequireWildcard(require("./functions/playerFuctions.js"));
+
+exports.playerfunctions = playerfunctions;
+
+var _buffsManager = _interopRequireDefault(require("./buffsManager.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+// init
+(function () {
+  _dom.restOfPage.addEventListener("pointerdown", function (e) {
+    selectionHandler();
+    playSelectedCard(e);
+  });
+})(); // /init
+// Dom Functions
+// render
+
+
+var render = function () {
+  var previous_hand = [];
+  return function () {
+    var hand = _player.player.hand;
+    var discarded_card_array = previous_hand.filter(function (x) {
+      return !hand.includes(x);
+    });
+    var drawn_card_array = hand.filter(function (x) {
+      return !previous_hand.includes(x);
+    });
+    previous_hand = Array.from(_player.player.hand);
+    drawn_card_array.forEach(function (card) {
+      domfunctions.visualyRenderCard(card);
+    });
+    discarded_card_array.forEach(function (card) {
+      domfunctions.visualyRemoveCard(card);
+    });
+  };
+}();
+
+exports.render = render;
+
+function renderHealth(entity) {
+  var maxHealth = entity.maxHealth;
+  var health = entity.health;
+  var healthInfo = domfunctions.getEntityHealthModals(entity);
+  var health_percent = health / maxHealth;
+  domfunctions.renderHealthBar(entity);
+  domfunctions.renderHealthCount(entity);
+  domfunctions.renderBlock(entity);
+  domfunctions.renderHealthD(healthInfo.healthDisplay, health_percent);
+  setTimeout(function () {
+    domfunctions.renderHealthD(healthInfo.healthDrag, health_percent);
+  }, 700);
+}
+
+function selectionHandler() {
+  if (!domfunctions.selectedCard) {
+    domfunctions.deSelectAllEntities();
+    return;
+  }
+
+  var selected_card = domfunctions.selectedCard.cardObject;
+
+  if (selected_card.target === "enemy") {
+    // console.log("play on enemy");
+    // de select friends if we switch cards
+    domfunctions.deSelectAllEntities(false);
+    domfunctions.selectAllEnemies();
+  } else if (selected_card.target === "friendly") {
+    // console.log("play on friendly");
+    // de select all enemies if we switch cards
+    domfunctions.deSelectAllEntities(false);
+    domfunctions.selectAllFriendlies();
+  } else if (selected_card.target === "player") {
+    // console.log("play on player");
+    // de select all enemies if we switch cards
+    domfunctions.deSelectAllEntities(false);
+    domfunctions.selectPlayer();
+  } //fall back
+  else {
+    alert("selected card", domfunctions.selectedCard, "no have target");
+  }
+} // /render
+// /Dom Functions
+// Battle Fucntion
+// play cardon enemy
+
+
+function playSelectedCard(e) {
+  var is_selector = domfunctions.checkIfIncludesClass(e.target, "selector");
+
+  if (!is_selector) {
+    return;
+  }
+
+  var selector = e.target;
+  var card = domfunctions.selectedCard.cardObject;
+  var entity = selector.parentNode.entity;
+  card.play(entity);
+}
+
+function damage(recievingEntity, DealingEntity, initialDamage) {
+  var damageObj = {
+    val: basicDamageFormula(recievingEntity, DealingEntity, initialDamage),
+    status: true
+  }; // loop through dealDamage Effects
+
+  for (var effect in DealingEntity.dealDamageEffects) {
+    DealingEntity.dealDamageEffects[effect].listEffect(damageObj);
+  } // loop through recieveDamageEffects Effects
+
+
+  for (var _effect in recievingEntity.recieveDamageEffects) {
+    recievingEntity.recieveDamageEffects[_effect].listEffect(damageObj);
+  }
+
+  if (!damageObj.status) {
+    return;
+  }
+
+  console.log("attack function : ".concat(recievingEntity.name, " recieved ").concat(damageObj.val), recievingEntity);
+  var unblockedDamage = damageBlock(damageObj.val, recievingEntity);
+  recievingEntity.health -= unblockedDamage;
+  renderHealth(recievingEntity);
+}
+
+function directlyDamage(damage, entity) {
+  entity.health -= damage;
+  renderHealth(entity);
+}
+
+function damageBlock(damage, entity) {
+  var block = entity.block;
+
+  if (block >= damage) {
+    entity.block -= damage;
+    return 0;
+  } else {
+    entity.block = 0;
+    return damage - block;
+  }
+}
+
+function basicDamageFormula(recievingEntity, DealingEntity, initialDamage) {
+  var finalDamage = (initialDamage + DealingEntity.str) * (DealingEntity.atkMod * recievingEntity.defMod);
+  return Math.round(finalDamage);
+} // /play cardon enemy
+// enemy functions
+
+
+function attackFriendly(damage, DealingEntity) {} // / enemy functions
+// /Battle Fucntion
+// Card Functions
+
+
+function drawCardsIntoHand(draw) {
+  var _player$buffs$draw;
+
+  var bonusDrawBuff = (_player$buffs$draw = _player.player.buffs.draw) !== null && _player$buffs$draw !== void 0 ? _player$buffs$draw : 0;
+  var playerDraw = 5;
+  var totalDraw = draw !== null && draw !== void 0 ? draw : playerDraw + bonusDrawBuff;
+
+  for (var i = 1; i <= totalDraw; i++) {
+    if (_player.player.drawPile.length == 0) {
+      if (_player.player.discardPile.length == 0) {
+        break;
+      } // maybe solves idk
+
+
+      cardfunctions.shuffleDrawPile();
+    }
+
+    var drawnCard = _player.player.drawPile.pop();
+
+    _player.player.hand.push(drawnCard);
+  }
+
+  render();
+}
+
+function discardCard(card) {
+  var index = _player.player.hand.findIndex(function (x) {
+    return x === card;
+  });
+
+  var discardedCard = _player.player.hand.splice(index, 1);
+
+  _player.player.discardPile.push(discardedCard);
+
+  render();
+} // /Card Functions
+},{"./player.js":"jscripts/components/player.js","./dom.js":"jscripts/components/dom.js","./functions/battleFunctions.js":"jscripts/components/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/components/functions/cardFunctions.js","./functions/domFunctions.js":"jscripts/components/functions/domFunctions.js","./functions/playerFuctions.js":"jscripts/components/functions/playerFuctions.js","./buffsManager.js":"jscripts/components/buffsManager.js"}],"jscripts/components/cards/attackCardClasses.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1347,11 +1688,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var basicAttackCardClass = /*#__PURE__*/function () {
-  function basicAttackCardClass(damage, energyCost) {
+  function basicAttackCardClass(name, energyCost, damage) {
     _classCallCheck(this, basicAttackCardClass);
 
-    this.damage = damage;
+    this.name = name;
     this.energyCost = energyCost;
+    this.damage = damage;
     this.target = "enemy";
     this.type = "attack";
   }
@@ -1388,13 +1730,9 @@ var strike = /*#__PURE__*/function (_basicAttackCardClass) {
   var _super = _createSuper(strike);
 
   function strike(damage, energyCost) {
-    var _this;
-
     _classCallCheck(this, strike);
 
-    _this = _super.call(this, 7, 1);
-    _this.name = "Strike";
-    return _this;
+    return _super.call(this, "Strike", 1, 6);
   }
 
   _createClass(strike, [{
@@ -1415,20 +1753,17 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
   var _super2 = _createSuper(bash);
 
   function bash(damage, energyCost) {
-    var _this2;
-
     _classCallCheck(this, bash);
 
-    _this2 = _super2.call(this, 10, 2);
-    _this2.name = "Bash";
-    return _this2;
+    return _super2.call(this, "Bash", 2, 10);
   }
 
   _createClass(bash, [{
     key: "play",
     value: function play(enemy) {
-      enemy.apply(new _buffsManager.default.vulnerable(3));
       this.defaultPlay(enemy);
+      enemy.apply(new _buffsManager.default.buffer());
+      enemy.apply(new _buffsManager.default.vulnerable(3));
     }
   }]);
 
@@ -1490,10 +1825,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var basicSkillCardClass = /*#__PURE__*/function () {
-  function basicSkillCardClass(energyCost) {
+  function basicSkillCardClass(name, energyCost, addingBlock) {
     _classCallCheck(this, basicSkillCardClass);
 
+    this.name = name;
     this.energyCost = energyCost;
+    this.addingBlock = addingBlock;
     this.target = "friendly";
     this.type = "skill";
   }
@@ -1502,6 +1839,13 @@ var basicSkillCardClass = /*#__PURE__*/function () {
     key: "play",
     value: function play() {
       console.log(this.name, " got played");
+    }
+  }, {
+    key: "addBlock",
+    value: function addBlock(entity) {
+      console.log(entity);
+      entity.block += this.addingBlock;
+      f.renderHealth(entity);
     }
   }]);
 
@@ -1518,19 +1862,15 @@ var defend = /*#__PURE__*/function (_basicSkillCardClass) {
   var _super = _createSuper(defend);
 
   function defend(energyCost) {
-    var _this;
-
     _classCallCheck(this, defend);
 
-    _this = _super.call(this, 1);
-    _this.name = "Defend";
-    return _this;
+    return _super.call(this, "Defend", 1, 5);
   }
 
   _createClass(defend, [{
     key: "play",
-    value: function play() {
-      console.log("".concat(this.name, " add 5 block"));
+    value: function play(entity) {
+      this.addBlock(entity);
     }
   }]);
 
@@ -1545,13 +1885,13 @@ var card = /*#__PURE__*/function (_basicSkillCardClass2) {
   var _super2 = _createSuper(card);
 
   function card(energyCost) {
-    var _this2;
+    var _this;
 
     _classCallCheck(this, card);
 
-    _this2.energyCost = energyCost;
-    _this2.name = "";
-    return _possibleConstructorReturn(_this2);
+    _this.energyCost = energyCost;
+    _this.name = "";
+    return _possibleConstructorReturn(_this);
   }
 
   _createClass(card, [{
@@ -1636,14 +1976,14 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 var drawPile = [];
 var discardPile = [];
 var playerHand = [];
-var playerStartingDeck = [// new attackCardClasses.strike(),
-// new attackCardClasses.strike(),
-// new attackCardClasses.strike(),
-// new attackCardClasses.strike(),
+var playerStartingDeck = [new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), // new skillCardClasses.defend(),
 // new skillCardClasses.defend(),
 // new skillCardClasses.defend(),
-// new skillCardClasses.defend(),
-new attackCardClasses.bash(), new attackCardClasses.bash(), new attackCardClasses.bash(), new attackCardClasses.bash(), new attackCardClasses.bash()]; // useless ?//, drawPile , discardPile , playerHand}
+// new attackCardClasses.bash(),
+new attackCardClasses.bash() // new attackCardClasses.bash(),
+// new attackCardClasses.bash(),
+// new attackCardClasses.bash(),
+]; // useless ?//, drawPile , discardPile , playerHand}
 
 exports.playerStartingDeck = playerStartingDeck;
 },{"./attackCardClasses.js":"jscripts/components/cards/attackCardClasses.js","./skillCardClass.js":"jscripts/components/cards/skillCardClass.js","./powerCardClasses.js":"jscripts/components/cards/powerCardClasses.js"}],"jscripts/components/player.js":[function(require,module,exports) {
@@ -1655,6 +1995,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.player = void 0;
 
 var _cardsManager = require("./cards/01cardsManager.js");
+
+var _enemyClass = require("./enemies/enemyClass.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -1668,7 +2010,7 @@ var playerClass = /*#__PURE__*/function () {
 
     this.maxHealth = hp;
     this.health = hp;
-    this.block = 0;
+    this.block = 30;
     this.energy = 3;
     this.hand = [];
     this.drawPile = [];
@@ -1692,17 +2034,16 @@ var playerClass = /*#__PURE__*/function () {
     this.dex = 0;
     this.atkMod = 1;
     this.defMod = 1;
+    this.actualDeck = deck;
     this.deck = deck;
-    this.relics = relics;
+    this.relics = relics; // dom stufff
+
     this.modal = document.querySelector(".player");
+    this.modal.entity = this;
+    (0, _enemyClass.setUpHealthBar)(this);
   }
 
   _createClass(playerClass, [{
-    key: "attack",
-    value: function attack() {
-      console.log("player attacked");
-    }
-  }, {
     key: "apply",
     value: function apply(effectObj) {
       effectObj.apply(this);
@@ -1727,7 +2068,7 @@ var playerClass = /*#__PURE__*/function () {
 
 var player = new playerClass(73, _cardsManager.playerStartingDeck, {});
 exports.player = player;
-},{"./cards/01cardsManager.js":"jscripts/components/cards/01cardsManager.js"}],"jscripts/logics/battle.js":[function(require,module,exports) {
+},{"./cards/01cardsManager.js":"jscripts/components/cards/01cardsManager.js","./enemies/enemyClass.js":"jscripts/components/enemies/enemyClass.js"}],"jscripts/logics/battle.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1750,7 +2091,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function battleInit() {
   f.battlefunctions.initEnemies();
   f.cardfunctions.resetDrawPile();
-  f.drawCardsIntoHand(); // after everything is initialized start turn
+  f.drawCardsIntoHand();
+  f.renderHealth(_player.player); // after everything is initialized start turn
 
   _pubsub.default.turnStarted();
 }
@@ -1807,7 +2149,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58213" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57862" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

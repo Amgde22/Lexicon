@@ -123,10 +123,6 @@
     transform: translateY(-30%) scale(0.7);
   }
 }
-img {
-  display: none;
-}
-
 .enemy {
   position: absolute;
   inset: 0;
@@ -157,15 +153,15 @@ img {
 
 .tiger {
   width: 95%;
-  background-image: url("/basicTiger.f740a3a7.jpg");
+  background-image: url("/basicTiger.00373913.jpg");
 }
 
 .bat {
-  background-image: url("/basicBat.6d717bf4.gif");
+  background-image: url("/basicBat.7b99f2c9.gif");
 }
 
 .bruv {
-  background-image: url("/basicBruv.60940ee0.gif");
+  background-image: url("/basicBruv.61999fc7.gif");
 }
 
 .healthBar {
@@ -181,7 +177,7 @@ img {
   min-width: 30%;
   max-width: 100%;
   height: 20px;
-  transform-origin: left;
+  transform-origin: center;
   transform: scale(1);
   opacity: 0.85;
   isolation: isolate;
@@ -192,18 +188,46 @@ img {
   height: 100%;
   width: 100%;
   background-color: red;
-  z-index: -1;
+  z-index: -2;
   transition: transform 500ms ease-out;
-  transform-origin: inherit;
+  transform-origin: left;
 }
 .healthBar .healthDrag {
   position: absolute;
   height: 100%;
   width: 100%;
   background-color: rgb(255, 217, 0);
-  z-index: -2;
+  z-index: -3;
   transition: transform 50ms ease-in;
-  transform-origin: inherit;
+  transform-origin: left;
+}
+.healthBar .blockBar {
+  display: none;
+}
+.healthBar .blockBar.show {
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  outline: 3px solid lightgray;
+}
+.healthBar .blockBar.show .blockCount {
+  position: absolute;
+  right: 100%;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+  height: 50px;
+  width: 50px;
+  background-image: url("/solid shield.c24caed3.png");
+  background-size: contain;
+  font-size: 20px;
+  color: white;
+  text-shadow: 2px 0 black, -2px 0 black, 0 2px black, 0 -2px black;
+  display: grid;
+  place-items: center;
+  transform: translateX(25%);
 }
 
 .enemySelector, .friendlySelector {

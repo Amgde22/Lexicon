@@ -189,7 +189,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"./components/enemies/basicTiger.jpg":[["basicTiger.f740a3a7.jpg","scss/components/enemies/basicTiger.jpg"],"scss/components/enemies/basicTiger.jpg"],"./components/enemies/basicBat.gif":[["basicBat.6d717bf4.gif","scss/components/enemies/basicBat.gif"],"scss/components/enemies/basicBat.gif"],"./components/enemies/basicBruv.gif":[["basicBruv.60940ee0.gif","scss/components/enemies/basicBruv.gif"],"scss/components/enemies/basicBruv.gif"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../graphics/enemies/basicTiger.jpg":[["basicTiger.00373913.jpg","graphics/enemies/basicTiger.jpg"],"graphics/enemies/basicTiger.jpg"],"./../graphics/enemies/basicBat.gif":[["basicBat.7b99f2c9.gif","graphics/enemies/basicBat.gif"],"graphics/enemies/basicBat.gif"],"./../graphics/enemies/basicBruv.gif":[["basicBruv.61999fc7.gif","graphics/enemies/basicBruv.gif"],"graphics/enemies/basicBruv.gif"],"./../graphics/icons/solid shield.png":[["solid shield.c24caed3.png","graphics/icons/solid shield.png"],"graphics/icons/solid shield.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -217,7 +217,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58213" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57862" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
