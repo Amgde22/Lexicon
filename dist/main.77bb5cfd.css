@@ -104,6 +104,14 @@
   background-color: orange;
 }
 
+.Poison {
+  background-color: green;
+}
+
+.Bleed {
+  background-color: crimson;
+}
+
 @media (max-width: 500px) {
   .hand {
     height: 30vw;
@@ -164,6 +172,19 @@
   background-image: url("/basicBruv.61999fc7.gif");
 }
 
+.attacking {
+  animation-name: attacking;
+  animation-duration: 300ms;
+}
+
+@keyframes attacking {
+  50% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
 .healthBar {
   position: absolute;
   top: 0;
@@ -275,37 +296,37 @@
   z-index: 2;
 }
 
-.enemy-box[data-enemy-box2=""] {
-  grid-column: 3/4;
-  grid-row: 2/3;
-  z-index: 2;
-}
-
 .enemy-box[data-enemy-box3=""] {
-  grid-column: 2/3;
-  grid-row: 2/3;
-  z-index: 2;
-}
-
-.enemy-box[data-enemy-box4=""] {
-  grid-column: 1/2;
+  grid-column: 3/4;
   grid-row: 2/3;
   z-index: 2;
 }
 
 .enemy-box[data-enemy-box5=""] {
+  grid-column: 2/3;
+  grid-row: 2/3;
+  z-index: 2;
+}
+
+.enemy-box[data-enemy-box7=""] {
+  grid-column: 1/2;
+  grid-row: 2/3;
+  z-index: 2;
+}
+
+.enemy-box[data-enemy-box2=""] {
   grid-column: 4/5;
   grid-row: 1/2;
   z-index: 1;
 }
 
-.enemy-box[data-enemy-box6=""] {
+.enemy-box[data-enemy-box4=""] {
   grid-column: 3/4;
   grid-row: 1/2;
   z-index: 1;
 }
 
-.enemy-box[data-enemy-box7=""] {
+.enemy-box[data-enemy-box6=""] {
   grid-column: 2/3;
   grid-row: 1/2;
   z-index: 1;
@@ -325,6 +346,27 @@
     transform: scale(0.85);
   }
 }
+.background_animation {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+.background_animation img {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.background_animation.hidden {
+  display: none;
+}
+
 body {
   font-family: "Roboto Slab", serif;
 }

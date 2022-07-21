@@ -123,6 +123,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.dark_strike = exports.anim = void 0;
 exports.domInit = domInit;
 exports.restOfPage = exports.playerModel = exports.handElement = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemyGrid = exports.enemyBoxes = void 0;
 var restOfPage = document.querySelector(".rest-of-page");
@@ -149,17 +150,12 @@ var enemy_box7 = document.querySelector(".enemy-grid").children[6];
 exports.enemy_box7 = enemy_box7;
 var enemy_box8 = document.querySelector(".enemy-grid").children[7];
 exports.enemy_box8 = enemy_box8;
-var enemyBoxes = {
-  enemyBox1: enemy_box1,
-  enemyBox2: enemy_box2,
-  enemyBox3: enemy_box3,
-  enemyBox4: enemy_box4,
-  enemyBox5: enemy_box5,
-  enemyBox6: enemy_box6,
-  enemyBox7: enemy_box7,
-  enemyBox8: enemy_box8
-};
+var enemyBoxes = [enemy_box1, enemy_box2, enemy_box3, enemy_box4, enemy_box5, enemy_box6, enemy_box7, enemy_box8];
 exports.enemyBoxes = enemyBoxes;
+var dark_strike = document.querySelector("#dark_strike");
+exports.dark_strike = dark_strike;
+var anim = document.querySelector("#anim");
+exports.anim = anim;
 
 function domInit() {}
 },{}],"jscripts/components/enemies/enemyClass.js":[function(require,module,exports) {
@@ -171,6 +167,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.g = exports.bruv = exports.bat = exports.basicEnemy = void 0;
 exports.setUpHealthBar = setUpHealthBar;
 exports.tiger = void 0;
+
+var _functions = require("../functions.js");
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
@@ -204,6 +202,7 @@ var basicEnemy = /*#__PURE__*/function () {
     this.maxHealth = health;
     this.health = health;
     this.block = initBlock;
+    this.turn = 0;
     this.buffs = {};
     this.debuffs = {};
     this.str = 0;
@@ -214,10 +213,27 @@ var basicEnemy = /*#__PURE__*/function () {
     this.recieveDamageEffects = {};
     this.blockEffects = {};
     this.turnEffects = {};
+    this.delay = 500;
     generateEnemyElement(this);
   }
 
   _createClass(basicEnemy, [{
+    key: "attack",
+    value: function attack() {
+      console.log(this.name, " attacked");
+      (0, _functions.attackFriendly)(1, this);
+    }
+  }, {
+    key: "move",
+    value: function move() {
+      this.moves[this.turn].exe();
+      this.turn++;
+
+      if (this.turn >= this.moves.length) {
+        this.turn = 0;
+      }
+    }
+  }, {
     key: "apply",
     value: function apply(effectObj) {
       effectObj.apply(this);
@@ -243,9 +259,26 @@ var bat = /*#__PURE__*/function (_basicEnemy) {
   var _super = _createSuper(bat);
 
   function bat() {
+    var _this;
+
     _classCallCheck(this, bat);
 
-    return _super.call(this, "bat", 13);
+    _this = _super.call(this, "bat", 13);
+
+    var enemy = _assertThisInitialized(_this);
+
+    _this.moves = [{
+      exe: function exe() {
+        (0, _functions.gainBlock)(12, enemy);
+      },
+      icon: ""
+    }, {
+      exe: function exe() {
+        (0, _functions.gainBlock)(12, enemy);
+      },
+      icon: ""
+    }];
+    return _this;
   }
 
   return _createClass(bat);
@@ -259,9 +292,26 @@ var tiger = /*#__PURE__*/function (_basicEnemy2) {
   var _super2 = _createSuper(tiger);
 
   function tiger() {
+    var _this2;
+
     _classCallCheck(this, tiger);
 
-    return _super2.call(this, "tiger", 63);
+    _this2 = _super2.call(this, "tiger", 63);
+
+    var enemy = _assertThisInitialized(_this2);
+
+    _this2.moves = [{
+      exe: function exe() {
+        (0, _functions.attackFriendly)(50, enemy);
+      },
+      icon: ""
+    }, {
+      exe: function exe() {
+        (0, _functions.attackFriendly)(50, enemy);
+      },
+      icon: ""
+    }];
+    return _this2;
   }
 
   return _createClass(tiger);
@@ -275,9 +325,22 @@ var bruv = /*#__PURE__*/function (_basicEnemy3) {
   var _super3 = _createSuper(bruv);
 
   function bruv() {
+    var _this3;
+
     _classCallCheck(this, bruv);
 
-    return _super3.call(this, "bruv", 36);
+    _this3 = _super3.call(this, "bruv", 36);
+
+    var enemy = _assertThisInitialized(_this3);
+
+    _this3.moves = [{
+      exe: function exe() {},
+      icon: ""
+    }, {
+      exe: function exe() {},
+      icon: ""
+    }];
+    return _this3;
   }
 
   return _createClass(bruv);
@@ -291,13 +354,19 @@ var g = /*#__PURE__*/function (_basicEnemy4) {
   var _super4 = _createSuper(g);
 
   function g() {
-    var _this;
+    var _this4;
 
     _classCallCheck(this, g);
 
-    _this = _super4.call(this, 2);
-    _this.name = "";
-    return _this;
+    _this4 = _super4.call(this, "", 2);
+
+    var enemy = _assertThisInitialized(_this4);
+
+    _this4.moves = [{
+      exe: function exe() {},
+      icon: ""
+    }];
+    return _this4;
   }
 
   return _createClass(g);
@@ -354,7 +423,93 @@ function setUpHealthBar(enemy) {
   enemy.modal.append(enemyHealthBar);
   enemy.healthBar = enemyHealthBar; // for easy access
 }
-},{}],"jscripts/components/functions/battleFunctions.js":[function(require,module,exports) {
+/*
+each enemy has a list of moves 
+when player turn ends play the next move for each enemy
+only when an enemy's move finishes 
+  (he chooses how much time) , should we advance in the
+  moves list
+
+
+
+
+*/
+},{"../functions.js":"jscripts/components/functions.js"}],"jscripts/components/pubsub.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _functions = require("./functions.js");
+
+var pubsub = function () {
+  var turn = 0;
+  var events = {
+    "turnEnded": [],
+    "turnStarted": []
+  };
+
+  function on(event, obj) {
+    events[event] = events[event] || [];
+    events[event].push(obj);
+  }
+
+  function off(event, obj) {
+    if (!(event in events)) {
+      alert("trying to off event that doesn't exist");
+      console.log(event, obj);
+      return;
+    }
+
+    for (var i = 0; i < events[event].length; i++) {
+      if (events[event][i] === obj) {
+        events[event].splice(i, 1);
+        break;
+      }
+    }
+  }
+
+  function emit(event, data) {
+    events[event] = events[event] || [];
+    Array.from(events[event]).forEach(function (evenObject) {
+      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(data);
+    });
+  }
+
+  function turnStarted() {
+    Array.from(events["turnStarted"]).forEach(function (evenObject) {
+      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
+    });
+    turn++;
+    console.log("%c Turn%c:".concat(turn, " started"), "color:red;", "color:black;");
+  }
+
+  function turnEnded() {
+    Array.from(events["turnEnded"]).forEach(function (evenObject) {
+      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
+    });
+  }
+
+  function resetTurns() {
+    turn = 0;
+  }
+
+  return {
+    events: events,
+    on: on,
+    off: off,
+    emit: emit,
+    turnEnded: turnEnded,
+    turnStarted: turnStarted,
+    resetTurns: resetTurns
+  };
+}();
+
+var _default = pubsub;
+exports.default = _default;
+},{"./functions.js":"jscripts/components/functions.js"}],"jscripts/components/functions/battleFunctions.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -366,6 +521,10 @@ exports.initEnemies = initEnemies;
 var _dom = require("../dom.js");
 
 var enemyClass = _interopRequireWildcard(require("../enemies/enemyClass.js"));
+
+var _pubsub = _interopRequireDefault(require("../pubsub.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
@@ -383,6 +542,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+// enemies
 function initEnemies() {
   var randomEnemyBoxes = getRandomEnemyBoxes(3);
   var enemy1 = new enemyClass.bat();
@@ -394,7 +554,7 @@ function initEnemies() {
 }
 
 function getRandomEnemyBoxes(num) {
-  var all_EnemyBoxes = Object.values(_dom.enemyBoxes);
+  var all_EnemyBoxes = Array.from(_dom.enemyBoxes);
   var random_Boxes = [];
 
   for (var i = 1; i <= num; i++) {
@@ -403,14 +563,15 @@ function getRandomEnemyBoxes(num) {
   }
 
   return random_Boxes;
-}
-},{"../dom.js":"jscripts/components/dom.js","../enemies/enemyClass.js":"jscripts/components/enemies/enemyClass.js"}],"jscripts/components/functions/cardFunctions.js":[function(require,module,exports) {
+} // /enemies
+},{"../dom.js":"jscripts/components/dom.js","../enemies/enemyClass.js":"jscripts/components/enemies/enemyClass.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/functions/cardFunctions.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.determineCardType = determineCardType;
+exports.locateCard = locateCard;
 exports.resetDrawPile = resetDrawPile;
 exports.shuffle = shuffle;
 exports.shuffleDrawPile = shuffleDrawPile;
@@ -455,7 +616,58 @@ function determineCardType(card) {
 function shuffleDrawPile() {
   // asuming drawPile has 0 cards
   var shuffled_discard = shuffle(_player.player.discardPile);
+  clearDiscardPile();
   _player.player.drawPile = _toConsumableArray(shuffled_discard);
+}
+
+function clearDiscardPile() {
+  _player.player.discardPile = [];
+}
+/* returns object */
+
+
+function locateCard(card) {
+  var index = _player.player.hand.findIndex(function (x) {
+    return x === card;
+  });
+
+  var locatedCard;
+  var location;
+
+  if (index !== -1) {
+    locatedCard = _player.player.hand[index];
+    location = "hand";
+  }
+
+  if (index === -1) {
+    index = _player.player.drawPile.findIndex(function (x) {
+      return x === card;
+    });
+    locatedCard = _player.player.drawPile[index];
+    location = "drawPile";
+  }
+
+  if (index === -1) {
+    index = _player.player.discardPile.findIndex(function (x) {
+      return x === card;
+    });
+    locatedCard = _player.player.discardPile[index];
+    location = "discardPile";
+  }
+
+  if (index === -1) {
+    index = _player.player.exhaustPile.findIndex(function (x) {
+      return x === card;
+    });
+    locatedCard = _player.player.exhaustPile[index];
+    location = "exhaustPile";
+  }
+
+  return {
+    index: index,
+    locatedCard: locatedCard,
+    location: location
+  };
 }
 },{"../player.js":"jscripts/components/player.js"}],"jscripts/components/functions/domFunctions.js":[function(require,module,exports) {
 "use strict";
@@ -467,10 +679,14 @@ exports.checkElement = checkElement;
 exports.checkIfIncludesClass = checkIfIncludesClass;
 exports.deSelectAllCards = deSelectAllCards;
 exports.deSelectAllEntities = deSelectAllEntities;
+exports.deSelectHandler = deSelectHandler;
 exports.determineCardType = determineCardType;
+exports.findEnemyBoxPosition = findEnemyBoxPosition;
 exports.generateCardDomElement = generateCardDomElement;
+exports.getEnemyBoxOfEntity = getEnemyBoxOfEntity;
 exports.getEntityHealthModals = getEntityHealthModals;
 exports.linkElementtToEntity = linkElementtToEntity;
+exports.moveNextEnemyBoxOf = moveNextEnemyBoxOf;
 exports.renderBlock = renderBlock;
 exports.renderCardIntoHand = renderCardIntoHand;
 exports.renderHealthBar = renderHealthBar;
@@ -486,6 +702,10 @@ exports.visualyRemoveCard = visualyRemoveCard;
 exports.visualyRenderCard = visualyRenderCard;
 
 var _dom = require("../dom.js");
+
+var _pubsub = _interopRequireDefault(require("../pubsub.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var selectedCard;
 exports.selectedCard = selectedCard;
@@ -636,12 +856,12 @@ function selectPlayer() {
 // misc
 
 
-function determineCardType(card) {
-  return card.constructor.generatedCardType;
-}
-
 function linkElementtToEntity(Element, entity) {
   Element.entityObject = entity;
+}
+
+function determineCardType(card) {
+  return card.constructor.generatedCardType;
 }
 
 function getEntityHealthModals(entity) {
@@ -661,8 +881,30 @@ function getEntityHealthModals(entity) {
     blockBar: blockBar,
     blockCount: blockCount
   };
+}
+
+function moveNextEnemyBoxOf(enemyBox) {
+  var enemyBoxPosition = findEnemyBoxPosition(enemyBox);
+
+  if (!_dom.enemyBoxes[enemyBoxPosition + 1]) {
+    _pubsub.default.turnStarted();
+
+    return;
+  }
+
+  _dom.enemyBoxes[enemyBoxPosition + 1].move();
+}
+
+function findEnemyBoxPosition(enemyBox) {
+  return _dom.enemyBoxes.findIndex(function (eBox) {
+    return eBox === enemyBox;
+  });
+}
+
+function getEnemyBoxOfEntity(entity) {
+  return entity.modal.parentElement;
 } // / misc
-},{"../dom.js":"jscripts/components/dom.js"}],"jscripts/components/functions/playerFuctions.js":[function(require,module,exports) {
+},{"../dom.js":"jscripts/components/dom.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/functions/playerFuctions.js":[function(require,module,exports) {
 
 },{}],"jscripts/components/buffs/effectsHandler.js":[function(require,module,exports) {
 "use strict";
@@ -875,80 +1117,7 @@ function reinforceUses(exactEffect, bonusUses) {
     console.log(bonusUses, " added to ", exactEffect);
   }
 } // /reinforce effect
-},{"../buffsManager":"jscripts/components/buffsManager.js"}],"jscripts/components/pubsub.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var pubsub = function () {
-  var turn = 0;
-  var events = {
-    "turnEnded": [],
-    "turnStarted": []
-  };
-
-  function on(event, obj) {
-    events[event] = events[event] || [];
-    events[event].push(obj);
-  }
-
-  function off(event, obj) {
-    if (!(event in events)) {
-      alert("trying to off event that doesn't exist");
-      console.log(event, obj);
-      return;
-    }
-
-    for (var i = 0; i < events[event].length; i++) {
-      if (events[event][i] === obj) {
-        events[event].splice(i, 1);
-        break;
-      }
-    }
-  }
-
-  function emit(event, data) {
-    events[event] = events[event] || [];
-    Array.from(events[event]).forEach(function (evenObject) {
-      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(data);
-    });
-  }
-
-  function turnEnded() {
-    Array.from(events["turnEnded"]).forEach(function (evenObject) {
-      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
-    });
-  }
-
-  function turnStarted(params) {
-    Array.from(events["turnStarted"]).forEach(function (evenObject) {
-      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
-    });
-    turn++;
-    console.log("%c Turn%c:".concat(turn), "color:red;", "color:black;");
-  }
-
-  function resetTurns() {
-    turn = 0;
-  }
-
-  return {
-    events: events,
-    on: on,
-    off: off,
-    emit: emit,
-    turnEnded: turnEnded,
-    turnStarted: turnStarted,
-    resetTurns: resetTurns
-  };
-}();
-
-var _default = pubsub;
-exports.default = _default;
-},{}],"jscripts/components/buffs/buffClasses.js":[function(require,module,exports) {
+},{"../buffsManager":"jscripts/components/buffsManager.js"}],"jscripts/components/buffs/buffClasses.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1418,15 +1587,21 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.animationHandler = animationHandler;
 exports.attackFriendly = attackFriendly;
 exports.basicDamageFormula = basicDamageFormula;
 exports.cardfunctions = exports.battlefunctions = void 0;
 exports.damage = damage;
 exports.damageBlock = damageBlock;
+exports.defaultTurnEnded = defaultTurnEnded;
+exports.defaultTurnStarted = defaultTurnStarted;
 exports.directlyDamage = directlyDamage;
 exports.discardCard = discardCard;
 exports.domfunctions = void 0;
 exports.drawCardsIntoHand = drawCardsIntoHand;
+exports.endTurnClearPlayerHand = endTurnClearPlayerHand;
+exports.exhaustCard = exhaustCard;
+exports.gainBlock = gainBlock;
 exports.playSelectedCard = playSelectedCard;
 exports.render = exports.playerfunctions = void 0;
 exports.renderHealth = renderHealth;
@@ -1434,7 +1609,7 @@ exports.selectionHandler = selectionHandler;
 
 var _player = require("./player.js");
 
-var _dom = require("./dom.js");
+var dom = _interopRequireWildcard(require("./dom.js"));
 
 var battlefunctions = _interopRequireWildcard(require("./functions/battleFunctions.js"));
 
@@ -1454,18 +1629,41 @@ exports.playerfunctions = playerfunctions;
 
 var _buffsManager = _interopRequireDefault(require("./buffsManager.js"));
 
+var _pubsub = _interopRequireDefault(require("./pubsub.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 // init
 (function () {
-  _dom.restOfPage.addEventListener("pointerdown", function (e) {
+  _pubsub.default.on("turnStarted", {
+    effect: defaultTurnStarted
+  });
+
+  _pubsub.default.on("turnEnded", {
+    effect: defaultTurnEnded
+  });
+
+  dom.restOfPage.addEventListener("pointerdown", function (e) {
     selectionHandler();
     playSelectedCard(e);
   });
+  dom.enemyBoxes[0].__proto__.move = moveEnemyBox;
 })(); // /init
 // Dom Functions
 // render
@@ -1474,6 +1672,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 var render = function () {
   var previous_hand = [];
   return function () {
+    domfunctions.deSelectAllCards();
     var hand = _player.player.hand;
     var discarded_card_array = previous_hand.filter(function (x) {
       return !hand.includes(x);
@@ -1482,11 +1681,11 @@ var render = function () {
       return !previous_hand.includes(x);
     });
     previous_hand = Array.from(_player.player.hand);
-    drawn_card_array.forEach(function (card) {
-      domfunctions.visualyRenderCard(card);
-    });
     discarded_card_array.forEach(function (card) {
       domfunctions.visualyRemoveCard(card);
+    });
+    drawn_card_array.forEach(function (card) {
+      domfunctions.visualyRenderCard(card);
     });
   };
 }();
@@ -1535,9 +1734,54 @@ function selectionHandler() {
     alert("selected card", domfunctions.selectedCard, "no have target");
   }
 } // /render
+// moveBoxes
+
+
+function moveEnemyBox(box) {
+  var _this = this;
+
+  var boxEnemyModal = this.querySelector(".enemy"); // console.log(domfunctions.findEnemyBoxPosition(this) , this , boxEnemyModal);
+
+  if (boxEnemyModal == null) {
+    domfunctions.moveNextEnemyBoxOf(this);
+    return;
+  }
+
+  var boxEnemyEntity = boxEnemyModal.entity;
+  boxEnemyEntity.move();
+  setTimeout(function () {
+    domfunctions.moveNextEnemyBoxOf(_this);
+  },
+  /*wait*/
+  boxEnemyEntity.delay);
+} // /moveBoxes
+// animations
+
+
+function animationHandler(entity) {
+  var enemyBox = domfunctions.getEnemyBoxOfEntity(entity);
+  var animation = dom.dark_strike.cloneNode(true);
+  animation.classList.remove("hidden");
+  var animation_duration = animation.getAttribute("data-duration");
+  enemyBox.append(animation);
+  setTimeout(function () {
+    animation.remove();
+  }, animation_duration);
+} // /animations
 // /Dom Functions
 // Battle Fucntion
 // play cardon enemy
+// turns
+
+
+function defaultTurnStarted() {
+  drawCardsIntoHand();
+}
+
+function defaultTurnEnded(params) {
+  endTurnClearPlayerHand();
+  dom.enemyBoxes[0].move();
+} // /turns
 
 
 function playSelectedCard(e) {
@@ -1568,13 +1812,15 @@ function damage(recievingEntity, DealingEntity, initialDamage) {
     recievingEntity.recieveDamageEffects[_effect].listEffect(damageObj);
   }
 
-  if (!damageObj.status) {
+  if (damageObj.status === false) {
     return;
-  }
+  } // console.log(`attack function : ${recievingEntity.name} recieved ${damageObj.val}`
+  // , recievingEntity);
 
-  console.log("attack function : ".concat(recievingEntity.name, " recieved ").concat(damageObj.val), recievingEntity);
+
   var unblockedDamage = damageBlock(damageObj.val, recievingEntity);
   recievingEntity.health -= unblockedDamage;
+  animationHandler(recievingEntity);
   renderHealth(recievingEntity);
 }
 
@@ -1602,7 +1848,28 @@ function basicDamageFormula(recievingEntity, DealingEntity, initialDamage) {
 // enemy functions
 
 
-function attackFriendly(damage, DealingEntity) {} // / enemy functions
+function attackFriendly(dealingDamage, DealingEntity) {
+  // first ally from entity spot()
+  damage(_player.player, DealingEntity, dealingDamage);
+}
+
+function gainBlock(initialBlock, recievingEntity) {
+  var block = {
+    val: initialBlock,
+    status: true
+  };
+
+  for (var effect in recievingEntity.blockEffects) {
+    recievingEntity.blockEffects[effect].listEffect(block);
+  }
+
+  if (block.status === false) {
+    return;
+  }
+
+  recievingEntity.block += block.val;
+  renderHealth(recievingEntity);
+} // / enemy functions
 // /Battle Fucntion
 // Card Functions
 
@@ -1618,8 +1885,7 @@ function drawCardsIntoHand(draw) {
     if (_player.player.drawPile.length == 0) {
       if (_player.player.discardPile.length == 0) {
         break;
-      } // maybe solves idk
-
+      }
 
       cardfunctions.shuffleDrawPile();
     }
@@ -1629,27 +1895,63 @@ function drawCardsIntoHand(draw) {
     _player.player.hand.push(drawnCard);
   }
 
+  console.log(_player.player.hand);
+  render();
+}
+
+function endTurnClearPlayerHand() {
+  var playerHand = Array.from(_player.player.hand);
+
+  for (var i = 0; i < playerHand.length; i++) {
+    var card = playerHand[i];
+
+    if (card.retains) {
+      continue;
+    } else if (card.exhausts) {
+      exhaustCard(card);
+      continue;
+    } else {
+      discardCard(card);
+    }
+  }
+
   render();
 }
 
 function discardCard(card) {
+  var _player$discardPile;
+
+  //only from hand
   var index = _player.player.hand.findIndex(function (x) {
     return x === card;
   });
 
   var discardedCard = _player.player.hand.splice(index, 1);
 
-  _player.player.discardPile.push(discardedCard);
+  (_player$discardPile = _player.player.discardPile).push.apply(_player$discardPile, _toConsumableArray(discardedCard));
+
+  render();
+}
+
+function exhaustCard(card) {
+  var _cardfunctions$locate = cardfunctions.locateCard(card),
+      index = _cardfunctions$locate.index,
+      exhaustedCard = _cardfunctions$locate.exhaustedCard,
+      location = _cardfunctions$locate.location;
+
+  _player.player[location].splice(index, 1);
+
+  _player.player.exhaustPile.push(exhaustedCard);
 
   render();
 } // /Card Functions
-},{"./player.js":"jscripts/components/player.js","./dom.js":"jscripts/components/dom.js","./functions/battleFunctions.js":"jscripts/components/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/components/functions/cardFunctions.js","./functions/domFunctions.js":"jscripts/components/functions/domFunctions.js","./functions/playerFuctions.js":"jscripts/components/functions/playerFuctions.js","./buffsManager.js":"jscripts/components/buffsManager.js"}],"jscripts/components/cards/attackCardClasses.js":[function(require,module,exports) {
+},{"./player.js":"jscripts/components/player.js","./dom.js":"jscripts/components/dom.js","./functions/battleFunctions.js":"jscripts/components/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/components/functions/cardFunctions.js","./functions/domFunctions.js":"jscripts/components/functions/domFunctions.js","./functions/playerFuctions.js":"jscripts/components/functions/playerFuctions.js","./buffsManager.js":"jscripts/components/buffsManager.js","./pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/cards/attackCardClasses.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.strike = exports.basicAttackCardClass = exports.bash = void 0;
+exports.strike = exports.poison = exports.card = exports.bleed = exports.basicAttackCardClass = exports.bash = void 0;
 
 var f = _interopRequireWildcard(require("../functions.js"));
 
@@ -1768,18 +2070,78 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
   }]);
 
   return bash;
-}(basicAttackCardClass); // export class card extends basicAttackCardClass{
-//   constructor(damage,energyCost){
-//     super(1 , 1) 
-//     this.name = ""
-//   }
-//   play(){
-//     console.log(`${this.name} attacked for ${this.damage}`) 
-//   }
-// }
-
+}(basicAttackCardClass);
 
 exports.bash = bash;
+
+var poison = /*#__PURE__*/function (_basicAttackCardClass3) {
+  _inherits(poison, _basicAttackCardClass3);
+
+  var _super3 = _createSuper(poison);
+
+  function poison(damage, energyCost) {
+    _classCallCheck(this, poison);
+
+    return _super3.call(this, "Poison", 1, 1);
+  }
+
+  _createClass(poison, [{
+    key: "play",
+    value: function play(enemy) {
+      this.defaultPlay(enemy);
+    }
+  }]);
+
+  return poison;
+}(basicAttackCardClass);
+
+exports.poison = poison;
+
+var bleed = /*#__PURE__*/function (_basicAttackCardClass4) {
+  _inherits(bleed, _basicAttackCardClass4);
+
+  var _super4 = _createSuper(bleed);
+
+  function bleed(damage, energyCost) {
+    _classCallCheck(this, bleed);
+
+    return _super4.call(this, "Bleed", 1, 1);
+  }
+
+  _createClass(bleed, [{
+    key: "play",
+    value: function play(enemy) {
+      this.defaultPlay(enemy);
+    }
+  }]);
+
+  return bleed;
+}(basicAttackCardClass);
+
+exports.bleed = bleed;
+
+var card = /*#__PURE__*/function (_basicAttackCardClass5) {
+  _inherits(card, _basicAttackCardClass5);
+
+  var _super5 = _createSuper(card);
+
+  function card(damage, energyCost) {
+    _classCallCheck(this, card);
+
+    return _super5.call(this, "", 1, 1);
+  }
+
+  _createClass(card, [{
+    key: "play",
+    value: function play(enemy) {
+      this.defaultPlay(enemy);
+    }
+  }]);
+
+  return card;
+}(basicAttackCardClass);
+
+exports.card = card;
 },{"../functions.js":"jscripts/components/functions.js","../player.js":"jscripts/components/player.js","../buffsManager.js":"jscripts/components/buffsManager.js"}],"jscripts/components/cards/skillCardClass.js":[function(require,module,exports) {
 "use strict";
 
@@ -1836,14 +2198,19 @@ var basicSkillCardClass = /*#__PURE__*/function () {
   }
 
   _createClass(basicSkillCardClass, [{
-    key: "play",
-    value: function play() {
-      console.log(this.name, " got played");
+    key: "defaultPlay",
+    value: function defaultPlay(entity) {
+      this.effect(entity);
+      this.discard();
+    }
+  }, {
+    key: "discard",
+    value: function discard() {
+      f.discardCard(this);
     }
   }, {
     key: "addBlock",
     value: function addBlock(entity) {
-      console.log(entity);
       entity.block += this.addingBlock;
       f.renderHealth(entity);
     }
@@ -1870,6 +2237,11 @@ var defend = /*#__PURE__*/function (_basicSkillCardClass) {
   _createClass(defend, [{
     key: "play",
     value: function play(entity) {
+      this.defaultPlay(entity);
+    }
+  }, {
+    key: "effect",
+    value: function effect(entity) {
       this.addBlock(entity);
     }
   }]);
@@ -1976,14 +2348,9 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 var drawPile = [];
 var discardPile = [];
 var playerHand = [];
-var playerStartingDeck = [new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), // new skillCardClasses.defend(),
-// new skillCardClasses.defend(),
-// new skillCardClasses.defend(),
-// new attackCardClasses.bash(),
-new attackCardClasses.bash() // new attackCardClasses.bash(),
-// new attackCardClasses.bash(),
-// new attackCardClasses.bash(),
-]; // useless ?//, drawPile , discardPile , playerHand}
+var playerStartingDeck = [// new attackCardClasses.poison(),
+// new attackCardClasses.poison(),
+new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new skillCardClasses.defend(), new skillCardClasses.defend(), new skillCardClasses.defend(), new attackCardClasses.bash()]; // useless ?//, drawPile , discardPile , playerHand}
 
 exports.playerStartingDeck = playerStartingDeck;
 },{"./attackCardClasses.js":"jscripts/components/cards/attackCardClasses.js","./skillCardClass.js":"jscripts/components/cards/skillCardClass.js","./powerCardClasses.js":"jscripts/components/cards/powerCardClasses.js"}],"jscripts/components/player.js":[function(require,module,exports) {
@@ -2008,6 +2375,7 @@ var playerClass = /*#__PURE__*/function () {
   function playerClass(hp, deck, relics) {
     _classCallCheck(this, playerClass);
 
+    this.name = "struggeler";
     this.maxHealth = hp;
     this.health = hp;
     this.block = 30;
@@ -2015,6 +2383,7 @@ var playerClass = /*#__PURE__*/function () {
     this.hand = [];
     this.drawPile = [];
     this.discardPile = [];
+    this.exhaustPile = [];
     this.buffs = {};
     this.debuffs = {};
     this.dealDamageEffects = {};
@@ -2082,6 +2451,8 @@ var _pubsub = _interopRequireDefault(require("../components/pubsub.js"));
 
 var f = _interopRequireWildcard(require("../components/functions.js"));
 
+var _dom = require("../components/dom.js");
+
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -2091,12 +2462,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function battleInit() {
   f.battlefunctions.initEnemies();
   f.cardfunctions.resetDrawPile();
-  f.drawCardsIntoHand();
   f.renderHealth(_player.player); // after everything is initialized start turn
 
   _pubsub.default.turnStarted();
 }
-},{"../components/player.js":"jscripts/components/player.js","../components/pubsub.js":"jscripts/components/pubsub.js","../components/functions.js":"jscripts/components/functions.js"}],"jscripts/main.js":[function(require,module,exports) {
+},{"../components/player.js":"jscripts/components/player.js","../components/pubsub.js":"jscripts/components/pubsub.js","../components/functions.js":"jscripts/components/functions.js","../components/dom.js":"jscripts/components/dom.js"}],"jscripts/main.js":[function(require,module,exports) {
 "use strict";
 
 var battle = _interopRequireWildcard(require("./logics/battle.js"));
@@ -2114,8 +2484,6 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 var endTurnButton = document.querySelector("button");
 endTurnButton.addEventListener("click", function () {
   _pubsub.default.turnEnded();
-
-  _pubsub.default.turnStarted();
 });
 battle.battleInit(); // will throw error bcause not importing and no render function
 // console.log(cardsManager.playerHand);
@@ -2149,7 +2517,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57862" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50515" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
