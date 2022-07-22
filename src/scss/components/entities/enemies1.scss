@@ -1,0 +1,56 @@
+// ../graphics/enemies
+.enemy{
+  position: absolute;
+  inset: 0;margin: auto ;
+  width: 100%;
+  isolation: isolate;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  // border: 3px solid red;
+  transform-origin: bottom left;
+  
+  & img {
+    display: initial;
+    position: absolute;
+    width: 100%; height: auto;
+    inset: 0;margin: auto;
+    object-fit: contain;
+  
+    }
+  
+    & .oneByTwo{
+      height: 200%; transform: translateY(-25%);
+    }
+  
+    & .twoByTwo{ 
+      transform: scale(2);
+    }
+  
+  
+  }
+  
+  .tiger{
+    width: 95%;
+    background-image: url("../graphics/enemies/basicTiger.jpg");
+  }
+  
+  .bat{
+    background-image: url("../graphics/enemies/basicBat.gif");
+  }
+  
+  .bruv{
+    background-image: url("../graphics/enemies/basicBruv.gif");
+  }
+  
+  .attacking{
+    animation-name: attacking;
+    animation-duration: 300ms;
+  }
+  
+  @keyframes attacking {
+    50%{transform: translateX(-100%);}
+    100%{transform: translateX(0%);}
+  
+  }
+  

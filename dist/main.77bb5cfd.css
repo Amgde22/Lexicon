@@ -185,6 +185,60 @@
     transform: translateX(0%);
   }
 }
+.enemy {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  isolation: isolate;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform-origin: bottom left;
+}
+.enemy img {
+  display: initial;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  inset: 0;
+  margin: auto;
+  object-fit: contain;
+}
+.enemy .oneByTwo {
+  height: 200%;
+  transform: translateY(-25%);
+}
+.enemy .twoByTwo {
+  transform: scale(2);
+}
+
+.tiger {
+  width: 95%;
+  background-image: url("/basicTiger.00373913.jpg");
+}
+
+.bat {
+  background-image: url("/basicBat.7b99f2c9.gif");
+}
+
+.bruv {
+  background-image: url("/basicBruv.61999fc7.gif");
+}
+
+.attacking {
+  animation-name: attacking;
+  animation-duration: 300ms;
+}
+
+@keyframes attacking {
+  50% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
 .healthBar {
   position: absolute;
   top: 0;

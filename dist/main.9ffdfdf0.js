@@ -1797,7 +1797,7 @@ function playSelectedCard(e) {
   card.play(entity);
 }
 
-function damage(recievingEntity, DealingEntity, initialDamage) {
+function damage(recievingEntity, DealingEntity, initialDamage, damageAniamtion) {
   var damageObj = {
     val: basicDamageFormula(recievingEntity, DealingEntity, initialDamage),
     status: true
@@ -2517,7 +2517,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50515" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63762" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
