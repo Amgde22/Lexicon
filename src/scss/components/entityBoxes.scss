@@ -1,58 +1,26 @@
 @use "./entities/allEntities";
-// ../graphics/enemies
-.enemy{
-position: absolute;
-inset: 0;margin: auto ;
-width: 100%;
-isolation: isolate;
-background-size: contain;
-background-repeat: no-repeat;
-background-position: center;
-// border: 3px solid red;
-transform-origin: bottom left;
 
-& img {
-  display: initial;
+
+// 
+.actionIcon{
+  display: grid;
+  place-content: center;
+  color: white;
+
+  box-sizing: initial;
   position: absolute;
-  width: 100%; height: auto;
-  inset: 0;margin: auto;
-  object-fit: contain;
-
+  margin: auto;
+  right: 0; bottom: 10px ;
+  width: 50px;height: 50px;
+  font-size:1.4em ;
+  text-shadow: 2px 0 black 
+  , -2px  0 black
+  , 0   2px black
+  , 0  -2px black ;
+  
+  &:empty{
+    display: none;
   }
-
-  & .oneByTwo{
-    height: 200%; transform: translateY(-25%);
-  }
-
-  & .twoByTwo{ 
-    transform: scale(2);
-  }
-
-
-}
-
-.tiger{
-  width: 95%;
-  background-image: url("../graphics/enemies/basicTiger.jpg");
-}
-
-.bat{
-  background-image: url("../graphics/enemies/basicBat.gif");
-}
-
-.bruv{
-  background-image: url("../graphics/enemies/basicBruv.gif");
-}
-
-.attacking{
-  animation-name: attacking;
-  animation-duration: 300ms;
-}
-
-@keyframes attacking {
-  50%{transform: translateX(-100%);}
-  100%{transform: translateX(0%);}
-
 }
 
 // bars
@@ -199,10 +167,28 @@ transform-origin: bottom left;
 }
 
 @media (max-width: 1000px) {
-.enemy-grid{
-  transform: scale(.85);
+  .enemy-grid{
+    transform: scale(.85);
+  }
+  .healthBar{
+    transform: scale(.85) ;
+  }
+  .actionIcon{
+    font-size:unset ;
+
+    right: 0;left: 0; bottom: calc(100% + 10px) ;
+    border-width: 4px;
+    width: 40px;height: 40px;
+  }
 }
-.healthBar{
-  transform: scale(.85) ;
-}
+
+
+@media (max-width: 500px) {
+.actionIcon{
+ 
+
+    right: 0;left: 0; bottom: calc(100% + 10px) ;
+    border-width: 2px;
+    width: 25px;height: 25px;
+  }
 }

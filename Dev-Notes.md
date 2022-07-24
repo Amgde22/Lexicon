@@ -1,3 +1,10 @@
+what i need
+  attack animation based on attack
+  <!-- break -->
+  next enemy
+  damage calculation
+  icon system
+
 ok so
 1st : structure
 2nd : logic
@@ -16,7 +23,7 @@ Features
 player {
   energy system
   health
-  money trinckets {pub sub}
+  money trinckets {pubsub}
 }
 
 
