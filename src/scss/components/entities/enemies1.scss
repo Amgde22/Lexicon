@@ -1,5 +1,5 @@
 // ../graphics/enemies
-.enemy{
+.enemy-box .entity{
   position: absolute;
   inset: 0;margin: auto ;
   width: 100%;
@@ -9,7 +9,7 @@
   background-position: center;
   // border: 3px solid red;
   transform-origin: bottom left;
-  
+    
   & img {
     display: initial;
     position: absolute;
@@ -26,8 +26,8 @@
     & .twoByTwo{ 
       transform: scale(2);
     }
-  
-  
+
+
   }
   
   .tiger{

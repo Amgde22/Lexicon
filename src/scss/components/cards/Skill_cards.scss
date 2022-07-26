@@ -1,0 +1,9 @@
+
+.card.Defend{
+  $color-here:rgb(52, 183, 226);
+  background-color:   $color-here;
+
+  border: 10px solid darken( $color-here, 15%);
+  border-top-color:lighten($color-here, 20%) ;
+  border-bottom-color:darken( $color-here, 20%) ;
+}

@@ -354,16 +354,18 @@ var basicEnemy = /*#__PURE__*/function () {
     this.dealDamageEffects = {};
     this.recieveDamageEffects = {};
     this.gainBlockEffects = {};
+    this.clearBlockEffects = {};
     this.turnEffects = {};
     this.delay = 500;
     generateEnemyElement(this);
   }
 
   _createClass(basicEnemy, [{
-    key: "attack",
-    value: function attack() {
-      console.log(this.name, " attacked");
-      (0, _functions.attackFriendly)(1, this);
+    key: "die",
+    value: function die(entity) {
+      (0, _functions.resetEntity)(entity);
+      this.modal.remove();
+      delete this;
     }
   }, {
     key: "move",
@@ -405,7 +407,7 @@ var bat = /*#__PURE__*/function (_basicEnemy) {
 
     _classCallCheck(this, bat);
 
-    _this = _super.call(this, "bat", 13);
+    _this = _super.call(this, "bat", 11);
 
     var enemy = _assertThisInitialized(_this);
 
@@ -643,6 +645,7 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.checkEntityDeath = checkEntityDeath;
 exports.getRandomEnemyBoxes = getRandomEnemyBoxes;
 exports.initEnemies = initEnemies;
 
@@ -692,8 +695,14 @@ function getRandomEnemyBoxes(num) {
 
   return random_Boxes;
 } // /enemies
-// damageCounters
-// /damageCounters
+// checl
+
+
+function checkEntityDeath(entity) {
+  if (entity.health <= 0) {
+    entity.die(entity);
+  }
+} // /checl
 },{"../dom.js":"jscripts/components/dom.js","../enemies/enemyClass.js":"jscripts/components/enemies/enemyClass.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/functions/cardFunctions.js":[function(require,module,exports) {
 "use strict";
 
@@ -807,6 +816,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.checkElement = checkElement;
 exports.checkIfIncludesClass = checkIfIncludesClass;
+exports.createCardDescription = createCardDescription;
+exports.createCardIcon = createCardIcon;
+exports.createEnergyElement = createEnergyElement;
+exports.createNameElement = createNameElement;
 exports.deSelectAllCards = deSelectAllCards;
 exports.deSelectAllEntities = deSelectAllEntities;
 exports.deSelectHandler = deSelectHandler;
@@ -854,13 +867,50 @@ function generateCardDomElement(card) {
   var cardElement = document.createElement("div");
   var cardType = determineCardType(card);
   var cardName = card.name.replaceAll(" ", "");
-  cardElement.classList.add("card");
-  cardElement.classList.add(cardType);
-  cardElement.classList.add(cardName);
+  cardElement.classList.add("card", cardType, cardName);
   cardElement.setAttribute("tabindex", "0");
+  var nameHolder = document.querySelector(".nameHolder").cloneNode(true);
+  nameHolder.classList.add("nameHolder");
+  cardElement.append(nameHolder);
+  var energyElement = createEnergyElement(card);
+  cardElement.append(energyElement);
+  var nameElement = createNameElement(card);
+  cardElement.append(nameElement);
+  var cardIcon = createCardIcon();
+  cardElement.append(cardIcon);
+  var cardDescription = createCardDescription(card);
+  cardElement.append(cardDescription !== null && cardDescription !== void 0 ? cardDescription : "description");
   card.element = cardElement;
   cardElement.cardObject = card;
   selectCardOnClick(cardElement);
+}
+
+function createEnergyElement(card) {
+  var card_energy = card.energyCost;
+  var card_energy_element = document.createElement("p");
+  card_energy_element.classList.add("energyElement");
+  card_energy_element.append(card_energy);
+  return card_energy_element;
+}
+
+function createNameElement(card) {
+  var name_element = document.createElement("p");
+  name_element.classList.add("nameElement");
+  name_element.append(card.name);
+  return name_element;
+}
+
+function createCardIcon() {
+  var card_icon = document.createElement("div");
+  card_icon.classList.add("cardIcon");
+  return card_icon;
+}
+
+function createCardDescription(card) {
+  var _document$querySelect;
+
+  var card_discription = (_document$querySelect = document.querySelector(".description.".concat(card.name.toLowerCase()))) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.cloneNode(true);
+  return card_discription;
 }
 
 function renderCardIntoHand(card) {
@@ -874,7 +924,7 @@ function visualyRenderCard(card) {
     generateCardDomElement(card);
   }
 
-  _dom.handElement.append(card.element);
+  renderCardIntoHand(card);
 }
 
 function visualyRemoveCard(card) {
@@ -1086,6 +1136,7 @@ exports.addTorecieveDamageEffects = addTorecieveDamageEffects;
 exports.addToturnEffects = addToturnEffects;
 exports.applyEffectHandler = applyEffectHandler;
 exports.applyStackingEffectHandler = applyStackingEffectHandler;
+exports.force_remove = force_remove;
 exports.halfEffectDuration = halfEffectDuration;
 exports.reduceEffectDuration = reduceEffectDuration;
 exports.reduceEffectUses = reduceEffectUses;
@@ -1096,6 +1147,8 @@ exports.removeFromrecieveDamageEffects = removeFromrecieveDamageEffects;
 exports.removeFromturnEffects = removeFromturnEffects;
 
 var _buffsManager = _interopRequireDefault(require("../buffsManager"));
+
+var _pubsub = _interopRequireDefault(require("../pubsub.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1284,7 +1337,23 @@ function reinforceUses(exactEffect, bonusUses) {
     console.log(bonusUses, " added to ", exactEffect);
   }
 } // /reinforce effect
-},{"../buffsManager":"jscripts/components/buffsManager.js"}],"jscripts/components/buffs/buffClasses.js":[function(require,module,exports) {
+// force remove
+
+
+function force_remove(effect) {
+  var events = _pubsub.default.events;
+
+  for (var event in events) {
+    _pubsub.default.off(event, effect); // for(let i = 0 ; i < events[event].length ; i++){
+    //   const index = events[event].findIndex(e => e === effect)
+    //   if (index > 0) {
+    //     events[event].splice(i,1)
+    //   }
+    // }
+
+  }
+}
+},{"../buffsManager":"jscripts/components/buffsManager.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/buffs/buffClasses.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1340,6 +1409,12 @@ var basicBuff = /*#__PURE__*/function () {
   }, {
     key: "remove",
     value: function remove() {
+      this.defaultRemove();
+    }
+  }, {
+    key: "_forceRemove",
+    value: function _forceRemove() {
+      (0, _effectsHandler.force_remove)(this);
       this.defaultRemove();
     }
   }, {
@@ -1526,6 +1601,13 @@ var basicDebuff = /*#__PURE__*/function () {
       this.defaultRemove();
     }
   }, {
+    key: "_forceRemove",
+    value: function _forceRemove() {
+      console.log("force moved");
+      (0, _effectsHandler.force_remove)(this);
+      this.defaultRemove();
+    }
+  }, {
     key: "defaultInit",
     value: function defaultInit(entity) {
       // for when first applied
@@ -1578,9 +1660,8 @@ var vulnerable = /*#__PURE__*/function (_basicDebuff) {
   }, {
     key: "effect",
     value: function effect() {
-      console.log("enemy every turn defmod:", this.hostingEntity.defMod); //     console.log( `enemy every turn :${variable}:` , this.hostingEntity)
-      // variable++
-
+      // console.log( "enemy every turn defmod:" , this.hostingEntity.defMod + "by " , this.hostingEntity)
+      // console.log( `enemy every turn :${variable}:` , this.hostingEntity)
       (0, _effectsHandler.reduceEffectDuration)(this);
     }
   }, {
@@ -1774,6 +1855,7 @@ exports.gainBlock = gainBlock;
 exports.playSelectedCard = playSelectedCard;
 exports.render = exports.playerfunctions = void 0;
 exports.renderHealth = renderHealth;
+exports.resetEntity = resetEntity;
 exports.selectionHandler = selectionHandler;
 
 var _player = require("./player.js");
@@ -1941,7 +2023,7 @@ function moveEnemyBox(box) {
 // animations
 
 
-function animationHandler(entity) {
+function animationHandler(entity, damageObj) {
   var enemyBox = entity.modal;
   var animation = dom.basic_slash.cloneNode(true);
   animation.classList.remove("hidden");
@@ -2032,6 +2114,7 @@ function damage(recievingEntity, DealingEntity, damageInfoObj) {
   recievingEntity.health -= unblockedDamage;
   animationHandler(recievingEntity);
   renderHealth(recievingEntity);
+  battlefunctions.checkEntityDeath(recievingEntity);
 }
 
 function directlyDamage(damage, entity) {
@@ -2095,6 +2178,18 @@ function clearBlock(entity) {
   var finalClearedBlock = blockClearer.clearedBlock < 0 ? 0 : blockClearer.clearedBlock;
   entity.block = blockClearer.initialBlock - finalClearedBlock;
   renderHealth(entity);
+}
+
+function resetEntity(entity) {
+  entity.apply = function () {};
+
+  for (var effect in entity.buffs) {
+    entity["buffs"][effect]._forceRemove();
+  }
+
+  for (var _effect2 in entity.debuffs) {
+    entity["debuffs"][_effect2]._forceRemove();
+  }
 } // /Battle Fucntion
 // Card Functions
 
@@ -2292,7 +2387,6 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
     key: "play",
     value: function play(enemy) {
       this.defaultPlay(enemy);
-      enemy.apply(new _buffsManager.default.buffer());
       enemy.apply(new _buffsManager.default.vulnerable(3));
     }
   }]);
@@ -2459,7 +2553,7 @@ var defend = /*#__PURE__*/function (_basicSkillCardClass) {
   function defend(energyCost) {
     _classCallCheck(this, defend);
 
-    return _super.call(this, "Defend", 1, 5);
+    return _super.call(this, "Defend", 1, 10);
   }
 
   _createClass(defend, [{
@@ -2578,7 +2672,7 @@ var discardPile = [];
 var playerHand = [];
 var playerStartingDeck = [// new attackCardClasses.poison(),
 // new attackCardClasses.poison(),
-new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new skillCardClasses.defend(), new skillCardClasses.defend(), new skillCardClasses.defend(), new attackCardClasses.bash()]; // useless ?//, drawPile , discardPile , playerHand}
+new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new skillCardClasses.defend(), new skillCardClasses.defend(), new skillCardClasses.defend(), new skillCardClasses.defend(), new attackCardClasses.bash()]; // useless ?//, drawPile , discardPile , playerHand}
 
 exports.playerStartingDeck = playerStartingDeck;
 },{"./attackCardClasses.js":"jscripts/components/cards/attackCardClasses.js","./skillCardClass.js":"jscripts/components/cards/skillCardClass.js","./powerCardClasses.js":"jscripts/components/cards/powerCardClasses.js"}],"jscripts/components/player.js":[function(require,module,exports) {
@@ -2646,6 +2740,11 @@ var playerClass = /*#__PURE__*/function () {
   }
 
   _createClass(playerClass, [{
+    key: "die",
+    value: function die() {
+      console.log("player died resseting game");
+    }
+  }, {
     key: "apply",
     value: function apply(effectObj) {
       effectObj.apply(this);
@@ -2750,7 +2849,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64418" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62880" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

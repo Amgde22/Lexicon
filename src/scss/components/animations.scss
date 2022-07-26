@@ -31,13 +31,6 @@
   animation-name:basicSlash ;
   animation-duration: 250ms;
 }
-
-// keyframes
-@keyframes basicSlash {
-  0%{transform: rotate(-25deg) scaleX(0);}
-100%{transform: rotate(-25deg) scaleX(1);}
-}
-
 //icons
 .icon{
   position: absolute;
@@ -49,7 +42,7 @@
   , 0  -2px black ;
   z-index: -1;
 
-  transform: scale(1.2);
+  animation: iconLoad .5s ;
 }
 .icon.attack{
 
@@ -57,8 +50,21 @@
     fill: red;
   }
 }
+
+
+// keyframes
+@keyframes basicSlash {
+  0%{transform: rotate(-25deg) scaleX(0);}
+100%{transform: rotate(-25deg) scaleX(1);}
+}
+
+@keyframes iconLoad{
+  0%{transform: translateY(80%) scale(.6); opacity: 0.2;}
+100%{transform: translateY(0)   scale(1);  opacity: 1;  }
+}
+
+
+// media
 @media (max-width: 1000px){
-  .icon{
-     transform: scale(1);
-  }
+
 }

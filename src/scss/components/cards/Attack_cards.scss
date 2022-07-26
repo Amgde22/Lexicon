@@ -1,0 +1,34 @@
+
+
+
+
+.card.Strike{
+  $color-here :red;
+  background-color: $color-here;
+
+  border: 10px solid darken( $color-here, 15%);
+  border-top-color:lighten($color-here, 20%) ;
+  border-bottom-color:darken( $color-here, 20%) ;
+}
+.card.Bash{
+  $color-here :orange;
+  background-color: $color-here;
+
+  border: 10px solid darken( $color-here, 15%);
+  border-top-color:lighten($color-here, 20%) ;
+  border-bottom-color:darken( $color-here, 20%) ;
+}
+.Poison{
+  $color-here :green;
+  background-color: $color-here;
+
+  border: 10px solid darken( $color-here, 15%);
+  border-top-color:lighten($color-here, 20%) ;
+  border-bottom-color:darken( $color-here, 20%) ;
+}
+.Bleed{  $color-here :crimson;
+  background-color: $color-here;
+
+  border: 10px solid darken( $color-here, 15%);
+  border-top-color:lighten($color-here, 20%) ;
+  border-bottom-color:darken( $color-here, 20%) ;}

@@ -32,7 +32,15 @@
 
     <button style="position: absolute; right: 0; bottom: 200px; font-size: 20px;"> End Turn</button>
   </section>
+<!--  icons -->
+<div id="shield_icon" class="icon deffend hidden">
+  <img src="/solid shield.c24caed3.png" alt="Shield">
+</div>
 
+<div id="card_name_holder_diva" class="hidden">
+  <img class="nameHolder" src="/card-name.2d118fc1.png" alt="">
+</div>
+<!-- animations -->
 <div id="dark_strike" class="background_animation hidden" data-duration="270">
   <img src="/dark_slash_540.1fcbafef.gif" alt="">
 </div>
@@ -93,10 +101,36 @@
 <g>
 </g>
 </svg>
+<!-- discriptions -->
+<!-- 
+<span class="damage"> 10 <span class="calculatedDamage"></span></span> damage
+<mark class="special"></mark>
+ -->
 
-<div id="shield_icon" class="icon deffend hidden">
-  <img src="/solid shield.c24caed3.png" alt="Shield">
+ <div class="hidden">
+<div class="description bash">
+<span class="damage"> 10 <span class="calculatedDamage"></span></span>
+  deal <span class="damage"> 10 <span class="calculatedDamage"></span></span> damage <br>
+  apply 3 <mark class="special">vulnerable</mark>
 </div>
+<div class="description strike">
+  deal <span class="damage"> 6 <span class="calculatedDamage"></span></span> damage
+</div>
+
+
+
+<div class="description defend">
+  get 5 block
+</div>
+
+
+
+<div class="description">
+  deal <span class="damage"> 10 <span class="calculatedDamage"></span></span> damage
+  <mark class="special"></mark>
+</div>
+
+</div> <!--end of descs -->
 
 </body>
 </html>

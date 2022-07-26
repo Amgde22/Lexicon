@@ -1,3 +1,5 @@
+@use "cards/allCards" ;
+
 .hand {
   position: absolute;
   bottom: 0; left: 0; right: 0;
@@ -24,6 +26,7 @@
     
 
 .card{
+  position: relative;
   flex:0 0 auto;
   background-color: #fff;
   border: 3px solid black;
@@ -54,19 +57,9 @@ z-index: 1;
   transform: translateY(-30%) scale(1.2);
 }
 
-.Strike{
-  background-color: red;
-}
-.Defend{
-  background-color: rgb(52, 183, 226);
-}
-.Bash{
-  background-color: orange;
-}
-.Poison{
-  background-color: green;
-}
-.Bleed{background-color: crimson;}
+
+
+
 
 
 @media (max-width:500px){
