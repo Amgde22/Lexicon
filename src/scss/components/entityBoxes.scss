@@ -6,7 +6,7 @@
   display: grid;
   place-content: center;
   color: white;
-
+  
   box-sizing: initial;
   position: absolute;
   margin: auto;
@@ -19,6 +19,7 @@
   , 0  -2px black ;
   
   transform: scale(1.2);
+  pointer-events: none;
   &:empty{
     display: none;
   }

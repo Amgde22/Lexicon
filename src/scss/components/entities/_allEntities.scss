@@ -1,1 +1,9 @@
 @use  "./enemies1.scss";
+
+.entity.dying{
+  
+  animation:dyingEntity 700ms ;
+}
+@keyframes dyingEntity{
+  to{transform: translateY(50%); opacity: 0;}
+}

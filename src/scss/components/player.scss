@@ -5,14 +5,37 @@
   height: 200px; width: 145px;
   background-color: rgb(162, 162, 231);
 }
+.playerEnergyContainer{
+  position: absolute;left: 3%;top: 70%;
+  width: 120px;height: 120px;
+  display:grid;place-items: center;
 
-@media (max-width:500px){
-  .player{
-    height: 150px; width: 100px;
-  }
+  background-image: url("../graphics/cardIcons/energy-icon.png");
+  background-size: contain;
+  transform-origin: top left;
+  color: white;
+  font-size: 1.6em;
+  text-shadow: 3px 3px 0 #4f2a0b , 2px 2px 0 #4f2a0b, -2px -2px 0 #4f2a0b, 2px -2px 0 #4f2a0b, -2px 2px 0 #4f2a0b, 2px 2px 0 #4f2a0b;
+
 }
+
+
+
+
+
+
 @media (max-width:1000px){
   .player{
     height: 150px; width: 100px;
   }
+  .playerEnergyContainer{
+    transform: scale(.65);
+  }
+}
+
+@media (max-width:500px){
+  .playerEnergyContainer{
+    transform: scale(0);
+  }
+
 }

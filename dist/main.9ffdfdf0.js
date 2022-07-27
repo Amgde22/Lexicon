@@ -125,16 +125,22 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.dark_strike = exports.basic_slash = exports.attack_icon = exports.anim = void 0;
 exports.domInit = domInit;
-exports.shield_icon = exports.restOfPage = exports.playerModel = exports.handElement = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemyGrid = exports.enemyBoxes = void 0;
+exports.shield_icon = exports.restOfPage = exports.playerModel = exports.playerMaxEnergyElement = exports.playerEnergyElement = exports.handElement = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemyGrid = exports.enemyBoxes = exports.endTurnBtn = void 0;
 var restOfPage = document.querySelector(".rest-of-page");
 exports.restOfPage = restOfPage;
+var enemyGrid = document.querySelector(".enemy-grid");
+exports.enemyGrid = enemyGrid;
+var endTurnBtn = document.querySelector(".endTurnBtn");
+exports.endTurnBtn = endTurnBtn;
 var playerModel = document.querySelector(".player");
 exports.playerModel = playerModel;
 var handElement = document.querySelector(".hand");
 exports.handElement = handElement;
-var enemyGrid = document.querySelector(".enemy-grid"); // all enemy boxes (check side it goes reall long this way => )
+var playerEnergyElement = document.querySelector(".playerEnergy");
+exports.playerEnergyElement = playerEnergyElement;
+var playerMaxEnergyElement = document.querySelector(".playerMaxEnergy"); // all enemy boxes (check side it goes reall long this way => )
 
-exports.enemyGrid = enemyGrid;
+exports.playerMaxEnergyElement = playerMaxEnergyElement;
 var enemy_box1 = document.querySelector(".enemy-grid").children[0];
 var enemy_box2 = document.querySelector(".enemy-grid").children[1];
 exports.enemy_box2 = enemy_box2;
@@ -150,7 +156,8 @@ var enemy_box7 = document.querySelector(".enemy-grid").children[6];
 exports.enemy_box7 = enemy_box7;
 var enemy_box8 = document.querySelector(".enemy-grid").children[7];
 exports.enemy_box8 = enemy_box8;
-var enemyBoxes = [enemy_box1, enemy_box2, enemy_box3, enemy_box4, enemy_box5, enemy_box6, enemy_box7, enemy_box8];
+var enemyBoxes = [enemy_box1, enemy_box2, enemy_box3, enemy_box4, enemy_box5, enemy_box6, enemy_box7, enemy_box8]; //animation
+
 exports.enemyBoxes = enemyBoxes;
 var dark_strike = document.querySelector("#dark_strike");
 exports.dark_strike = dark_strike;
@@ -357,14 +364,15 @@ var basicEnemy = /*#__PURE__*/function () {
     this.clearBlockEffects = {};
     this.turnEffects = {};
     this.delay = 500;
+    this.deathDelay = 700;
     generateEnemyElement(this);
   }
 
   _createClass(basicEnemy, [{
     key: "die",
     value: function die(entity) {
-      (0, _functions.resetEntity)(entity);
-      this.modal.remove();
+      (0, _functions.resetEntity)(this);
+      (0, _functions.killEntityModal)(this);
       delete this;
     }
   }, {
@@ -518,6 +526,7 @@ function setUpSelector(enemy) {
   enemySelector.classList.add("selector");
   enemySelector.classList.add("enemySelector");
   enemy.modal.append(enemySelector);
+  enemy.selector = enemySelector;
 }
 
 function setUpHealthBar(enemy) {
@@ -646,12 +655,19 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.checkEntityDeath = checkEntityDeath;
+exports.countDamage = countDamage;
 exports.getRandomEnemyBoxes = getRandomEnemyBoxes;
 exports.initEnemies = initEnemies;
+exports.iterateDealDamageEffects = iterateDealDamageEffects;
+exports.iterateEnergyEffects = iterateEnergyEffects;
+exports.iterateGainBlockEffects = iterateGainBlockEffects;
+exports.iterateRecieveDamageEffects = iterateRecieveDamageEffects;
 
 var _dom = require("../dom.js");
 
 var enemyClass = _interopRequireWildcard(require("../enemies/enemyClass.js"));
+
+var _player = require("../player.js");
 
 var _pubsub = _interopRequireDefault(require("../pubsub.js"));
 
@@ -695,15 +711,49 @@ function getRandomEnemyBoxes(num) {
 
   return random_Boxes;
 } // /enemies
-// checl
+//damage
+
+
+function countDamage(recievingEntity, DealingEntity, damageInfoObj) {
+  if (damageInfoObj.counter) {
+    return damageInfoObj.counter(recievingEntity, DealingEntity, damageInfoObj.damage);
+  }
+
+  return damageInfoObj.damage;
+}
+
+function iterateDealDamageEffects(DealingEntity, damageObj) {
+  for (var effect in DealingEntity.dealDamageEffects) {
+    DealingEntity.dealDamageEffects[effect].listEffect(damageObj);
+  }
+}
+
+function iterateRecieveDamageEffects(recievingEntity, damageObj) {
+  for (var effect in recievingEntity.recieveDamageEffects) {
+    recievingEntity.recieveDamageEffects[effect].listEffect(damageObj);
+  }
+}
+
+function iterateGainBlockEffects(recievingEntity, block) {
+  for (var effect in recievingEntity.gainBlockEffects) {
+    recievingEntity.gainBlockEffects[effect].listEffect(block);
+  }
+}
+
+function iterateEnergyEffects(energyObj) {
+  for (var effect in _player.player.energyEffects) {
+    _player.player.energyEffects[effect].listEffect(energyObj);
+  }
+} // /damage
+// check
 
 
 function checkEntityDeath(entity) {
   if (entity.health <= 0) {
     entity.die(entity);
   }
-} // /checl
-},{"../dom.js":"jscripts/components/dom.js","../enemies/enemyClass.js":"jscripts/components/enemies/enemyClass.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/functions/cardFunctions.js":[function(require,module,exports) {
+} // /check
+},{"../dom.js":"jscripts/components/dom.js","../enemies/enemyClass.js":"jscripts/components/enemies/enemyClass.js","../player.js":"jscripts/components/player.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/functions/cardFunctions.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -836,6 +886,7 @@ exports.renderCardIntoHand = renderCardIntoHand;
 exports.renderHealthBar = renderHealthBar;
 exports.renderHealthCount = renderHealthCount;
 exports.renderHealthD = renderHealthD;
+exports.renderPlayerEnergy = renderPlayerEnergy;
 exports.selectAllEnemies = selectAllEnemies;
 exports.selectAllFriendlies = selectAllFriendlies;
 exports.selectCard = selectCard;
@@ -869,6 +920,8 @@ function generateCardDomElement(card) {
   var cardName = card.name.replaceAll(" ", "");
   cardElement.classList.add("card", cardType, cardName);
   cardElement.setAttribute("tabindex", "0");
+  var cardIcon = createCardIcon();
+  cardElement.append(cardIcon);
   var nameHolder = document.querySelector(".nameHolder").cloneNode(true);
   nameHolder.classList.add("nameHolder");
   cardElement.append(nameHolder);
@@ -876,8 +929,6 @@ function generateCardDomElement(card) {
   cardElement.append(energyElement);
   var nameElement = createNameElement(card);
   cardElement.append(nameElement);
-  var cardIcon = createCardIcon();
-  cardElement.append(cardIcon);
   var cardDescription = createCardDescription(card);
   cardElement.append(cardDescription !== null && cardDescription !== void 0 ? cardDescription : "description");
   card.element = cardElement;
@@ -909,8 +960,11 @@ function createCardIcon() {
 function createCardDescription(card) {
   var _document$querySelect;
 
+  var description_box = document.createElement("div");
+  description_box.classList.add("descriptionBox");
   var card_discription = (_document$querySelect = document.querySelector(".description.".concat(card.name.toLowerCase()))) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.cloneNode(true);
-  return card_discription;
+  description_box.append(card_discription);
+  return description_box;
 }
 
 function renderCardIntoHand(card) {
@@ -960,6 +1014,11 @@ function renderBlock(entity) {
     blockBar.classList.toggle("show", true);
     blockCount.innerText = entity.block;
   }
+}
+
+function renderPlayerEnergy() {
+  _dom.playerEnergyElement.innerText = _player.player.energy;
+  _dom.playerMaxEnergyElement.innerText = _player.player.maxEnergy;
 } // /small renders
 // checks
 
@@ -1661,7 +1720,6 @@ var vulnerable = /*#__PURE__*/function (_basicDebuff) {
     key: "effect",
     value: function effect() {
       // console.log( "enemy every turn defmod:" , this.hostingEntity.defMod + "by " , this.hostingEntity)
-      // console.log( `enemy every turn :${variable}:` , this.hostingEntity)
       (0, _effectsHandler.reduceEffectDuration)(this);
     }
   }, {
@@ -1852,10 +1910,13 @@ exports.drawCardsIntoHand = drawCardsIntoHand;
 exports.endTurnClearPlayerHand = endTurnClearPlayerHand;
 exports.exhaustCard = exhaustCard;
 exports.gainBlock = gainBlock;
+exports.killEntityModal = killEntityModal;
+exports.playCardManager = playCardManager;
 exports.playSelectedCard = playSelectedCard;
 exports.render = exports.playerfunctions = void 0;
 exports.renderHealth = renderHealth;
 exports.resetEntity = resetEntity;
+exports.resetPlayerEnergy = resetPlayerEnergy;
 exports.selectionHandler = selectionHandler;
 
 var _player = require("./player.js");
@@ -1914,12 +1975,17 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     effect: defaultTurnEnded
   });
 
+  dom.endTurnBtn.addEventListener("pointerdown", emitTurnEnded);
   dom.restOfPage.addEventListener("pointerdown", function (e) {
     selectionHandler();
     playSelectedCard(e);
   });
   dom.enemyBoxes[0].__proto__.move = moveEnemyBox;
-})(); // /init
+})();
+
+function emitTurnEnded() {
+  _pubsub.default.turnEnded();
+} // /init
 // Dom Functions
 // render
 
@@ -1998,6 +2064,15 @@ function selectionHandler() {
   else {
     alert("selected card", domfunctions.selectedCard, "no have target");
   }
+}
+
+function killEntityModal(entity) {
+  var entity_selector = entity.modal.querySelector(".selector");
+  entity_selector.remove();
+  entity.modal.classList.add("dying");
+  setTimeout(function () {
+    entity.modal.remove();
+  }, entity.deathDelay);
 } // /render
 // moveBoxes
 
@@ -2024,7 +2099,7 @@ function moveEnemyBox(box) {
 
 
 function animationHandler(entity, damageObj) {
-  var enemyBox = entity.modal;
+  var enemyBox = entity.modal.parentNode;
   var animation = dom.basic_slash.cloneNode(true);
   animation.classList.remove("hidden");
   var animation_duration = animation.getAttribute("data-duration");
@@ -2041,22 +2116,42 @@ function animationHandler(entity, damageObj) {
 
 function defaultTurnStarted() {
   clearBlockOfType("friendly");
+  resetPlayerEnergy();
   drawCardsIntoHand();
   renderActionIcons();
+  enableEndTurnBtn();
 }
 
 function defaultTurnEnded(params) {
+  disableEndTurnBtn();
   clearBlockOfType("enemy");
   endTurnClearPlayerHand();
   dom.enemyBoxes[0].move();
 }
 
-function clearBlockOfType(entityTypr) {
-  var target_entities = document.querySelectorAll(".entity.".concat(entityTypr));
+function disableEndTurnBtn() {
+  dom.endTurnBtn.removeEventListener("pointerdown", emitTurnEnded);
+}
+
+function enableEndTurnBtn() {
+  dom.endTurnBtn.addEventListener("pointerdown", emitTurnEnded);
+}
+
+function clearBlockOfType(entityType) {
+  var target_entities = document.querySelectorAll(".entity.".concat(entityType));
   target_entities.forEach(function (entityModal) {
     var entity = entityModal.entity;
     clearBlock(entity);
   });
+}
+
+function resetPlayerEnergy() {
+  var energy = {
+    val: _player.player.maxEnergy
+  };
+  battlefunctions.iterateEnergyEffects(energy);
+  _player.player.energy = energy.val;
+  domfunctions.renderPlayerEnergy();
 } // /turns
 
 
@@ -2070,7 +2165,21 @@ function playSelectedCard(e) {
   var selector = e.target;
   var card = domfunctions.selectedCard.cardObject;
   var entity = selector.parentNode.entity;
+  playCardManager(card, entity);
+}
+
+function playCardManager(card, entity) {
+  var energyCost = card.energyCost;
+  var energy = _player.player.energy;
+
+  if (energyCost > energy) {
+    domfunctions.deSelectAllCards();
+    return;
+  }
+
+  _player.player.energy -= energyCost;
   card.play(entity);
+  domfunctions.renderPlayerEnergy();
 } // {
 //   damage: 34,
 //   damageCounter : ()=> {}
@@ -2079,29 +2188,16 @@ function playSelectedCard(e) {
 
 
 function damage(recievingEntity, DealingEntity, damageInfoObj) {
-  var _countedDamage;
-
-  var initialDamage = damageInfoObj.damage;
-  var countedDamage;
-
-  if (damageInfoObj.damageCounter) {
-    countedDamage = damageInfoObj.damageCounter(recievingEntity, DealingEntity, initialDamage);
-  }
-
+  var countedDamage = battlefunctions.countDamage(recievingEntity, DealingEntity, damageInfoObj);
   var damageObj = {
-    val: (_countedDamage = countedDamage) !== null && _countedDamage !== void 0 ? _countedDamage : damageFormulas.basicDamageFormula(recievingEntity, DealingEntity, initialDamage),
+    val: countedDamage,
     animation: damageInfoObj.animation,
     status: true
   }; // loop through dealDamage Effects
 
-  for (var effect in DealingEntity.dealDamageEffects) {
-    DealingEntity.dealDamageEffects[effect].listEffect(damageObj);
-  } // loop through recieveDamageEffects Effects
+  battlefunctions.iterateDealDamageEffects(DealingEntity, damageObj); // loop through recieveDamageEffects Effects
 
-
-  for (var _effect in recievingEntity.recieveDamageEffects) {
-    recievingEntity.recieveDamageEffects[_effect].listEffect(damageObj);
-  }
+  battlefunctions.iterateRecieveDamageEffects(recievingEntity, damageObj);
 
   if (damageObj.status === false) {
     return;
@@ -2146,10 +2242,7 @@ function gainBlock(recievingEntity, initialBlock) {
     val: initialBlock,
     status: true
   };
-
-  for (var effect in recievingEntity.gainBlockEffects) {
-    recievingEntity.gainBlockEffects[effect].listEffect(block);
-  }
+  battlefunctions.iterateGainBlockEffects(recievingEntity, block);
 
   if (block.status === false) {
     return;
@@ -2187,8 +2280,8 @@ function resetEntity(entity) {
     entity["buffs"][effect]._forceRemove();
   }
 
-  for (var _effect2 in entity.debuffs) {
-    entity["debuffs"][_effect2]._forceRemove();
+  for (var _effect in entity.debuffs) {
+    entity["debuffs"][_effect]._forceRemove();
   }
 } // /Battle Fucntion
 // Card Functions
@@ -2326,7 +2419,8 @@ var basicAttackCardClass = /*#__PURE__*/function () {
       // console.log(this.name , "attacked" , enemy.name , "for" , this.damage);
       f.damage(enemy, _player.player, {
         damage: this.damage,
-        animation: animation
+        animation: animation,
+        counter: null
       });
       this.discard();
     }
@@ -2705,6 +2799,7 @@ var playerClass = /*#__PURE__*/function () {
     this.maxHealth = hp;
     this.health = hp;
     this.block = 0;
+    this.maxEnergy = 3;
     this.energy = 3;
     this.hand = [];
     this.drawPile = [];
@@ -2725,6 +2820,7 @@ var playerClass = /*#__PURE__*/function () {
       exaustEffects: {},
       discardEffects: {}
     };
+    this.energyEffects = {};
     this.turnEffects = {};
     this.str = 0;
     this.dex = 0;
@@ -2813,10 +2909,10 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-var endTurnButton = document.querySelector("button");
-endTurnButton.addEventListener("click", function () {
-  _pubsub.default.turnEnded();
-});
+// const endTurnButton = document.querySelector("button")
+// endTurnButton.addEventListener("click" , ()=>{
+//   pubsub.turnEnded()
+// })
 battle.battleInit(); // will throw error bcause not importing and no render function
 // console.log(cardsManager.playerHand);
 // console.log(cardsManager.drawPile);
@@ -2849,7 +2945,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62880" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58892" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

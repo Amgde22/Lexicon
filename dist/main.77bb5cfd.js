@@ -189,7 +189,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"./../graphics/cardIcons/energy-icon.png":[["energy-icon.5239062b.png","graphics/cardIcons/energy-icon.png"],"graphics/cardIcons/energy-icon.png"],"./../graphics/enemies/basicTiger.jpg":[["basicTiger.00373913.jpg","graphics/enemies/basicTiger.jpg"],"graphics/enemies/basicTiger.jpg"],"./../graphics/enemies/basicBat.gif":[["basicBat.7b99f2c9.gif","graphics/enemies/basicBat.gif"],"graphics/enemies/basicBat.gif"],"./../graphics/enemies/basicBruv.gif":[["basicBruv.61999fc7.gif","graphics/enemies/basicBruv.gif"],"graphics/enemies/basicBruv.gif"],"./../graphics/icons/solid shield.png":[["solid shield.c24caed3.png","graphics/icons/solid shield.png"],"graphics/icons/solid shield.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../graphics/cardIcons/energy-icon.png":[["energy-icon.5239062b.png","graphics/cardIcons/energy-icon.png"],"graphics/cardIcons/energy-icon.png"],"./../graphics/attackCards/bash.png":[["bash.def89abe.png","graphics/attackCards/bash.png"],"graphics/attackCards/bash.png"],"./../graphics/skillCards/defend.png":[["defend.83986c8d.png","graphics/skillCards/defend.png"],"graphics/skillCards/defend.png"],"./../graphics/enemies/basicTiger.jpg":[["basicTiger.00373913.jpg","graphics/enemies/basicTiger.jpg"],"graphics/enemies/basicTiger.jpg"],"./../graphics/enemies/basicBat.gif":[["basicBat.7b99f2c9.gif","graphics/enemies/basicBat.gif"],"graphics/enemies/basicBat.gif"],"./../graphics/enemies/basicBruv.gif":[["basicBruv.61999fc7.gif","graphics/enemies/basicBruv.gif"],"graphics/enemies/basicBruv.gif"],"./../graphics/icons/solid shield.png":[["solid shield.c24caed3.png","graphics/icons/solid shield.png"],"graphics/icons/solid shield.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -217,7 +217,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62880" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58892" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

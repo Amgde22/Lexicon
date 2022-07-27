@@ -10,10 +10,34 @@
   height: 100vh;
   background-color: rgb(0, 10, 66);
   overflow: hidden;
+  isolation: isolate;
   transform-origin: top right;
   transition: all 250ms, transform 500ms ease-in;
 }
 
+.endTurnBtn {
+  position: absolute;
+  right: 0;
+  top: 70%;
+  padding: 5px 1em;
+  color: white;
+  background-color: rgb(130, 59, 8);
+  border-radius: 1em 0;
+  border: 2px solid gold;
+  outline: none;
+  text-shadow: 2px 1px rgb(0, 0, 0), 1px 2px black;
+  font-size: 1.4em;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  transform-origin: right;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+@media (max-width: 1000px) {
+  .endTurnBtn {
+    transform: translateY(-50%) scale(0.8);
+  }
+}
 @media (max-width: 500px) {
   .rest-of-page {
     width: 100vh;
@@ -30,55 +54,78 @@
   background-color: rgb(162, 162, 231);
 }
 
-@media (max-width: 500px) {
-  .player {
-    height: 150px;
-    width: 100px;
-  }
+.playerEnergyContainer {
+  position: absolute;
+  left: 3%;
+  top: 70%;
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+  background-image: url("/energy-icon.5239062b.png");
+  background-size: contain;
+  transform-origin: top left;
+  color: white;
+  font-size: 1.6em;
+  text-shadow: 3px 3px 0 #4f2a0b, 2px 2px 0 #4f2a0b, -2px -2px 0 #4f2a0b, 2px -2px 0 #4f2a0b, -2px 2px 0 #4f2a0b, 2px 2px 0 #4f2a0b;
 }
+
 @media (max-width: 1000px) {
   .player {
     height: 150px;
     width: 100px;
   }
+  .playerEnergyContainer {
+    transform: scale(0.65);
+  }
+}
+@media (max-width: 500px) {
+  .playerEnergyContainer {
+    transform: scale(0);
+  }
 }
 .card.Strike {
   background-color: red;
-  border: 10px solid #b30000;
-  border-top-color: #ff6666;
-  border-bottom-color: #990000;
 }
 
 .card.Bash {
   background-color: orange;
-  border: 10px solid #b37400;
-  border-top-color: #ffc966;
-  border-bottom-color: #996300;
+}
+.card.Bash .cardIcon {
+  background-image: url("/bash.def89abe.png");
 }
 
 .Poison {
   background-color: green;
-  border: 10px solid #003400;
-  border-top-color: #00e600;
-  border-bottom-color: #001a00;
 }
 
 .Bleed {
   background-color: crimson;
-  border: 10px solid #960e29;
-  border-top-color: #f16581;
-  border-bottom-color: #7f0c23;
+}
+
+.card {
+  background-color: white;
+}
+.card .cardIcon {
+  background-image: url();
 }
 
 .card.Defend {
   background-color: rgb(52, 183, 226);
-  border: 10px solid #198bb0;
-  border-top-color: #8dd7ef;
-  border-bottom-color: #16799a;
+}
+.card.Defend .cardIcon {
+  background-image: url("/defend.83986c8d.png");
 }
 
-.card .nameHolder {
+.card * {
   position: absolute;
+}
+.card mark {
+  background-color: transparent;
+  color: gold;
+  text-shadow: 2px 2px 0 #59564f, -1px -1px 0 #59564f, 1px -1px 0 #59564f, -1px 1px 0 #59564f, 1px 1px 0 #59564f;
+}
+.card .nameHolder {
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -87,9 +134,10 @@
 }
 .card .energyElement {
   box-sizing: initial;
-  position: absolute;
-  top: 0;
-  left: 0;
+  display: grid;
+  place-items: center;
+  top: 35px;
+  left: -10px;
   width: 30%;
   height: 39px;
   background: url("/energy-icon.5239062b.png");
@@ -98,11 +146,10 @@
   background-position: 30%;
   transform: translate(-60%, -125%);
   border-radius: 50%;
-  display: grid;
-  place-items: center;
+  color: white;
+  text-shadow: 3px 3px 0 #59564f, 2px 2px 0 #59564f, -1px -1px 0 #59564f, 1px -1px 0 #59564f, -1px 1px 0 #59564f, 1px 1px 0 #59564f;
 }
 .card .nameElement {
-  position: absolute;
   width: 100%;
   margin: 0;
   padding-top: 5px;
@@ -111,6 +158,29 @@
   color: white;
   text-shadow: 3px 3px 0 #59564f, 2px 2px 0 #59564f, -1px -1px 0 #59564f, 1px -1px 0 #59564f, -1px 1px 0 #59564f, 1px 1px 0 #59564f;
 }
+.card .cardIcon {
+  bottom: 50%;
+  width: 100%;
+  height: 40%;
+  border: 3px solid gold;
+  background-position: 50%;
+  background-size: 104%;
+}
+.card .descriptionBox {
+  display: grid;
+  place-items: center;
+  bottom: 0;
+  height: 50%;
+  width: 100%;
+  background-color: rgb(89, 56, 56);
+  color: white;
+  text-align: center;
+  font-size: 0.6em;
+  padding-top: 5px;
+}
+.card .descriptionBox * {
+  position: unset;
+}
 
 .hand {
   position: absolute;
@@ -118,7 +188,6 @@
   left: 0;
   right: 0;
   margin: 0 auto;
-  border: 3px dotted rgb(80, 77, 77);
   height: 30vh;
   width: 75%;
   isolation: isolate;
@@ -148,6 +217,9 @@
   transition: transform 150ms ease-out;
   transform-origin: center;
   z-index: 0;
+  border: 10px solid rgba(0, 0, 0, 0.28);
+  border-top-color: rgba(255, 255, 255, 0.374);
+  border-bottom-color: rgba(0, 0, 0, 0.423);
 }
 .card:hover, .card:focus-within {
   transform: translateY(-30%) scale(1.2);
@@ -236,6 +308,16 @@
     transform: translateX(0%);
   }
 }
+.entity.dying {
+  animation: dyingEntity 700ms;
+}
+
+@keyframes dyingEntity {
+  to {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+}
 .actionIcon {
   display: grid;
   place-content: center;
@@ -250,6 +332,7 @@
   font-size: 1.4em;
   text-shadow: 2px 0 black, -2px 0 black, 0 2px black, 0 -2px black;
   transform: scale(1.2);
+  pointer-events: none;
 }
 .actionIcon:empty {
   display: none;
