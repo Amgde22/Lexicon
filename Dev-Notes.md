@@ -1,9 +1,3 @@
-what i need
-  attack animation based on attack
-  <!-- break -->
-  next enemy
-  damage calculation
-  icon system
 
 ok so
 1st : structure

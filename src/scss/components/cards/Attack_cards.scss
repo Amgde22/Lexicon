@@ -5,6 +5,7 @@
 .card.Strike{
   $color-here :red;
   background-color: $color-here;
+  & .cardIcon{ background-image: url("../graphics/attackCards/slash.png"); }
 
 }
 .card.Bash{
