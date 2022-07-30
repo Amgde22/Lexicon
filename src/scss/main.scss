@@ -1,4 +1,5 @@
 @use "components/allComponents" ;
+* ,*::after ,*::before{margin: 0;padding: 0;}
 body{
   font-family: 'Roboto Slab', serif;
 

@@ -35,11 +35,21 @@
   z-index:0;
 }
 
+.cardScanner{
+  position: absolute;left: 10px;top: 20px;
+  width: 60px;height: 60px;
+  background-color: white;
+}
+
 
 @media (max-width:1000px){
   .endTurnBtn{
     transform: translateY(-50%) scale(.8);
   }
+  .cardScanner{
+    width: 45px;height: 45px;
+  }
+
 }
 @media (max-width:500px){
 

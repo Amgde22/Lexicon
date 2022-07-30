@@ -33,9 +33,22 @@
   z-index: 0;
 }
 
+.cardScanner {
+  position: absolute;
+  left: 10px;
+  top: 20px;
+  width: 60px;
+  height: 60px;
+  background-color: white;
+}
+
 @media (max-width: 1000px) {
   .endTurnBtn {
     transform: translateY(-50%) scale(0.8);
+  }
+  .cardScanner {
+    width: 45px;
+    height: 45px;
   }
 }
 @media (max-width: 500px) {
@@ -322,7 +335,7 @@
     opacity: 0;
   }
 }
-.vulnurable {
+.vulnerable {
   background-image: url("/vulnerable.435eebd4.png");
 }
 
@@ -348,6 +361,73 @@
   bottom: 50%;
   margin: auto;
   text-shadow: -1px -1px 0 #59564f, 1px -1px 0 #59564f, -1px 1px 0 #59564f, 1px 1px 0 #59564f;
+}
+
+.entityScan {
+  position: absolute;
+  width: 200px;
+  min-height: 400px;
+  color: white;
+  background-color: black;
+  text-transform: capitalize;
+  display: flex;
+  flex-direction: column;
+  transition: all 200ms ease-in-out;
+  animation: scanInit 200ms;
+  z-index: 100;
+}
+.entityScan h1 {
+  text-align: center;
+  text-decoration: underline;
+  box-shadow: 0 15px 0 -10px white;
+  margin-bottom: 10px;
+}
+.entityScan p {
+  margin-left: 10px;
+  color: rgba(255, 255, 255, 0.884);
+}
+.entityScan .scannedBuffs {
+  flex: 1 1 auto;
+  width: 100%;
+}
+.entityScan .scannedDebuffs {
+  flex: 1 1 auto;
+  width: 100%;
+}
+@keyframes scanInit {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.defaultEntityScan.lefty {
+  right: 100%;
+}
+
+.defaultEntityScan.righty {
+  left: 100%;
+}
+
+.effect_description .icon {
+  position: relative;
+  top: 5px;
+  display: inline;
+  width: 1.4em;
+}
+.effect_description .effect {
+  color: yellow;
+}
+.effect_description .effect::before {
+  content: "[";
+}
+.effect_description .effect::after {
+  content: "]:";
+}
+.effect_description .description {
+  font-size: 0.8em;
 }
 
 .actionIcon {
@@ -553,6 +633,10 @@
     height: 40px;
     transform: scale(1);
   }
+  .entityScan {
+    transform-origin: top left;
+    transform: scale(0.6);
+  }
 }
 @media (max-width: 500px) {
   .actionIcon {
@@ -562,6 +646,19 @@
     border-width: 2px;
     width: 25px;
     height: 25px;
+  }
+  .entityScan {
+    transform-origin: center;
+    transform: scale(0.6) rotate(90deg);
+    animation: scanInit2 200ms;
+  }
+  @keyframes scanInit2 {
+    from {
+      transform: scale(0) rotate(90deg);
+    }
+    to {
+      transform: scale(0.6) rotate(90deg);
+    }
   }
 }
 .background_animation {
@@ -637,6 +734,11 @@
     opacity: 1;
   }
 }
+*, *::after, *::before {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   font-family: "Roboto Slab", serif;
 }

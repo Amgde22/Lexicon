@@ -125,7 +125,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.dark_strike = exports.basic_slash = exports.attack_icon = exports.anim = void 0;
 exports.domInit = domInit;
-exports.shield_icon = exports.restOfPage = exports.playerModel = exports.playerMaxEnergyElement = exports.playerEnergyElement = exports.handElement = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemyGrid = exports.enemyBoxes = exports.endTurnBtn = void 0;
+exports.shield_icon = exports.restOfPage = exports.playerModel = exports.playerMaxEnergyElement = exports.playerEnergyElement = exports.handElement = exports.entityScan = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemyGrid = exports.enemyBoxes = exports.endTurnBtn = void 0;
 var restOfPage = document.querySelector(".rest-of-page");
 exports.restOfPage = restOfPage;
 var enemyGrid = document.querySelector(".enemy-grid");
@@ -138,9 +138,11 @@ var handElement = document.querySelector(".hand");
 exports.handElement = handElement;
 var playerEnergyElement = document.querySelector(".playerEnergy");
 exports.playerEnergyElement = playerEnergyElement;
-var playerMaxEnergyElement = document.querySelector(".playerMaxEnergy"); // all enemy boxes (check side it goes reall long this way => )
-
+var playerMaxEnergyElement = document.querySelector(".playerMaxEnergy");
 exports.playerMaxEnergyElement = playerMaxEnergyElement;
+var entityScan = document.querySelector(".entityScan"); // all enemy boxes (check side it goes reall long this way => )
+
+exports.entityScan = entityScan;
 var enemy_box1 = document.querySelector(".enemy-grid").children[0];
 var enemy_box2 = document.querySelector(".enemy-grid").children[1];
 exports.enemy_box2 = enemy_box2;
@@ -372,8 +374,13 @@ var basicEnemy = /*#__PURE__*/function () {
   _createClass(basicEnemy, [{
     key: "die",
     value: function die(entity) {
+      if (this.dead) {
+        return;
+      }
+
       (0, _functions.resetEntity)(this);
       (0, _functions.killEntityModal)(this);
+      this.dead = true;
       delete this;
     }
   }, {
@@ -518,6 +525,11 @@ function setUpModal(enemy) {
   var enemyModal = document.createElement("div");
   enemyModal.entity = enemy;
   enemy.modal = enemyModal;
+
+  enemyModal.scan = function () {
+    (0, _functions.renderEntityScan)(enemy);
+  };
+
   enemyModal.classList.add("entity");
   enemyModal.classList.add("enemy");
   enemyModal.classList.add(enemy.name);
@@ -635,6 +647,7 @@ var pubsub = function () {
     Array.from(events["turnStarted"]).forEach(function (evenObject) {
       evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
     });
+    (0, _functions.defaultTurnStarted)();
     turn++;
     console.log("%c Turn%c:".concat(turn, " started"), "color:red;", "color:black;");
   }
@@ -643,6 +656,7 @@ var pubsub = function () {
     Array.from(events["turnEnded"]).forEach(function (evenObject) {
       evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
     });
+    (0, _functions.defaultTurnEnded)();
   }
 
   function resetTurns() {
@@ -911,10 +925,13 @@ exports.findEnemyBoxPosition = findEnemyBoxPosition;
 exports.findNextFriendly = findNextFriendly;
 exports.generateCardDomElement = generateCardDomElement;
 exports.generateEffectEllement = generateEffectEllement;
+exports.generateEntityScan = generateEntityScan;
 exports.getEnemyBoxOfEntity = getEnemyBoxOfEntity;
 exports.getEntityHealthModals = getEntityHealthModals;
 exports.linkElementtToEntity = linkElementtToEntity;
 exports.moveNextEnemyBoxOf = moveNextEnemyBoxOf;
+exports.positionEntityScan = positionEntityScan;
+exports.removeAllEntityScans = removeAllEntityScans;
 exports.renderBlock = renderBlock;
 exports.renderCardIntoHand = renderCardIntoHand;
 exports.renderEntityAttackedAnimation = renderEntityAttackedAnimation;
@@ -1095,6 +1112,35 @@ function generateEffectEllement(entity, effect) {
   durationElement.classList.add("effectDuration");
   effectElement.append(durationElement, usesElement);
   entity.effectGrid.append(effectElement);
+}
+
+function generateEntityScan(entity) {
+  var entityScan = dom.entityScan.cloneNode(true);
+
+  for (var effect in entity.buffs) {
+    var effectElement = document.querySelector(".effect_description.".concat(effect.name)).cloneNode(true);
+
+    if (effectElement) {
+      entityScan.append(effectElement);
+    }
+  }
+
+  for (var _effect in entity.debuffs) {
+    var _effectElement = document.querySelector(".effect_description.".concat(_effect)).cloneNode(true);
+
+    if (_effectElement) {
+      entityScan.querySelector(".scannedDebuffs").append(_effectElement);
+    }
+  }
+
+  return entityScan;
+}
+
+function removeAllEntityScans() {
+  var all_scans = document.querySelectorAll(".entityScan");
+  all_scans.forEach(function (scan) {
+    scan.remove();
+  });
 } // /small renders
 // checks
 
@@ -1235,6 +1281,23 @@ function findNextFriendly(enemy) {
   }
 
   return _player.player;
+}
+
+function positionEntityScan(entityScan, entity) {
+  var enemy_box_position = entity.modal.getBoundingClientRect();
+  var restOfPage_position = dom.restOfPage.getBoundingClientRect();
+  var screenWidth = restOfPage_position.width > restOfPage_position.height ? restOfPage_position.width : restOfPage_position.height;
+  var ebox_in_left = enemy_box_position.left < screenWidth / 2;
+  var X_bonus;
+
+  if (ebox_in_left) {
+    X_bonus = 1;
+  } else {
+    X_bonus = -1;
+  }
+
+  entityScan.style.top = enemy_box_position.top + "px";
+  entityScan.style.left = enemy_box_position.left + X_bonus * enemy_box_position.width + "px";
 } // / misc
 },{"../dom.js":"jscripts/components/dom.js","../player.js":"jscripts/components/player.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/functions/playerFuctions.js":[function(require,module,exports) {
 
@@ -1260,6 +1323,12 @@ exports.removeFromcardEffects = removeFromcardEffects;
 exports.removeFromdealDamageEffects = removeFromdealDamageEffects;
 exports.removeFromrecieveDamageEffects = removeFromrecieveDamageEffects;
 exports.removeFromturnEffects = removeFromturnEffects;
+Object.defineProperty(exports, "renderEffect", {
+  enumerable: true,
+  get: function () {
+    return _functions.renderEffect;
+  }
+});
 exports.renderEffect2 = void 0;
 
 var _buffsManager = _interopRequireDefault(require("../buffsManager"));
@@ -1270,11 +1339,11 @@ var _pubsub = _interopRequireDefault(require("../pubsub.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var renderEffect2 = _functions.renderEffect; // add effect
-// stacking
-
+var renderEffect2 = _functions.renderEffect;
 exports.renderEffect2 = renderEffect2;
 
+// add effect
+// stacking
 function applyEffectHandler(effect, entity) {
   var type_of_effect = effect.constructor.generatedEffect;
   var effect_list = entity[type_of_effect];
@@ -1568,7 +1637,7 @@ var basicBuff = /*#__PURE__*/function () {
     value: function defaultRemove() {
       // for removal
       delete this.hostingEntity.buffs[this.name];
-      (0, _effectsHandler.renderEffect2)(this.hostingEntity, this);
+      (0, _effectsHandler.renderEffect)(this.hostingEntity, this);
       delete this;
     }
   }]);
@@ -1753,7 +1822,7 @@ var basicDebuff = /*#__PURE__*/function () {
     value: function defaultRemove() {
       // for removal
       delete this.hostingEntity.debuffs[this.name];
-      (0, _effectsHandler.renderEffect2)(this.hostingEntity, this);
+      (0, _effectsHandler.renderEffect)(this.hostingEntity, this);
       delete this;
     }
   }]);
@@ -1773,7 +1842,7 @@ var vulnerable = /*#__PURE__*/function (_basicDebuff) {
   function vulnerable(duration) {
     _classCallCheck(this, vulnerable);
 
-    return _super.call(this, "vulnurable", duration, "inf");
+    return _super.call(this, "vulnerable", duration, "inf");
   }
 
   _createClass(vulnerable, [{
@@ -1832,7 +1901,7 @@ var poison = /*#__PURE__*/function (_basicDebuff2) {
         return;
       }
 
-      _pubsub.default.on("turnStarted", this);
+      _pubsub.default.on("turnEnded", this);
     }
   }, {
     key: "effect",
@@ -1843,7 +1912,7 @@ var poison = /*#__PURE__*/function (_basicDebuff2) {
   }, {
     key: "remove",
     value: function remove() {
-      _pubsub.default.off("turnStarted", this);
+      _pubsub.default.off("turnEnded", this);
 
       this.defaultRemove();
     }
@@ -1988,6 +2057,7 @@ exports.playCardManager = playCardManager;
 exports.playSelectedCard = playSelectedCard;
 exports.render = exports.playerfunctions = void 0;
 exports.renderEffect = renderEffect;
+exports.renderEntityScan = renderEntityScan;
 exports.renderHealth = renderHealth;
 exports.resetEntity = resetEntity;
 exports.resetPlayerEnergy = resetPlayerEnergy;
@@ -2041,18 +2111,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 // init
 (function () {
-  _pubsub.default.on("turnStarted", {
-    effect: defaultTurnStarted
-  });
-
-  _pubsub.default.on("turnEnded", {
-    effect: defaultTurnEnded
-  });
-
+  // pubsub.on("turnStarted" , {effect:defaultTurnStarted})
+  // pubsub.on("turnEnded" , {effect:defaultTurnEnded})
   dom.endTurnBtn.addEventListener("pointerdown", emitTurnEnded);
   dom.restOfPage.addEventListener("pointerdown", function (e) {
     selectionHandler();
     playSelectedCard(e);
+
+    if (e.target.scan) {
+      domfunctions.removeAllEntityScans();
+      e.target.scan();
+    } else {
+      domfunctions.removeAllEntityScans();
+    }
   });
   dom.enemyBoxes[0].__proto__.move = moveEnemyBox;
 })();
@@ -2127,6 +2198,12 @@ function renderActionIcons() {
     move.render(); // entity.actionIcon.innerText = 0
     // entity.actionIcon.innerText = move?.damage ?? ""
   });
+}
+
+function renderEntityScan(entity) {
+  var entityScan = domfunctions.generateEntityScan(entity);
+  domfunctions.positionEntityScan(entityScan, entity);
+  document.body.append(entityScan);
 } // /render
 
 
@@ -2255,6 +2332,7 @@ function playSelectedCard(e) {
   var card = domfunctions.selectedCard.cardObject;
   var entity = selector.parentNode.entity;
   playCardManager(card, entity);
+  selectionHandler();
 }
 
 function playCardManager(card, entity) {
@@ -2363,6 +2441,8 @@ function clearBlock(entity) {
 
 function resetEntity(entity) {
   entity.apply = function () {};
+
+  entity.move = function () {};
 
   for (var effect in entity.buffs) {
     entity["buffs"][effect]._forceRemove();
@@ -3034,7 +3114,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55368" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54076" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
