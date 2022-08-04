@@ -22,11 +22,30 @@
     z-index: -1;
   }
 }
-    
+.squeezer{
+  width: fit-content;
+  height: 100%;
+  flex: 2 1 auto;
+}
+.squeezer2{
+  order: 1;
+}
+.squeezer2{
 
+  order: 999;
+}
+    
+.cardParent{
+  flex: 2;
+  width: 0;
+  height: 100%;
+  transition: all .3s linear;
+  &.removing{
+  flex: 0.00001;
+  }
+}
 .card{
   position: relative;
-  flex:0 0 auto;
   background-color: #fff;
   border: 3px solid black;
 
@@ -35,7 +54,7 @@
   width: 150px; height: 200px;
   margin-left: -100px;
 
-  transition: transform 150ms ease-out;
+  transition: transform 150ms ease-out ;
   transform-origin:  center;
   z-index: 0;
 
@@ -93,4 +112,7 @@ z-index: 1;
     
     transform: translateY(-30%) scale(0.7);
   }
+.squeezer2{
+  flex: 4;
+}
 }

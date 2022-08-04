@@ -1018,14 +1018,17 @@ function createCardDescription(card) {
 
   var description_box = document.createElement("div");
   description_box.classList.add("descriptionBox");
-  var card_discription = (_document$querySelect = document.querySelector(".description.".concat(card.name.toLowerCase()))) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.cloneNode(true);
+  var card_discription = (_document$querySelect = document.querySelector(".description.".concat(card.name.toLowerCase().replaceAll(" ", "")))) === null || _document$querySelect === void 0 ? void 0 : _document$querySelect.cloneNode(true);
   description_box.append(card_discription);
   return description_box;
 }
 
 function renderCardIntoHand(card) {
+  var cardParent = document.createElement("div");
+  cardParent.className = "cardParent";
   var cardElement = card.element;
-  dom.handElement.append(cardElement);
+  cardParent.append(cardElement);
+  dom.handElement.append(cardParent);
 }
 
 function visualyRenderCard(card) {
@@ -1037,7 +1040,14 @@ function visualyRenderCard(card) {
 }
 
 function visualyRemoveCard(card) {
+  var cardParent = card.element.parentElement;
   card.element.remove();
+  cardParent.addEventListener("animationend", removeelement);
+  cardParent.classList.add("removing");
+}
+
+function removeelement(e) {
+  e.target.remove();
 }
 
 function renderHealthBar(entity) {
@@ -1160,6 +1170,7 @@ function deSelectHandler(e) {
 
   var is_restOfPage = checkElement(e.target, dom.restOfPage);
   var is_enemyBox = (_checkIfIncludesClass = checkIfIncludesClass(e.target, "enemy-box")) !== null && _checkIfIncludesClass !== void 0 ? _checkIfIncludesClass : !checkIfIncludesClass(e.target.firstElementChild, "entity");
+  var handElement = Array.from(e.target.classList).includes("");
 
   if (is_restOfPage || is_enemyBox) {
     deSelectAllCards();
@@ -1943,7 +1954,7 @@ var bleed = /*#__PURE__*/function (_basicDebuff3) {
         return;
       }
 
-      _pubsub.default.on("turnStarted", this);
+      _pubsub.default.on("turnEnded", this);
     }
   }, {
     key: "effect",
@@ -1954,7 +1965,7 @@ var bleed = /*#__PURE__*/function (_basicDebuff3) {
   }, {
     key: "remove",
     value: function remove() {
-      _pubsub.default.off("turnStarted", this);
+      _pubsub.default.off("turnEnded", this);
 
       this.defaultRemove();
     }
@@ -2111,8 +2122,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 // init
 (function () {
-  // pubsub.on("turnStarted" , {effect:defaultTurnStarted})
-  // pubsub.on("turnEnded" , {effect:defaultTurnEnded})
   dom.endTurnBtn.addEventListener("pointerdown", emitTurnEnded);
   dom.restOfPage.addEventListener("pointerdown", function (e) {
     selectionHandler();
@@ -2126,6 +2135,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   });
   dom.enemyBoxes[0].__proto__.move = moveEnemyBox;
+
+  dom.playerModel.scan = function () {
+    renderEntityScan(_player.player);
+  };
 })();
 
 function emitTurnEnded() {
@@ -2532,7 +2545,7 @@ function exhaustCard(card) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.strike = exports.poison = exports.card = exports.bleed = exports.basicAttackCardClass = exports.bash = void 0;
+exports.strike = exports.poison_stab = exports.draw_blood = exports.card = exports.basicAttackCardClass = exports.bash = void 0;
 
 var f = _interopRequireWildcard(require("../functions.js"));
 
@@ -2659,51 +2672,53 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
 
 exports.bash = bash;
 
-var poison = /*#__PURE__*/function (_basicAttackCardClass3) {
-  _inherits(poison, _basicAttackCardClass3);
+var poison_stab = /*#__PURE__*/function (_basicAttackCardClass3) {
+  _inherits(poison_stab, _basicAttackCardClass3);
 
-  var _super3 = _createSuper(poison);
+  var _super3 = _createSuper(poison_stab);
 
-  function poison(damage, energyCost) {
-    _classCallCheck(this, poison);
+  function poison_stab(damage, energyCost) {
+    _classCallCheck(this, poison_stab);
 
-    return _super3.call(this, "Poison", 1, 1);
+    return _super3.call(this, "poison stab", 1, 4);
   }
 
-  _createClass(poison, [{
+  _createClass(poison_stab, [{
     key: "play",
     value: function play(enemy) {
       this.defaultPlay(enemy);
+      enemy.apply(new _buffsManager.default.poison(4));
     }
   }]);
 
-  return poison;
+  return poison_stab;
 }(basicAttackCardClass);
 
-exports.poison = poison;
+exports.poison_stab = poison_stab;
 
-var bleed = /*#__PURE__*/function (_basicAttackCardClass4) {
-  _inherits(bleed, _basicAttackCardClass4);
+var draw_blood = /*#__PURE__*/function (_basicAttackCardClass4) {
+  _inherits(draw_blood, _basicAttackCardClass4);
 
-  var _super4 = _createSuper(bleed);
+  var _super4 = _createSuper(draw_blood);
 
-  function bleed(damage, energyCost) {
-    _classCallCheck(this, bleed);
+  function draw_blood(damage, energyCost) {
+    _classCallCheck(this, draw_blood);
 
-    return _super4.call(this, "Bleed", 1, 1);
+    return _super4.call(this, "draw blood", 1, 2);
   }
 
-  _createClass(bleed, [{
+  _createClass(draw_blood, [{
     key: "play",
     value: function play(enemy) {
       this.defaultPlay(enemy);
+      enemy.apply(new _buffsManager.default.bleed(6));
     }
   }]);
 
-  return bleed;
+  return draw_blood;
 }(basicAttackCardClass);
 
-exports.bleed = bleed;
+exports.draw_blood = draw_blood;
 
 var card = /*#__PURE__*/function (_basicAttackCardClass5) {
   _inherits(card, _basicAttackCardClass5);
@@ -2935,7 +2950,11 @@ var discardPile = [];
 var playerHand = [];
 var playerStartingDeck = [// new attackCardClasses.poison(),
 // new attackCardClasses.poison(),
-new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.strike(), new skillCardClasses.defend(), new skillCardClasses.defend(), new skillCardClasses.defend(), new skillCardClasses.defend(), new attackCardClasses.bash()]; // useless ?//, drawPile , discardPile , playerHand}
+new attackCardClasses.strike(), new attackCardClasses.strike(), new attackCardClasses.draw_blood(), new attackCardClasses.poison_stab(), // new attackCardClasses.strike(),
+// new attackCardClasses.strike(),
+// new skillCardClasses.defend(),
+// new skillCardClasses.defend(),
+new skillCardClasses.defend(), new skillCardClasses.defend(), new attackCardClasses.bash()]; // useless ?//, drawPile , discardPile , playerHand}
 
 exports.playerStartingDeck = playerStartingDeck;
 },{"./attackCardClasses.js":"jscripts/components/cards/attackCardClasses.js","./skillCardClass.js":"jscripts/components/cards/skillCardClass.js","./powerCardClasses.js":"jscripts/components/cards/powerCardClasses.js"}],"jscripts/components/player.js":[function(require,module,exports) {
@@ -2968,7 +2987,7 @@ var playerClass = /*#__PURE__*/function () {
     this.maxHealth = hp;
     this.health = hp;
     this.block = 0;
-    this.maxEnergy = 3;
+    this.maxEnergy = 999;
     this.energy = 3;
     this.hand = [];
     this.drawPile = [];
@@ -3114,7 +3133,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53388" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64490" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

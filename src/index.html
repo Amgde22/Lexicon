@@ -80,7 +80,10 @@
     </div>
     <button class="endTurnBtn"> End Turn</button>
     <div class="playerEnergyContainer"><p><span class="playerEnergy"></span> / <span class="playerMaxEnergy"></span></p></div>
-    <div class="hand"></div>
+    <div class="hand">
+      <div class="squeezer squeezer1"></div>
+      <div class="squeezer squeezer2"></div>
+    </div>
 
   </section>
 <!--  icons -->
@@ -187,6 +190,12 @@
 <mark class="special"></mark>
  -->
 
+
+              CARD DESCRIPTIONS
+<div class="description poisonstab">
+  deal <span class="damage"> 4 <span class="calculatedDamage"></span></span> damage <br>
+  apply 4 <mark class="special">Poison</mark>
+</div>
 <div class="description bash">
 
   deal <span class="damage"> 10 <span class="calculatedDamage"></span></span> damage <br>
@@ -195,17 +204,19 @@
 <div class="description strike">
   deal <span class="damage"> 6 <span class="calculatedDamage"></span></span> damage
 </div>
-
-
-
 <div class="description defend">
   get 5 block
+</div>
+
+<div class="description drawblood">
+  deal <span class="damage"> 2 <span class="calculatedDamage"></span></span> damage <br>
+ apply 6 <mark class="special">bleed</mark>
 </div>
 
 
 
 <div class="description">
-  deal <span class="damage"> 10 <span class="calculatedDamage"></span></span> damage
+  deal <span class="damage"> 10 <span class="calculatedDamage"></span></span> damage <br>
   <mark class="special"></mark>
 </div>
 

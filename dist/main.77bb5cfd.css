@@ -111,12 +111,18 @@
   background-image: url("/bash.def89abe.png");
 }
 
-.Poison {
+.card.poisonstab {
   background-color: green;
 }
+.card.poisonstab .cardIcon {
+  background-image: url("/poison_stab.838bd0cb.png");
+}
 
-.Bleed {
+.card.drawblood {
   background-color: crimson;
+}
+.card.drawblood .cardIcon {
+  background-image: url("/draw_blood.0cbaaf20.jpeg");
 }
 
 .card {
@@ -223,9 +229,32 @@
   z-index: -1;
 }
 
+.squeezer {
+  width: fit-content;
+  height: 100%;
+  flex: 2 1 auto;
+}
+
+.squeezer2 {
+  order: 1;
+}
+
+.squeezer2 {
+  order: 999;
+}
+
+.cardParent {
+  flex: 2;
+  width: 0;
+  height: 100%;
+  transition: all 0.3s linear;
+}
+.cardParent.removing {
+  flex: 0.00001;
+}
+
 .card {
   position: relative;
-  flex: 0 0 auto;
   background-color: #fff;
   border: 3px solid black;
   width: 150px;
@@ -269,6 +298,9 @@
     box-shadow: 0 0 10px 10px rgb(126, 213, 241);
     z-index: 1;
     transform: translateY(-30%) scale(0.7);
+  }
+  .squeezer2 {
+    flex: 4;
   }
 }
 .enemy-box .entity {

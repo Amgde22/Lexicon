@@ -14,11 +14,14 @@
 
   & .cardIcon{ background-image: url("../graphics/attackCards/bash.png"); }
 }
-.Poison{
+.card.poisonstab{
   background-color: green;
+  & .cardIcon{ background-image: url("../graphics/attackCards/poison_stab.png"); }
+  
 }
-.Bleed{ 
+.card.drawblood{ 
   background-color: crimson;
+  & .cardIcon{ background-image: url("../graphics/attackCards/draw_blood.jpeg"); }
 }
 .card{
   background-color: white;
