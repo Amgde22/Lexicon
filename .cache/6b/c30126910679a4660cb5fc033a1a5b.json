@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"id":"graphics/enemies/basicTiger.jpg","dependencies":[{"name":"/Users/Mac/Desktop/lexicon/package.json","includedInParent":true,"mtime":1663425448000}],"generated":{"js":"module.exports = \"/f779103044b4de14176e63c300373913.jpg\";"},"sourceMaps":null,"error":null,"hash":"ecf14156ea451b241054f893279e37eb","cacheData":{"env":{}}}
+=======
+{"id":"graphics/enemies/basicTiger.jpg","dependencies":[{"name":"/Users/Mac/Desktop/lexicon/package.json","includedInParent":true,"mtime":1663425043000}],"generated":{"js":"module.exports = \"/f779103044b4de14176e63c300373913.jpg\";"},"sourceMaps":null,"error":null,"hash":"ecf14156ea451b241054f893279e37eb","cacheData":{"env":{}}}
+>>>>>>> dev
