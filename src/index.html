@@ -13,7 +13,12 @@
 
 </head>
 <body>
-  <section class="rest-of-page" data-rest-of-page="" >
+
+
+
+  <section class="rest-of-page" data-rest-of-page="">
+
+
     <div class="header"></div>
     
     <div class="cardScanner"><?xml version="1.0" encoding="iso-8859-1"?>
@@ -78,14 +83,49 @@
       <div class="enemy-box" data-enemy-box7=""></div>
       <div class="enemy-box" data-enemy-box8=""></div>
     </div>
+
+
     <button class="endTurnBtn"> End Turn</button>
+
+
     <div class="playerEnergyContainer"><p><span class="playerEnergy"></span> / <span class="playerMaxEnergy"></span></p></div>
+
     <div class="hand">
-      <div class="squeezer squeezer1"></div>
-      <div class="squeezer squeezer2"></div>
+        <div class="squeezer squeezer1"></div>
+        <div class="squeezer squeezer2"></div>
     </div>
 
-  </section>
+
+
+    <div class="battle-won-div hidden">
+
+      <div class="rewards">
+        <h1>Battle Rewards !</h1>
+        <div class="reward">Card Pack</div>
+        <button class="end-rewards-btn">Next</button>
+      </div>
+
+      <div class="new-card-reward-div">
+        <div class="normal-card-rewards-div"></div>
+
+        <div class="destiny-card-rewards-div"></div>
+
+        <div class="add-card-btns-div">
+          <button class="replace-card-in-deck-btn">replace card in deck</button>
+          <button class="add-card-to-deck-btn">add card to deck</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>  <!--  end of rest of page -->
+
+
+
+
+
+
 <!--  icons -->
 <div id="shield_icon" class="icon deffend hidden">
   <img src="./graphics/icons/solid shield.png" alt="Shield">
