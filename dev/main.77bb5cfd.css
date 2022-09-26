@@ -868,4 +868,8 @@ body {
   font-family: "Roboto Slab", serif;
 }
 
+.hidden {
+  display: none;
+}
+
 /*# sourceMappingURL=/main.77bb5cfd.css.map */
