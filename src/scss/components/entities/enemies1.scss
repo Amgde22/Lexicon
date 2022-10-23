@@ -43,14 +43,13 @@
     background-image: url("../graphics/enemies/basicBruv.gif");
   }
   
-  .attacking{
-    animation-name: attacking;
-    animation-duration: 300ms;
+
+  .enemy.attacking{
+    animation-name: attacking ;
+    animation-duration: 500ms;
   }
-  
-  @keyframes attacking {
-    50%{transform: translateX(-100%);}
-    100%{transform: translateX(0%);}
-  
+  .enemy.defending{
+    animation-name: defending ;
+    animation-duration: 500ms;
   }
   

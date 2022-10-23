@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"jscripts/components/dom.js":[function(require,module,exports) {
+})({"dlJM":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -125,7 +125,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.discardpileDialog = exports.discardpile = exports.dark_strike = exports.battle_won_div = exports.basic_slash = exports.attack_icon = exports.anim = void 0;
 exports.domInit = domInit;
-exports.stun_icon = exports.shield_icon = exports.restOfPage = exports.playerModel = exports.playerMaxEnergyElement = exports.playerEnergyElement = exports.handElement = exports.everuCloseDialogBtn = exports.entityScan = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemyGrid = exports.enemyBoxes = exports.endTurnBtn = exports.drawpileDialog = exports.drawpile = void 0;
+exports.shield_icon = exports.restOfPage = exports.playerModel = exports.playerMaxEnergyElement = exports.playerEnergyElement = exports.handElement = exports.everuCloseDialogBtn = exports.entityScan = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemyGrid = exports.enemyBoxes = exports.endTurnBtn = exports.drawpileDialog = exports.drawpile = void 0;
 var restOfPage = document.querySelector(".rest-of-page");
 exports.restOfPage = restOfPage;
 var enemyGrid = document.querySelector(".enemy-grid");
@@ -188,11 +188,9 @@ var attack_icon = document.querySelector(".icon.attack");
 exports.attack_icon = attack_icon;
 var shield_icon = document.querySelector(".icon.deffend");
 exports.shield_icon = shield_icon;
-var stun_icon = document.querySelector("#stunned_icon");
-exports.stun_icon = stun_icon;
 
 function domInit() {}
-},{}],"jscripts/components/enemies/entityIcons.js":[function(require,module,exports) {
+},{}],"drfY":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -200,17 +198,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.render_basic_attack_icon = render_basic_attack_icon;
 exports.render_basic_deffence_icon = render_basic_deffence_icon;
-exports.render_stunned_icon = render_stunned_icon;
 
-var dom = _interopRequireWildcard(require("../dom.js"));
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+var _dom = require("../dom.js");
 
 function render_basic_attack_icon(move) {
   var action_icon = move.entity.actionIcon;
-  var icon = dom.attack_icon.cloneNode(true);
+
+  var icon = _dom.attack_icon.cloneNode(true);
+
   icon.classList.remove("hidden");
   action_icon.innerText = "";
   action_icon.append(icon, move.damage);
@@ -218,26 +213,20 @@ function render_basic_attack_icon(move) {
 
 function render_basic_deffence_icon(move) {
   var action_icon = move.entity.actionIcon;
-  var icon = dom.shield_icon.cloneNode(true);
+
+  var icon = _dom.shield_icon.cloneNode(true);
+
   icon.classList.remove("hidden");
   action_icon.innerText = "";
   action_icon.append(icon, move.block);
 }
-
-function render_stunned_icon(move) {
-  var action_icon = move.entity.actionIcon;
-  var icon = dom.stun_icon.cloneNode(true);
-  icon.classList.remove("hidden");
-  action_icon.innerText = "";
-  action_icon.append(icon, "Stunned");
-}
-},{"../dom.js":"jscripts/components/dom.js"}],"jscripts/components/enemies/entityMoves.js":[function(require,module,exports) {
+},{"../dom.js":"dlJM"}],"h5cb":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.stunned = exports.basic_deffend = exports.basic_attack_friendly = exports.Op = void 0;
+exports.basic_deffend = exports.basic_attack_friendly = exports.Op = void 0;
 
 var _functions = require("../functions.js");
 
@@ -307,28 +296,6 @@ var basic_deffend = /*#__PURE__*/function () {
 
 exports.basic_deffend = basic_deffend;
 
-var stunned = /*#__PURE__*/function () {
-  function stunned(enemy) {
-    _classCallCheck(this, stunned);
-
-    this.entity = enemy;
-  }
-
-  _createClass(stunned, [{
-    key: "exe",
-    value: function exe() {}
-  }, {
-    key: "render",
-    value: function render() {
-      entityIcons.render_stunned_icon(this);
-    }
-  }]);
-
-  return stunned;
-}();
-
-exports.stunned = stunned;
-
 var Op = /*#__PURE__*/function () {
   function Op(enemy, damage) {
     _classCallCheck(this, Op);
@@ -354,15 +321,16 @@ var Op = /*#__PURE__*/function () {
 }();
 
 exports.Op = Op;
-},{"../functions.js":"jscripts/components/functions.js","./entityIcons.js":"jscripts/components/enemies/entityIcons.js"}],"jscripts/components/enemies/enemyClass.js":[function(require,module,exports) {
+},{"../functions.js":"Q9tZ","./entityIcons.js":"drfY"}],"uD9C":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.g = exports.basicEnemy = void 0;
+exports.g = exports.bruv = exports.bat = exports.basicEnemy = void 0;
 exports.setUpEffectGrid = setUpEffectGrid;
 exports.setUpHealthBar = setUpHealthBar;
+exports.tiger = void 0;
 
 var _functions = require("../functions.js");
 
@@ -463,25 +431,98 @@ var basicEnemy = /*#__PURE__*/function () {
 
 exports.basicEnemy = basicEnemy;
 
-var g = /*#__PURE__*/function (_basicEnemy) {
-  _inherits(g, _basicEnemy);
+var bat = /*#__PURE__*/function (_basicEnemy) {
+  _inherits(bat, _basicEnemy);
 
-  var _super = _createSuper(g);
+  var _super = _createSuper(bat);
 
-  function g() {
+  function bat() {
     var _this;
 
-    _classCallCheck(this, g);
+    _classCallCheck(this, bat);
 
-    _this = _super.call(this, "", 2);
+    _this = _super.call(this, "bat", 11);
 
     var enemy = _assertThisInitialized(_this);
 
-    _this.moves = [{
+    _this.moves = [new entityMoves.basic_deffend(enemy, 12), new entityMoves.basic_attack_friendly(enemy, 5)];
+    return _this;
+  }
+
+  return _createClass(bat);
+}(basicEnemy);
+
+exports.bat = bat;
+
+var tiger = /*#__PURE__*/function (_basicEnemy2) {
+  _inherits(tiger, _basicEnemy2);
+
+  var _super2 = _createSuper(tiger);
+
+  function tiger() {
+    var _this2;
+
+    _classCallCheck(this, tiger);
+
+    _this2 = _super2.call(this, "tiger", 63);
+
+    var enemy = _assertThisInitialized(_this2);
+
+    _this2.moves = [new entityMoves.basic_attack_friendly(enemy, 50), new entityMoves.basic_attack_friendly(enemy, 20)];
+    return _this2;
+  }
+
+  return _createClass(tiger);
+}(basicEnemy);
+
+exports.tiger = tiger;
+
+var bruv = /*#__PURE__*/function (_basicEnemy3) {
+  _inherits(bruv, _basicEnemy3);
+
+  var _super3 = _createSuper(bruv);
+
+  function bruv() {
+    var _this3;
+
+    _classCallCheck(this, bruv);
+
+    _this3 = _super3.call(this, "bruv", 36);
+
+    var enemy = _assertThisInitialized(_this3);
+
+    _this3.moves = [{
+      exe: function exe() {},
+      icon: "",
+      render: function render() {}
+    }];
+    return _this3;
+  }
+
+  return _createClass(bruv);
+}(basicEnemy);
+
+exports.bruv = bruv;
+
+var g = /*#__PURE__*/function (_basicEnemy4) {
+  _inherits(g, _basicEnemy4);
+
+  var _super4 = _createSuper(g);
+
+  function g() {
+    var _this4;
+
+    _classCallCheck(this, g);
+
+    _this4 = _super4.call(this, "", 2);
+
+    var enemy = _assertThisInitialized(_this4);
+
+    _this4.moves = [{
       exe: function exe() {},
       icon: ""
     }];
-    return _this;
+    return _this4;
   }
 
   return _createClass(g);
@@ -576,140 +617,7 @@ only when an enemy's move finishes
 
 
 */
-},{"../functions.js":"jscripts/components/functions.js","./entityMoves.js":"jscripts/components/enemies/entityMoves.js"}],"jscripts/components/enemies/stage1/enemies.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.tiger = exports.egg = exports.bruv = exports.bat = void 0;
-
-var entityMoves = _interopRequireWildcard(require("../entityMoves.js"));
-
-var _enemyClass = require("../enemyClass.js");
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-var bat = /*#__PURE__*/function (_basicEnemy) {
-  _inherits(bat, _basicEnemy);
-
-  var _super = _createSuper(bat);
-
-  function bat() {
-    var _this;
-
-    _classCallCheck(this, bat);
-
-    _this = _super.call(this, "bat", 11);
-
-    var enemy = _assertThisInitialized(_this);
-
-    _this.moves = [new entityMoves.basic_deffend(enemy, 12), new entityMoves.basic_attack_friendly(enemy, 5)];
-    return _this;
-  }
-
-  return _createClass(bat);
-}(_enemyClass.basicEnemy);
-
-exports.bat = bat;
-
-var tiger = /*#__PURE__*/function (_basicEnemy2) {
-  _inherits(tiger, _basicEnemy2);
-
-  var _super2 = _createSuper(tiger);
-
-  function tiger() {
-    var _this2;
-
-    _classCallCheck(this, tiger);
-
-    _this2 = _super2.call(this, "tiger", 63);
-
-    var enemy = _assertThisInitialized(_this2);
-
-    _this2.moves = [new entityMoves.basic_attack_friendly(enemy, 50), new entityMoves.basic_attack_friendly(enemy, 20)];
-    return _this2;
-  }
-
-  return _createClass(tiger);
-}(_enemyClass.basicEnemy);
-
-exports.tiger = tiger;
-
-var bruv = /*#__PURE__*/function (_basicEnemy3) {
-  _inherits(bruv, _basicEnemy3);
-
-  var _super3 = _createSuper(bruv);
-
-  function bruv() {
-    var _this3;
-
-    _classCallCheck(this, bruv);
-
-    _this3 = _super3.call(this, "bruv", 36);
-
-    var enemy = _assertThisInitialized(_this3);
-
-    _this3.moves = [{
-      exe: function exe() {},
-      icon: "",
-      render: function render() {}
-    }];
-    return _this3;
-  }
-
-  return _createClass(bruv);
-}(_enemyClass.basicEnemy);
-
-exports.bruv = bruv;
-
-var egg = /*#__PURE__*/function (_basicEnemy4) {
-  _inherits(egg, _basicEnemy4);
-
-  var _super4 = _createSuper(egg);
-
-  function egg() {
-    var _this4;
-
-    _classCallCheck(this, egg);
-
-    _this4 = _super4.call(this, "egg", 5);
-
-    var enemy = _assertThisInitialized(_this4);
-
-    _this4.moves = [new entityMoves.stunned(enemy)];
-    return _this4;
-  }
-
-  return _createClass(egg);
-}(_enemyClass.basicEnemy);
-
-exports.egg = egg;
-},{"../entityMoves.js":"jscripts/components/enemies/entityMoves.js","../enemyClass.js":"jscripts/components/enemies/enemyClass.js"}],"jscripts/components/pubsub.js":[function(require,module,exports) {
+},{"../functions.js":"Q9tZ","./entityMoves.js":"h5cb"}],"xoHa":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -721,9 +629,9 @@ var _functions = require("./functions.js");
 
 var pubsub = function () {
   var turn = 0;
-  var battle = null;
   var events = {
-    "entityDied": []
+    "turnEnded": [],
+    "turnStarted": []
   };
 
   function on(event, obj) {
@@ -753,26 +661,8 @@ var pubsub = function () {
     });
   }
 
-  function battleStarted(type_of_battle) {
-    battle = type_of_battle;
-    (0, _functions.defaultBattleStarted)(battle);
-    Array.from(events["battleStarted"]).forEach(function (evenObject) {
-      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(battle);
-    });
-  }
-
-  function battleEnded() {
-    var won = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-    // if (!battle) return // protect against multple enemies triggering this at the same time
-    Array.from(events["battleEnded"]).forEach(function (evenObject) {
-      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(battle);
-    });
-    (0, _functions.defaultBattleEnded)(battle);
-    battle = null;
-  }
-
   function turnStarted() {
-    Array.from(events["turnStarted"] || []).forEach(function (evenObject) {
+    Array.from(events["turnStarted"]).forEach(function (evenObject) {
       evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
     });
     (0, _functions.defaultTurnStarted)();
@@ -796,17 +686,15 @@ var pubsub = function () {
     on: on,
     off: off,
     emit: emit,
-    battleStarted: battleStarted,
-    battleEnded: battleEnded,
-    turnStarted: turnStarted,
     turnEnded: turnEnded,
+    turnStarted: turnStarted,
     resetTurns: resetTurns
   };
 }();
 
 var _default = pubsub;
 exports.default = _default;
-},{"./functions.js":"jscripts/components/functions.js"}],"jscripts/components/functions/damage_formulas.js":[function(require,module,exports) {
+},{"./functions.js":"Q9tZ"}],"GY4V":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -823,26 +711,24 @@ function basicDamageFormula(recievingEntity, DealingEntity, initialDamage) {
 function opDamage(recievingEntity, DealingEntity, initialDamage) {
   return 999;
 }
-},{}],"jscripts/components/functions/battleFunctions.js":[function(require,module,exports) {
+},{}],"egtd":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.checkBattleWon = checkBattleWon;
 exports.checkEntityDeath = checkEntityDeath;
 exports.countDamage = countDamage;
 exports.getRandomEnemyBoxes = getRandomEnemyBoxes;
+exports.initEnemies = initEnemies;
 exports.iterateDealDamageEffects = iterateDealDamageEffects;
 exports.iterateEnergyEffects = iterateEnergyEffects;
 exports.iterateGainBlockEffects = iterateGainBlockEffects;
 exports.iterateRecieveDamageEffects = iterateRecieveDamageEffects;
-exports.renderEnemyLevel = renderEnemyLevel;
-exports.testEnemies = testEnemies;
 
 var _dom = require("../dom.js");
 
-var level1 = _interopRequireWildcard(require("../enemies/stage1/enemies.js"));
+var enemyClass = _interopRequireWildcard(require("../enemies/enemyClass.js"));
 
 var _player = require("../player.js");
 
@@ -868,39 +754,15 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-var p = Promise.resolve();
-p.then(function () {
-  _pubsub.default.on("entityDied", function () {
-    setTimeout(function () {
-      checkBattleWon();
-    }, 3000);
-  });
-
-  _pubsub.default.on("battleEnded", function () {
-    console.log("everyoone dawn");
-  });
-}); // enemies
-
-function renderEnemyLevel() {
-  var stage = _player.player.stage;
-  var level = _player.player.level;
-
-  var current_stage = _player.player["stage".concat(stage)];
-
-  var all_enemy_list = current_stage.levelEnemies;
-  var enemy_list = all_enemy_list[level];
-  var enemyBoxes = getRandomEnemyBoxes(enemy_list.length);
-
-  for (var i = 0; i < enemy_list.length; i++) {
-    var enemy = new enemy_list[i]();
-    enemyBoxes[i].append(enemy.modal);
-  }
-}
-
-function testEnemies() {
+// enemies
+function initEnemies() {
   var randomEnemyBoxes = getRandomEnemyBoxes(3);
-  var enemy1 = new level1.egg();
+  var enemy1 = new enemyClass.bat();
+  var enemy2 = new enemyClass.tiger();
+  var enemy3 = new enemyClass.bruv();
   randomEnemyBoxes[0].append(enemy1.modal);
+  randomEnemyBoxes[1].append(enemy2.modal);
+  randomEnemyBoxes[2].append(enemy3.modal);
 }
 
 function getRandomEnemyBoxes(num) {
@@ -952,20 +814,11 @@ function iterateEnergyEffects(energyObj) {
 
 
 function checkEntityDeath(entity) {
-  if (entity.health > 0) return;
-  entity.die(entity);
-
-  _pubsub.default.emit("entityDied", entity);
-}
-
-function checkBattleWon() {
-  var enemy = _dom.enemyGrid.querySelector(".enemy");
-
-  if (enemy) return; // no enemy left
-
-  _pubsub.default.battleEnded();
+  if (entity.health <= 0) {
+    entity.die(entity);
+  }
 } // /check
-},{"../dom.js":"jscripts/components/dom.js","../enemies/stage1/enemies.js":"jscripts/components/enemies/stage1/enemies.js","../player.js":"jscripts/components/player.js","../pubsub.js":"jscripts/components/pubsub.js","./damage_formulas.js":"jscripts/components/functions/damage_formulas.js"}],"jscripts/components/functions/cardFunctions.js":[function(require,module,exports) {
+},{"../dom.js":"dlJM","../enemies/enemyClass.js":"uD9C","../player.js":"hDDw","../pubsub.js":"xoHa","./damage_formulas.js":"GY4V"}],"G6vW":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1070,11 +923,11 @@ function locateCard(card) {
   }
 
   if (index === -1) {
-    index = _player.player.grave.findIndex(function (x) {
+    index = _player.player.exhaustPile.findIndex(function (x) {
       return x === card;
     });
-    locatedCard = _player.player.grave[index];
-    location = "grave";
+    locatedCard = _player.player.exhaustPile[index];
+    location = "exhaustPile";
   }
 
   return {
@@ -1083,7 +936,7 @@ function locateCard(card) {
     location: location
   };
 }
-},{"../player.js":"jscripts/components/player.js"}],"jscripts/components/functions/domFunctions.js":[function(require,module,exports) {
+},{"../player.js":"hDDw"}],"fqaM":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1109,7 +962,6 @@ exports.generateEffectEllement = generateEffectEllement;
 exports.generateEntityScan = generateEntityScan;
 exports.getEnemyBoxOfEntity = getEnemyBoxOfEntity;
 exports.getEntityHealthModals = getEntityHealthModals;
-exports.hideBattleElements = hideBattleElements;
 exports.linkElementtToEntity = linkElementtToEntity;
 exports.moveNextEnemyBoxOf = moveNextEnemyBoxOf;
 exports.positionEntityScan = positionEntityScan;
@@ -1127,7 +979,6 @@ exports.selectCard = selectCard;
 exports.selectCardOnClick = selectCardOnClick;
 exports.selectPlayer = selectPlayer;
 exports.selectedCard = void 0;
-exports.showBattleElements = showBattleElements;
 exports.visualyRemoveCard = visualyRemoveCard;
 exports.visualyRenderCard = visualyRenderCard;
 
@@ -1156,9 +1007,14 @@ exports.selectedCard = selectedCard;
   dom.drawpile.addEventListener("click", displayDrawDialog);
   dom.discardpile.addEventListener("click", displayDiscardDialog); // windown stuff
 
+  document.body.style.overflow = "hidden";
   window.addEventListener("resize", function () {
-    scrollBy(0, -100);
+    scrollBy(0, 1000);
   });
+
+  window.onload = function () {
+    scrollBy(0, 1000);
+  };
 })(); // small renders
 
 
@@ -1240,8 +1096,7 @@ function visualyRemoveCard(card) {
 
 function removeelement(e) {
   e.target.remove();
-} // Entity Stuff
-
+}
 
 function renderHealthBar(entity) {
   var healthInfo = getEntityHealthModals(entity);
@@ -1358,26 +1213,7 @@ function removeAllEntityScans() {
   all_scans.forEach(function (scan) {
     scan.remove();
   });
-} // / Entity Stuff
-// Battle Elements
-
-
-function showBattleElements() {
-  renderBattleElements(false);
-}
-
-function hideBattleElements() {
-  renderBattleElements(true);
-}
-
-function renderBattleElements(boolean) {
-  var entityGrid = dom.enemyGrid;
-  var endTurnBtn = dom.endTurnBtn;
-  Array.from([entityGrid, endTurnBtn]).forEach(function (element) {
-    element.classList.toggle("hidden", boolean);
-  });
-} // /Battle Elements
-// /small renders
+} // /small renders
 // checks
 
 
@@ -1572,11 +1408,9 @@ function renderCardGrid(cardGrid, pile) {
     cardGrid.append(element);
   });
 }
-},{"../dom.js":"jscripts/components/dom.js","../player.js":"jscripts/components/player.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/functions/playerFuctions.js":[function(require,module,exports) {
+},{"../dom.js":"dlJM","../player.js":"hDDw","../pubsub.js":"xoHa"}],"oUWr":[function(require,module,exports) {
 
-},{}],"jscripts/components/functions/outsideFunctions.js":[function(require,module,exports) {
-
-},{}],"jscripts/components/buffs/effectsHandler.js":[function(require,module,exports) {
+},{}],"KyPS":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1827,7 +1661,7 @@ function force_remove(effect) {
 
   }
 }
-},{"../buffsManager":"jscripts/components/buffsManager.js","../functions":"jscripts/components/functions.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/buffs/buffClasses.js":[function(require,module,exports) {
+},{"../buffsManager":"HT2s","../functions":"Q9tZ","../pubsub.js":"xoHa"}],"e604":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2016,7 +1850,7 @@ that means 5 specific functions that remove from each list
 
 
 exports.d = d;
-},{"./effectsHandler.js":"jscripts/components/buffs/effectsHandler.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/buffs/debuffClasses.js":[function(require,module,exports) {
+},{"./effectsHandler.js":"KyPS","../pubsub.js":"xoHa"}],"CH2h":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2278,14 +2112,13 @@ var d = /*#__PURE__*/function (_basicDebuff4) {
 }(basicDebuff);
 
 exports.d = d;
-},{"./effectsHandler.js":"jscripts/components/buffs/effectsHandler.js","../functions.js":"jscripts/components/functions.js","../pubsub.js":"jscripts/components/pubsub.js"}],"jscripts/components/buffsManager.js":[function(require,module,exports) {
+},{"./effectsHandler.js":"KyPS","../functions.js":"Q9tZ","../pubsub.js":"xoHa"}],"HT2s":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-exports.forceRemoveEffects = forceRemoveEffects;
 
 var buffs = _interopRequireWildcard(require("./buffs/buffClasses.js"));
 
@@ -2305,598 +2138,20 @@ var effects = _objectSpread(_objectSpread({}, buffs), debuffs);
 
 var _default = effects;
 exports.default = _default;
-
-function forceRemoveEffects(entity) {
-  for (var effect in entity.buffs) {
-    entity["buffs"][effect]._forceRemove();
-  }
-
-  for (var _effect in entity.debuffs) {
-    entity["debuffs"][_effect]._forceRemove();
-  }
-}
-},{"./buffs/buffClasses.js":"jscripts/components/buffs/buffClasses.js","./buffs/debuffClasses.js":"jscripts/components/buffs/debuffClasses.js"}],"jscripts/components/enemies/stageSage.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _functions = require("../functions.js");
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-var stage = /*#__PURE__*/function () {
-  function stage() {
-    _classCallCheck(this, stage);
-
-    this.AllEnemyGroups = [];
-    this.AllElites = [];
-    this.AllBosses = [];
-    this.levelEnemies = [];
-    this.levelElites = [];
-    this.levelBoss = null;
-    /*
-      {
-        value:[],
-        type:"enemyGroup" / "elite" / "boss"
-      }
-     */
-  }
-
-  _createClass(stage, [{
-    key: "levelsInit",
-    value: function levelsInit() {
-      for (var _i = 0, _Object$entries = Object.entries(this); _i < _Object$entries.length; _i++) {
-        var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-            key = _Object$entries$_i[0],
-            value = _Object$entries$_i[1];
-
-        if (_typeof(value) !== "object" || value == null) continue;
-        if (value.type == undefined) continue;
-
-        switch (value.type) {
-          case "eg":
-            this.AllEnemyGroups.push(value.value);
-            break;
-
-          case "elite":
-            this.AllElites.push(value.value);
-            break;
-
-          case "boss":
-            this.AllBosses.push(value.value);
-            break;
-        }
-      }
-
-      var shuffledEnemies = _functions.cardfunctions.shuffle(this.AllEnemyGroups);
-
-      var shuffledElites = _functions.cardfunctions.shuffle(this.AllElites);
-
-      var shuffledBosses = _functions.cardfunctions.shuffle(this.AllBosses);
-
-      this.levelEnemies = shuffledEnemies.splice(0, 9);
-      this.levelElites = shuffledElites;
-      this.levelBoss = shuffledBosses[0];
-    }
-  }]);
-
-  return stage;
-}();
-/*
-end result : 
-a level prop that is an array of 10
-  9 enemies , 1 boss
-an elites prop that is an array of 
-  randomized elites
-
-eterate through this objects props
-  if prop is not object next
-  if prop.type = enemygroup add to level prop
-  if prop.type = elite      add to elit prop
-  if prop.type = boss      add to boss prop
-
-randomize level / elits / bosses prop
-
-set this. level / elites / boss
-
-
-
-*/
-
-
-exports.default = stage;
-},{"../functions.js":"jscripts/components/functions.js"}],"jscripts/components/enemies/stage1/elites.js":[function(require,module,exports) {
-
-},{}],"jscripts/components/enemies/stage1/stage.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _stageSage2 = _interopRequireDefault(require("../stageSage.js"));
-
-var e = _interopRequireWildcard(require("./enemies.js"));
-
-var elites = _interopRequireWildcard(require("./elites.js"));
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-var stage1 = /*#__PURE__*/function (_stageSage) {
-  _inherits(stage1, _stageSage);
-
-  var _super = _createSuper(stage1);
-
-  function stage1() {
-    var _this;
-
-    _classCallCheck(this, stage1);
-
-    _this = _super.call(this);
-    _this.eg1 = {
-      value: [e.bat, e.tiger, e.bruv],
-      type: "eg"
-    };
-    _this.eg2 = {
-      value: [e.bat, e.bat, e.bat],
-      type: "eg"
-    };
-    _this.eg = {
-      value: [e.tiger, e.tiger],
-      type: "eg"
-    };
-
-    _this.levelsInit();
-
-    return _this;
-  }
-
-  return _createClass(stage1);
-}(_stageSage2.default);
-
-var _default = new stage1();
-
-exports.default = _default;
-
-function d() {
-  this.eg = {
-    value: [],
-    type: "eg"
-  };
-}
-},{"../stageSage.js":"jscripts/components/enemies/stageSage.js","./enemies.js":"jscripts/components/enemies/stage1/enemies.js","./elites.js":"jscripts/components/enemies/stage1/elites.js"}],"jscripts/components/enemies/stage2/enemies.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.tiger = exports.bruv = exports.bat = void 0;
-
-var entityMoves = _interopRequireWildcard(require("../entityMoves.js"));
-
-var _enemyClass = require("../enemyClass.js");
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-var bat = /*#__PURE__*/function (_basicEnemy) {
-  _inherits(bat, _basicEnemy);
-
-  var _super = _createSuper(bat);
-
-  function bat() {
-    var _this;
-
-    _classCallCheck(this, bat);
-
-    _this = _super.call(this, "bat", 11);
-
-    var enemy = _assertThisInitialized(_this);
-
-    _this.moves = [new entityMoves.basic_deffend(enemy, 12), new entityMoves.basic_attack_friendly(enemy, 5)];
-    return _this;
-  }
-
-  return _createClass(bat);
-}(_enemyClass.basicEnemy);
-
-exports.bat = bat;
-
-var tiger = /*#__PURE__*/function (_basicEnemy2) {
-  _inherits(tiger, _basicEnemy2);
-
-  var _super2 = _createSuper(tiger);
-
-  function tiger() {
-    var _this2;
-
-    _classCallCheck(this, tiger);
-
-    _this2 = _super2.call(this, "tiger", 63);
-
-    var enemy = _assertThisInitialized(_this2);
-
-    _this2.moves = [new entityMoves.basic_attack_friendly(enemy, 50), new entityMoves.basic_attack_friendly(enemy, 20)];
-    return _this2;
-  }
-
-  return _createClass(tiger);
-}(_enemyClass.basicEnemy);
-
-exports.tiger = tiger;
-
-var bruv = /*#__PURE__*/function (_basicEnemy3) {
-  _inherits(bruv, _basicEnemy3);
-
-  var _super3 = _createSuper(bruv);
-
-  function bruv() {
-    var _this3;
-
-    _classCallCheck(this, bruv);
-
-    _this3 = _super3.call(this, "bruv", 36);
-
-    var enemy = _assertThisInitialized(_this3);
-
-    _this3.moves = [{
-      exe: function exe() {},
-      icon: "",
-      render: function render() {}
-    }];
-    return _this3;
-  }
-
-  return _createClass(bruv);
-}(_enemyClass.basicEnemy);
-
-exports.bruv = bruv;
-},{"../entityMoves.js":"jscripts/components/enemies/entityMoves.js","../enemyClass.js":"jscripts/components/enemies/enemyClass.js"}],"jscripts/components/enemies/stage2/elites.js":[function(require,module,exports) {
-
-},{}],"jscripts/components/enemies/stage2/stage.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _stageSage2 = _interopRequireDefault(require("../stageSage.js"));
-
-var enemies = _interopRequireWildcard(require("./enemies.js"));
-
-var elites = _interopRequireWildcard(require("./elites.js"));
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-var stage2 = /*#__PURE__*/function (_stageSage) {
-  _inherits(stage2, _stageSage);
-
-  var _super = _createSuper(stage2);
-
-  function stage2() {
-    var _this;
-
-    _classCallCheck(this, stage2);
-
-    _this = _super.call(this);
-
-    _this.levelsInit();
-
-    return _this;
-  }
-
-  return _createClass(stage2);
-}(_stageSage2.default);
-
-var _default = new stage2();
-
-exports.default = _default;
-
-function d() {
-  this.eg = {
-    value: [],
-    type: "eg"
-  };
-}
-},{"../stageSage.js":"jscripts/components/enemies/stageSage.js","./enemies.js":"jscripts/components/enemies/stage2/enemies.js","./elites.js":"jscripts/components/enemies/stage2/elites.js"}],"jscripts/components/enemies/stage3/enemies.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.tiger = exports.bruv = exports.bat = void 0;
-
-var entityMoves = _interopRequireWildcard(require("../entityMoves.js"));
-
-var _enemyClass = require("../enemyClass.js");
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-var bat = /*#__PURE__*/function (_basicEnemy) {
-  _inherits(bat, _basicEnemy);
-
-  var _super = _createSuper(bat);
-
-  function bat() {
-    var _this;
-
-    _classCallCheck(this, bat);
-
-    _this = _super.call(this, "bat", 11);
-
-    var enemy = _assertThisInitialized(_this);
-
-    _this.moves = [new entityMoves.basic_deffend(enemy, 12), new entityMoves.basic_attack_friendly(enemy, 5)];
-    return _this;
-  }
-
-  return _createClass(bat);
-}(_enemyClass.basicEnemy);
-
-exports.bat = bat;
-
-var tiger = /*#__PURE__*/function (_basicEnemy2) {
-  _inherits(tiger, _basicEnemy2);
-
-  var _super2 = _createSuper(tiger);
-
-  function tiger() {
-    var _this2;
-
-    _classCallCheck(this, tiger);
-
-    _this2 = _super2.call(this, "tiger", 63);
-
-    var enemy = _assertThisInitialized(_this2);
-
-    _this2.moves = [new entityMoves.basic_attack_friendly(enemy, 50), new entityMoves.basic_attack_friendly(enemy, 20)];
-    return _this2;
-  }
-
-  return _createClass(tiger);
-}(_enemyClass.basicEnemy);
-
-exports.tiger = tiger;
-
-var bruv = /*#__PURE__*/function (_basicEnemy3) {
-  _inherits(bruv, _basicEnemy3);
-
-  var _super3 = _createSuper(bruv);
-
-  function bruv() {
-    var _this3;
-
-    _classCallCheck(this, bruv);
-
-    _this3 = _super3.call(this, "bruv", 36);
-
-    var enemy = _assertThisInitialized(_this3);
-
-    _this3.moves = [{
-      exe: function exe() {},
-      icon: "",
-      render: function render() {}
-    }];
-    return _this3;
-  }
-
-  return _createClass(bruv);
-}(_enemyClass.basicEnemy);
-
-exports.bruv = bruv;
-},{"../entityMoves.js":"jscripts/components/enemies/entityMoves.js","../enemyClass.js":"jscripts/components/enemies/enemyClass.js"}],"jscripts/components/enemies/stage3/elites.js":[function(require,module,exports) {
-
-},{}],"jscripts/components/enemies/stage3/stage.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _stageSage2 = _interopRequireDefault(require("../stageSage.js"));
-
-var enemies = _interopRequireWildcard(require("./enemies.js"));
-
-var elites = _interopRequireWildcard(require("./elites.js"));
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-var stage3 = /*#__PURE__*/function (_stageSage) {
-  _inherits(stage3, _stageSage);
-
-  var _super = _createSuper(stage3);
-
-  function stage3() {
-    var _this;
-
-    _classCallCheck(this, stage3);
-
-    _this = _super.call(this);
-
-    _this.levelsInit();
-
-    return _this;
-  }
-
-  return _createClass(stage3);
-}(_stageSage2.default);
-
-var _default = new stage3();
-
-exports.default = _default;
-
-function d() {
-  this.eg = {
-    value: [],
-    type: "eg"
-  };
-}
-},{"../stageSage.js":"jscripts/components/enemies/stageSage.js","./enemies.js":"jscripts/components/enemies/stage3/enemies.js","./elites.js":"jscripts/components/enemies/stage3/elites.js"}],"jscripts/components/functions.js":[function(require,module,exports) {
+},{"./buffs/buffClasses.js":"e604","./buffs/debuffClasses.js":"CH2h"}],"Q9tZ":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.animationHandler = animationHandler;
-exports.applyEffect = applyEffect;
 exports.attackFriendly = attackFriendly;
-exports.cardfunctions = exports.buffsManager = exports.battlefunctions = void 0;
+exports.cardfunctions = exports.battlefunctions = void 0;
 exports.clearBlock = clearBlock;
 exports.clearBlockOfType = clearBlockOfType;
 exports.damage = damage;
 exports.damageBlock = damageBlock;
 exports.damageFormulas = void 0;
-exports.defaultBattleEnded = defaultBattleEnded;
-exports.defaultBattleStarted = defaultBattleStarted;
 exports.defaultTurnEnded = defaultTurnEnded;
 exports.defaultTurnStarted = defaultTurnStarted;
 exports.directlyDamage = directlyDamage;
@@ -2904,15 +2159,12 @@ exports.discardCard = discardCard;
 exports.domfunctions = void 0;
 exports.drawCardsIntoHand = drawCardsIntoHand;
 exports.endTurnClearPlayerHand = endTurnClearPlayerHand;
+exports.exhaustCard = exhaustCard;
 exports.gainBlock = gainBlock;
-exports.graveCard = graveCard;
 exports.killEntityModal = killEntityModal;
-exports.outsideFunctions = void 0;
 exports.playCardManager = playCardManager;
 exports.playSelectedCard = playSelectedCard;
-exports.playerfunctions = void 0;
-exports.random = random;
-exports.render = void 0;
+exports.render = exports.playerfunctions = void 0;
 exports.renderEffect = renderEffect;
 exports.renderEntityAttack = renderEntityAttack;
 exports.renderEntityScan = renderEntityScan;
@@ -2921,24 +2173,6 @@ exports.renderHealth = renderHealth;
 exports.resetEntity = resetEntity;
 exports.resetPlayerEnergy = resetPlayerEnergy;
 exports.selectionHandler = selectionHandler;
-Object.defineProperty(exports, "stage1", {
-  enumerable: true,
-  get: function () {
-    return _stage.default;
-  }
-});
-Object.defineProperty(exports, "stage2", {
-  enumerable: true,
-  get: function () {
-    return _stage2.default;
-  }
-});
-Object.defineProperty(exports, "stage3", {
-  enumerable: true,
-  get: function () {
-    return _stage3.default;
-  }
-});
 
 var _player = require("./player.js");
 
@@ -2964,21 +2198,9 @@ var damageFormulas = _interopRequireWildcard(require("./functions/damage_formula
 
 exports.damageFormulas = damageFormulas;
 
-var outsideFunctions = _interopRequireWildcard(require("./functions/outsideFunctions.js"));
-
-exports.outsideFunctions = outsideFunctions;
-
-var buffsManager = _interopRequireWildcard(require("./buffsManager.js"));
-
-exports.buffsManager = buffsManager;
+var _buffsManager = _interopRequireDefault(require("./buffsManager.js"));
 
 var _pubsub = _interopRequireDefault(require("./pubsub.js"));
-
-var _stage = _interopRequireDefault(require("./enemies/stage1/stage.js"));
-
-var _stage2 = _interopRequireDefault(require("./enemies/stage2/stage.js"));
-
-var _stage3 = _interopRequireDefault(require("./enemies/stage3/stage.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3201,16 +2423,6 @@ function renderEntitySkill(entity, moveObj) {
 // /Dom Functions
 // Battle Fucntion
 // play cardon enemy
-// Battle
-
-
-function defaultBattleStarted(battle) {
-  domfunctions.showBattleElements();
-}
-
-function defaultBattleEnded(battle) {
-  domfunctions.hideBattleElements();
-} // /Battle
 // turns
 
 
@@ -3253,7 +2465,6 @@ function resetPlayerEnergy() {
   _player.player.energy = energy.val;
   domfunctions.renderPlayerEnergy();
 } // /turns
-// play card on enemy
 
 
 function playSelectedCard(e) {
@@ -3333,11 +2544,7 @@ function damageBlock(damage, entity) {
     entity.block = 0;
     return damage - block;
   }
-}
-
-function applyEffect(effectObj, entity) {
-  entity.apply(effectObj);
-} // /play card on enemy
+} // /play cardon enemy
 // enemy functions
 
 
@@ -3387,7 +2594,13 @@ function resetEntity(entity) {
 
   entity.move = function () {};
 
-  buffsManager.forceRemoveEffects(entity);
+  for (var effect in entity.buffs) {
+    entity["buffs"][effect]._forceRemove();
+  }
+
+  for (var _effect in entity.debuffs) {
+    entity["debuffs"][_effect]._forceRemove();
+  }
 } // /Battle Fucntion
 // Card Functions
 
@@ -3451,7 +2664,7 @@ function discardCard(card) {
   render();
 }
 
-function graveCard(card) {
+function exhaustCard(card) {
   var _cardfunctions$locate = cardfunctions.locateCard(card),
       index = _cardfunctions$locate.index,
       exhaustedCard = _cardfunctions$locate.exhaustedCard,
@@ -3459,33 +2672,13 @@ function graveCard(card) {
 
   _player.player[location].splice(index, 1);
 
-  _player.player.grave.push(exhaustedCard);
+  _player.player.exhaustPile.push(exhaustedCard);
 
   render();
 } // /Card Functions
 // OUTSIDE BATTLE
 // /OUTSIDE BATTLE
-// Misc And Utility
-
-
-function random() {
-  var itemsArr = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  // items with biggest percent FIRST
-  var example_object = ["item", 69];
-  var hundred_array = [];
-  itemsArr.forEach(function (item) {
-    for (var i = 1; i <= item[1]; i++) {
-      hundred_array.push(item[0]);
-    }
-  });
-  var random_index = Math.random() * hundred_array.length;
-  return hundred_array[random_index];
-} // /Misc And Utility
-
-
-var p = Promise.resolve();
-p.then(function () {});
-},{"./player.js":"jscripts/components/player.js","./dom.js":"jscripts/components/dom.js","./functions/battleFunctions.js":"jscripts/components/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/components/functions/cardFunctions.js","./functions/domFunctions.js":"jscripts/components/functions/domFunctions.js","./functions/playerFuctions.js":"jscripts/components/functions/playerFuctions.js","./functions/damage_formulas.js":"jscripts/components/functions/damage_formulas.js","./functions/outsideFunctions.js":"jscripts/components/functions/outsideFunctions.js","./buffsManager.js":"jscripts/components/buffsManager.js","./pubsub.js":"jscripts/components/pubsub.js","./enemies/stage1/stage.js":"jscripts/components/enemies/stage1/stage.js","./enemies/stage2/stage.js":"jscripts/components/enemies/stage2/stage.js","./enemies/stage3/stage.js":"jscripts/components/enemies/stage3/stage.js"}],"jscripts/components/cards/attackCardClasses.js":[function(require,module,exports) {
+},{"./player.js":"hDDw","./dom.js":"dlJM","./functions/battleFunctions.js":"egtd","./functions/cardFunctions.js":"G6vW","./functions/domFunctions.js":"fqaM","./functions/playerFuctions.js":"oUWr","./functions/damage_formulas.js":"GY4V","./buffsManager.js":"HT2s","./pubsub.js":"xoHa"}],"ZvlW":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3611,7 +2804,7 @@ var bash = /*#__PURE__*/function (_basicAttackCardClass2) {
     key: "play",
     value: function play(enemy) {
       this.defaultPlay(enemy);
-      (0, f.applyEffect)(new _buffsManager.default.vulnerable(3), enemy);
+      enemy.apply(new _buffsManager.default.vulnerable(3));
     }
   }]);
 
@@ -3635,7 +2828,7 @@ var poison_stab = /*#__PURE__*/function (_basicAttackCardClass3) {
     key: "play",
     value: function play(enemy) {
       this.defaultPlay(enemy);
-      (0, f.applyEffect)(new _buffsManager.default.poison(4), enemy);
+      enemy.apply(new _buffsManager.default.poison(4));
     }
   }]);
 
@@ -3659,7 +2852,7 @@ var draw_blood = /*#__PURE__*/function (_basicAttackCardClass4) {
     key: "play",
     value: function play(enemy) {
       this.defaultPlay(enemy);
-      (0, f.applyEffect)(new _buffsManager.default.bleed(6), enemy);
+      enemy.apply(new _buffsManager.default.bleed(6));
     }
   }]);
 
@@ -3690,7 +2883,7 @@ var card = /*#__PURE__*/function (_basicAttackCardClass5) {
 }(basicAttackCardClass);
 
 exports.card = card;
-},{"../functions.js":"jscripts/components/functions.js","../player.js":"jscripts/components/player.js","../buffsManager.js":"jscripts/components/buffsManager.js","../functions/domFunctions.js":"jscripts/components/functions/domFunctions.js"}],"jscripts/components/cards/skillCardClass.js":[function(require,module,exports) {
+},{"../functions.js":"Q9tZ","../player.js":"hDDw","../buffsManager.js":"HT2s","../functions/domFunctions.js":"fqaM"}],"l5IJ":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3827,7 +3020,7 @@ var card = /*#__PURE__*/function (_basicSkillCardClass2) {
 }(basicSkillCardClass);
 
 exports.card = card;
-},{"../functions.js":"jscripts/components/functions.js","../player.js":"jscripts/components/player.js","../buffsManager.js":"jscripts/components/buffsManager.js","../functions/domFunctions.js":"jscripts/components/functions/domFunctions.js"}],"jscripts/components/cards/powerCardClasses.js":[function(require,module,exports) {
+},{"../functions.js":"Q9tZ","../player.js":"hDDw","../buffsManager.js":"HT2s","../functions/domFunctions.js":"fqaM"}],"Qw3i":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3874,7 +3067,7 @@ var basicPowerCardClass = /*#__PURE__*/function () {
 exports.basicPowerCardClass = basicPowerCardClass;
 
 _defineProperty(basicPowerCardClass, "generatedCardType", "power");
-},{"../functions.js":"jscripts/components/functions.js","../functions/domFunctions.js":"jscripts/components/functions/domFunctions.js"}],"jscripts/components/cards/01cardsManager.js":[function(require,module,exports) {
+},{"../functions.js":"Q9tZ","../functions/domFunctions.js":"fqaM"}],"YIsa":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3912,7 +3105,7 @@ new skillCardClasses.defend(), new skillCardClasses.defend(), new attackCardClas
 // useless ?//, drawPile , discardPile , playerHand}
 
 exports.playerStartingDeck = playerStartingDeck;
-},{"./attackCardClasses.js":"jscripts/components/cards/attackCardClasses.js","./skillCardClass.js":"jscripts/components/cards/skillCardClass.js","./powerCardClasses.js":"jscripts/components/cards/powerCardClasses.js"}],"jscripts/components/player.js":[function(require,module,exports) {
+},{"./attackCardClasses.js":"ZvlW","./skillCardClass.js":"l5IJ","./powerCardClasses.js":"Qw3i"}],"hDDw":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3923,8 +3116,6 @@ exports.player = void 0;
 var _cardsManager = require("./cards/01cardsManager.js");
 
 var _enemyClass = require("./enemies/enemyClass.js");
-
-var _functions = require("./functions.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -3977,13 +3168,7 @@ var playerClass = /*#__PURE__*/function () {
 
     this.modal = document.querySelector(".player");
     this.modal.entity = this;
-    (0, _enemyClass.setUpHealthBar)(this); // level stuff
-
-    this.stage1 = _functions.stage1;
-    this.stage2 = _functions.stage2;
-    this.stage3 = _functions.stage3;
-    this.stage = 1;
-    this.level = 0;
+    (0, _enemyClass.setUpHealthBar)(this);
   }
 
   _createClass(playerClass, [{
@@ -4005,17 +3190,6 @@ var playerClass = /*#__PURE__*/function () {
       (_this$debuffs$effectN = this.debuffs[effectName]) === null || _this$debuffs$effectN === void 0 ? void 0 : _this$debuffs$effectN.remove();
     }
   }, {
-    key: "nextStage",
-    value: function nextStage() {
-      this.stage++;
-      this.level = 0;
-    }
-  }, {
-    key: "nextLevel",
-    value: function nextLevel() {
-      this.level++;
-    }
-  }, {
     key: "test",
     value: function test() {
       console.log(this.cardEffects.drawEffects.prop, this.cardEffects.drawEffects.prop2);
@@ -4027,7 +3201,7 @@ var playerClass = /*#__PURE__*/function () {
 
 var player = new playerClass(73, _cardsManager.playerStartingDeck, {});
 exports.player = player;
-},{"./cards/01cardsManager.js":"jscripts/components/cards/01cardsManager.js","./enemies/enemyClass.js":"jscripts/components/enemies/enemyClass.js","./functions.js":"jscripts/components/functions.js"}],"jscripts/logics/battle.js":[function(require,module,exports) {
+},{"./cards/01cardsManager.js":"YIsa","./enemies/enemyClass.js":"uD9C"}],"Kc5B":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4050,8 +3224,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function battleInit() {
-  f.battlefunctions.testEnemies(); // f.battlefunctions.renderEnemyLevel()
-
+  f.battlefunctions.initEnemies();
   f.cardfunctions.playerDeckInit();
   f.cardfunctions.playerDeckInit();
   f.cardfunctions.resetDrawPile();
@@ -4059,7 +3232,7 @@ function battleInit() {
 
   _pubsub.default.turnStarted();
 }
-},{"../components/player.js":"jscripts/components/player.js","../components/pubsub.js":"jscripts/components/pubsub.js","../components/functions.js":"jscripts/components/functions.js","../components/dom.js":"jscripts/components/dom.js"}],"jscripts/main.js":[function(require,module,exports) {
+},{"../components/player.js":"hDDw","../components/pubsub.js":"xoHa","../components/functions.js":"Q9tZ","../components/dom.js":"dlJM"}],"MTLq":[function(require,module,exports) {
 "use strict";
 
 var battle = _interopRequireWildcard(require("./logics/battle.js"));
@@ -4078,214 +3251,9 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 // endTurnButton.addEventListener("click" , ()=>{
 //   pubsub.turnEnded()
 // })
-battle.battleInit(); //  pubsub.battleEnded()
-// will throw error bcause not importing and no render function
+battle.battleInit(); // will throw error bcause not importing and no render function
 // console.log(cardsManager.playerHand);
 // console.log(cardsManager.drawPile);
 // console.log(cardsManager.playerHand[0].element.cardObject);
-},{"./logics/battle.js":"jscripts/logics/battle.js","./components/pubsub.js":"jscripts/components/pubsub.js","./components/dom.js":"jscripts/components/dom.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
-var global = arguments[3];
-var OVERLAY_ID = '__parcel__error__overlay__';
-var OldModule = module.bundle.Module;
-
-function Module(moduleName) {
-  OldModule.call(this, moduleName);
-  this.hot = {
-    data: module.bundle.hotData,
-    _acceptCallbacks: [],
-    _disposeCallbacks: [],
-    accept: function (fn) {
-      this._acceptCallbacks.push(fn || function () {});
-    },
-    dispose: function (fn) {
-      this._disposeCallbacks.push(fn);
-    }
-  };
-  module.bundle.hotData = null;
-}
-
-module.bundle.Module = Module;
-var checkedAssets, assetsToAccept;
-var parent = module.bundle.parent;
-
-if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
-  var hostname = "" || location.hostname;
-  var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56575" + '/');
-
-  ws.onmessage = function (event) {
-    checkedAssets = {};
-    assetsToAccept = [];
-    var data = JSON.parse(event.data);
-
-    if (data.type === 'update') {
-      var handled = false;
-      data.assets.forEach(function (asset) {
-        if (!asset.isNew) {
-          var didAccept = hmrAcceptCheck(global.parcelRequire, asset.id);
-
-          if (didAccept) {
-            handled = true;
-          }
-        }
-      }); // Enable HMR for CSS by default.
-
-      handled = handled || data.assets.every(function (asset) {
-        return asset.type === 'css' && asset.generated.js;
-      });
-
-      if (handled) {
-        console.clear();
-        data.assets.forEach(function (asset) {
-          hmrApply(global.parcelRequire, asset);
-        });
-        assetsToAccept.forEach(function (v) {
-          hmrAcceptRun(v[0], v[1]);
-        });
-      } else if (location.reload) {
-        // `location` global exists in a web worker context but lacks `.reload()` function.
-        location.reload();
-      }
-    }
-
-    if (data.type === 'reload') {
-      ws.close();
-
-      ws.onclose = function () {
-        location.reload();
-      };
-    }
-
-    if (data.type === 'error-resolved') {
-      console.log('[parcel] ✨ Error resolved');
-      removeErrorOverlay();
-    }
-
-    if (data.type === 'error') {
-      console.error('[parcel] 🚨  ' + data.error.message + '\n' + data.error.stack);
-      removeErrorOverlay();
-      var overlay = createErrorOverlay(data);
-      document.body.appendChild(overlay);
-    }
-  };
-}
-
-function removeErrorOverlay() {
-  var overlay = document.getElementById(OVERLAY_ID);
-
-  if (overlay) {
-    overlay.remove();
-  }
-}
-
-function createErrorOverlay(data) {
-  var overlay = document.createElement('div');
-  overlay.id = OVERLAY_ID; // html encode message and stack trace
-
-  var message = document.createElement('div');
-  var stackTrace = document.createElement('pre');
-  message.innerText = data.error.message;
-  stackTrace.innerText = data.error.stack;
-  overlay.innerHTML = '<div style="background: black; font-size: 16px; color: white; position: fixed; height: 100%; width: 100%; top: 0px; left: 0px; padding: 30px; opacity: 0.85; font-family: Menlo, Consolas, monospace; z-index: 9999;">' + '<span style="background: red; padding: 2px 4px; border-radius: 2px;">ERROR</span>' + '<span style="top: 2px; margin-left: 5px; position: relative;">🚨</span>' + '<div style="font-size: 18px; font-weight: bold; margin-top: 20px;">' + message.innerHTML + '</div>' + '<pre>' + stackTrace.innerHTML + '</pre>' + '</div>';
-  return overlay;
-}
-
-function getParents(bundle, id) {
-  var modules = bundle.modules;
-
-  if (!modules) {
-    return [];
-  }
-
-  var parents = [];
-  var k, d, dep;
-
-  for (k in modules) {
-    for (d in modules[k][1]) {
-      dep = modules[k][1][d];
-
-      if (dep === id || Array.isArray(dep) && dep[dep.length - 1] === id) {
-        parents.push(k);
-      }
-    }
-  }
-
-  if (bundle.parent) {
-    parents = parents.concat(getParents(bundle.parent, id));
-  }
-
-  return parents;
-}
-
-function hmrApply(bundle, asset) {
-  var modules = bundle.modules;
-
-  if (!modules) {
-    return;
-  }
-
-  if (modules[asset.id] || !bundle.parent) {
-    var fn = new Function('require', 'module', 'exports', asset.generated.js);
-    asset.isNew = !modules[asset.id];
-    modules[asset.id] = [fn, asset.deps];
-  } else if (bundle.parent) {
-    hmrApply(bundle.parent, asset);
-  }
-}
-
-function hmrAcceptCheck(bundle, id) {
-  var modules = bundle.modules;
-
-  if (!modules) {
-    return;
-  }
-
-  if (!modules[id] && bundle.parent) {
-    return hmrAcceptCheck(bundle.parent, id);
-  }
-
-  if (checkedAssets[id]) {
-    return;
-  }
-
-  checkedAssets[id] = true;
-  var cached = bundle.cache[id];
-  assetsToAccept.push([bundle, id]);
-
-  if (cached && cached.hot && cached.hot._acceptCallbacks.length) {
-    return true;
-  }
-
-  return getParents(global.parcelRequire, id).some(function (id) {
-    return hmrAcceptCheck(global.parcelRequire, id);
-  });
-}
-
-function hmrAcceptRun(bundle, id) {
-  var cached = bundle.cache[id];
-  bundle.hotData = {};
-
-  if (cached) {
-    cached.hot.data = bundle.hotData;
-  }
-
-  if (cached && cached.hot && cached.hot._disposeCallbacks.length) {
-    cached.hot._disposeCallbacks.forEach(function (cb) {
-      cb(bundle.hotData);
-    });
-  }
-
-  delete bundle.cache[id];
-  bundle(id);
-  cached = bundle.cache[id];
-
-  if (cached && cached.hot && cached.hot._acceptCallbacks.length) {
-    cached.hot._acceptCallbacks.forEach(function (cb) {
-      cb();
-    });
-
-    return true;
-  }
-}
-},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","jscripts/main.js"], null)
-//# sourceMappingURL=/main.9ffdfdf0.js.map
+},{"./logics/battle.js":"Kc5B","./components/pubsub.js":"xoHa","./components/dom.js":"dlJM"}]},{},["MTLq"], null)
+//# sourceMappingURL=main.604018f9.js.map

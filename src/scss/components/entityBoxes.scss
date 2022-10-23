@@ -7,11 +7,13 @@
 
 // SCANS
 .entityScan{
+  box-sizing: initial; 
   position: absolute;
-  
-  width: 200px;min-height: 400px;
+  padding:  10px;
+
+  width: 200px;max-height: 400px;
   color: white;
-  background-color: black;
+  background-color: var(--wood-orange-dark);
   text-transform: capitalize;
   
   display: flex;
@@ -21,15 +23,47 @@
   animation: scanInit 200ms;
   z-index: 100;
 
+  overflow: auto;
+
   & h1{ text-align: center; text-decoration: underline; box-shadow: 0 15px 0 -10px white;margin-bottom: 10px;}
-  & p {margin-left: 10px; color: rgba(255, 255, 255, 0.884);} 
-  & .scannedBuffs{
+
+
+  & .scannedBuffs , & .scannedDebuffs{
     flex: 1 1 auto;
     width: 100%; 
   }
-  & .scannedDebuffs{
-    flex: 1 1 auto;
-    width: 100%; 
+  & .scannedBuffs::before , & .scannedDebuffs::before{
+    content: "";display:block ;
+    margin: 5px; 
+
+  }
+  & .scannedBuffs:empty , & .scannedDebuffs:empty{
+    display: none;opacity: 0;
+  }
+        & .scannedBuffs::before{
+          content: "Buffs :";color: rgb(181, 255, 107);
+        }
+        & .scannedDebuffs::before{
+          content: "Debuffs :";color: rgb(255, 119, 146);
+        }
+
+
+
+  &::-webkit-scrollbar{
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb{
+    appearance: none;
+    background: rgb(139,139,139);
+    background: var(--silver-gradient);
+    
+    display: block;
+    height: 10px;
+    border-radius: 15px;
+  }
+  &::-webkit-scrollbar-track{
+    appearance: none;
+    box-shadow: inset 0 0 5px white;
   }
 
   @keyframes scanInit {
@@ -41,6 +75,9 @@
 .defaultEntityScan.righty{ left: 100%;}
 
 .effect_description{
+  border: 3px solid var(--wood-orange);
+  background-image: none !important;
+  margin: 5px 0;
   & .icon{
     position: relative;top: 5px;
     display: inline;

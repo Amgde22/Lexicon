@@ -6,7 +6,7 @@
   background-color: rgb(162, 162, 231);
 }
 .playerEnergyContainer{
-  position: absolute;left: 3%;top: 70%;
+  position: absolute;left: 3%;top: 60% ;
   width: 120px;height: 120px;
   display:grid;place-items: center;
 
@@ -17,9 +17,20 @@
   font-size: 1.6em;
   text-shadow: 3px 3px 0 #4f2a0b , 2px 2px 0 #4f2a0b, -2px -2px 0 #4f2a0b, 2px -2px 0 #4f2a0b, -2px 2px 0 #4f2a0b, 2px 2px 0 #4f2a0b;
 
+  & p {width: max-content;}
 }
 
+.discardPile, .drawPile {
+  position: absolute; bottom: 0;left: 0;
+  width: 12%;
+  & img{
+    max-width: 100%;
+  }
+}
 
+.discardPile{
+  right: 0; left: unset;
+}
 
 
 

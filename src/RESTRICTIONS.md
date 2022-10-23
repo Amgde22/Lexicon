@@ -1,0 +1,1 @@
+Any enemy deathdelay prop CANNOT pass 2300 (ms)

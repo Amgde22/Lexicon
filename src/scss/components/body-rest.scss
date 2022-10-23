@@ -13,6 +13,7 @@
   transform-origin: top right;
   transition: all 250ms ,
              transform 500ms ease-in ;
+  overflow: hidden;
 }
 .endTurnBtn{
   position: absolute;
@@ -32,7 +33,7 @@
   
   transform-origin: right;
   transform: translateY(-50%);
-  z-index:0;
+  z-index:5;
 }
 
 .cardScanner{
@@ -40,6 +41,11 @@
   width: 60px;height: 60px;
   background-color: white;
 }
+
+
+
+
+
 
 
 @media (max-width:1000px){

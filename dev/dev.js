@@ -184,12 +184,7 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"scss/main.scss":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"./../graphics/cardIcons/energy-icon.png":[["energy-icon.5239062b.png","graphics/cardIcons/energy-icon.png"],"graphics/cardIcons/energy-icon.png"],"./../graphics/attackCards/slash.png":[["slash.22aba5a2.png","graphics/attackCards/slash.png"],"graphics/attackCards/slash.png"],"./../graphics/attackCards/bash.png":[["bash.def89abe.png","graphics/attackCards/bash.png"],"graphics/attackCards/bash.png"],"./../graphics/attackCards/poison_stab.png":[["poison_stab.838bd0cb.png","graphics/attackCards/poison_stab.png"],"graphics/attackCards/poison_stab.png"],"./../graphics/attackCards/draw_blood.jpeg":[["draw_blood.0cbaaf20.jpeg","graphics/attackCards/draw_blood.jpeg"],"graphics/attackCards/draw_blood.jpeg"],"./../graphics/skillCards/defend.png":[["defend.83986c8d.png","graphics/skillCards/defend.png"],"graphics/skillCards/defend.png"],"./../graphics/enemies/basicTiger.jpg":[["basicTiger.00373913.jpg","graphics/enemies/basicTiger.jpg"],"graphics/enemies/basicTiger.jpg"],"./../graphics/enemies/basicBat.gif":[["basicBat.7b99f2c9.gif","graphics/enemies/basicBat.gif"],"graphics/enemies/basicBat.gif"],"./../graphics/enemies/basicBruv.gif":[["basicBruv.61999fc7.gif","graphics/enemies/basicBruv.gif"],"graphics/enemies/basicBruv.gif"],"./../graphics/icons/vulnerable.png":[["vulnerable.435eebd4.png","graphics/icons/vulnerable.png"],"graphics/icons/vulnerable.png"],"./../graphics/icons/bleed.png":[["bleed.d3d5b7c9.png","graphics/icons/bleed.png"],"graphics/icons/bleed.png"],"./../graphics/icons/poison.png":[["poison.f208f720.png","graphics/icons/poison.png"],"graphics/icons/poison.png"],"./../graphics/icons/solid shield.png":[["solid shield.c24caed3.png","graphics/icons/solid shield.png"],"graphics/icons/solid shield.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -394,4 +389,4 @@ function hmrAcceptRun(bundle, id) {
   }
 }
 },{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
-//# sourceMappingURL=/main.77bb5cfd.js.map
+//# sourceMappingURL=/dev.js.map

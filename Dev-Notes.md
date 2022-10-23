@@ -14,9 +14,17 @@ I can jump but not much ok
 )
 
 Features
+  poison and bleed visuals
+
 player {
-  energy system
-  health
+  more content [cards , enemies , ideas]
+  card adds
+  in out-of combat states
+    shop
+    capm
+    battle
+    random-room
+
   money trinckets {pubsub}
 }
 

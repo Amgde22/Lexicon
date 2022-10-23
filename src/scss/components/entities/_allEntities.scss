@@ -1,5 +1,5 @@
 @use  "./enemies1.scss";
-
+@use "animations" ;
 .entity.dying{
   
   animation:dyingEntity 700ms ;

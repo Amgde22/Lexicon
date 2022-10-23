@@ -76,7 +76,7 @@
   height: 120px;
   display: grid;
   place-items: center;
-  background-image: url("/energy-icon.5239062b.png");
+  background-image: url("energy-icon.c3d3b8e5.png");
   background-size: contain;
   transform-origin: top left;
   color: white;
@@ -120,28 +120,28 @@
   background-color: red;
 }
 .card.Strike .cardIcon {
-  background-image: url("/slash.22aba5a2.png");
+  background-image: url("slash.e1e1e353.png");
 }
 
 .card.Bash {
   background-color: orange;
 }
 .card.Bash .cardIcon {
-  background-image: url("/bash.def89abe.png");
+  background-image: url("bash.6c91ef17.png");
 }
 
 .card.poisonstab {
   background-color: green;
 }
 .card.poisonstab .cardIcon {
-  background-image: url("/poison_stab.838bd0cb.png");
+  background-image: url("poison_stab.e7be4460.png");
 }
 
 .card.drawblood {
   background-color: crimson;
 }
 .card.drawblood .cardIcon {
-  background-image: url("/draw_blood.0cbaaf20.jpeg");
+  background-image: url("draw_blood.7a9e3611.jpeg");
 }
 
 .card {
@@ -155,7 +155,7 @@
   background-color: rgb(52, 183, 226);
 }
 .card.Defend .cardIcon {
-  background-image: url("/defend.83986c8d.png");
+  background-image: url("defend.c0869b44.png");
 }
 
 .card * {
@@ -181,7 +181,7 @@
   left: -10px;
   width: 30%;
   height: 39px;
-  background: url("/energy-icon.5239062b.png");
+  background: url("energy-icon.c3d3b8e5.png");
   background-repeat: no-repeat;
   background-size: 120%;
   background-position: 30%;
@@ -207,7 +207,6 @@
   border: 3px solid gold;
   background-position: 50%;
   background-size: 104%;
-  background-repeat: no-repeat;
 }
 .card .descriptionBox {
   display: grid;
@@ -353,15 +352,15 @@
 
 .tiger {
   width: 95%;
-  background-image: url("/basicTiger.00373913.jpg");
+  background-image: url("basicTiger.1ef009d6.jpg");
 }
 
 .bat {
-  background-image: url("/basicBat.7b99f2c9.gif");
+  background-image: url("basicBat.9f8d4071.gif");
 }
 
 .bruv {
-  background-image: url("/basicBruv.61999fc7.gif");
+  background-image: url("basicBruv.4ff64643.gif");
 }
 
 .enemy.attacking {
@@ -413,15 +412,15 @@
   }
 }
 .vulnerable {
-  background-image: url("/vulnerable.435eebd4.png");
+  background-image: url("vulnerable.2e4f81e4.png");
 }
 
 .bleed {
-  background-image: url("/bleed.d3d5b7c9.png");
+  background-image: url("bleed.add02585.png");
 }
 
 .poison {
-  background-image: url("/poison.f208f720.png");
+  background-image: url("poison.45bdf8f5.png");
 }
 
 .effectIcon {
@@ -636,7 +635,7 @@
   margin: auto;
   height: 50px;
   width: 50px;
-  background-image: url("/solid shield.c24caed3.png");
+  background-image: url("solid shield.a474a56c.png");
   background-size: contain;
   font-size: 20px;
   color: white;
@@ -1008,36 +1007,10 @@ dialog.closing {
   background-color: black;
 }
 
-.rotation-dialog {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  background-color: black;
-  display: grid;
-  place-items: center;
-  font-size: 1.6em;
-  transform: scale(0);
-}
-.rotation-dialog::after {
-  content: "";
-  display: block;
-  position: absolute;
-  inset: 0;
-  transform: scale(3);
-  background-color: rgba(0, 0, 0, 0.521);
-  z-index: -1;
-}
-
 @media (max-width: 1000px) {
   dialog {
     --scale:.9;
     font-size: 80%;
-  }
-}
-@media (max-width: 500px) {
-  .rotation-dialog {
-    transform: scale(1);
   }
 }
 :root {
@@ -1071,7 +1044,6 @@ dialog.closing {
 
 body {
   font-family: "Roboto Slab", serif;
-  overflow: hidden;
 }
 
 .block {
@@ -1085,4 +1057,4 @@ body {
   display: none;
 }
 
-/*# sourceMappingURL=/main.77bb5cfd.css.map */
+/*# sourceMappingURL=main.aaeb0372.css.map */
