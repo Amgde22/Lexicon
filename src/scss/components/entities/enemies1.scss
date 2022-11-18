@@ -10,6 +10,8 @@
   // border: 3px solid red;
   transform-origin: bottom left;
     
+  transition:transform 700ms ease-out;
+
   & img {
     display: initial;
     position: absolute;

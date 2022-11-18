@@ -125,7 +125,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.discardpileDialog = exports.discardpile = exports.dark_strike = exports.battle_won_div = exports.basic_slash = exports.attack_icon = exports.anim = void 0;
 exports.domInit = domInit;
-exports.stun_icon = exports.shield_icon = exports.restOfPage = exports.playerModel = exports.playerMaxEnergyElement = exports.playerEnergyElement = exports.handElement = exports.everuCloseDialogBtn = exports.entityScan = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemyGrid = exports.enemyBoxes = exports.endTurnBtn = exports.drawpileDialog = exports.drawpile = void 0;
+exports.stun_icon = exports.shield_icon = exports.restOfPage = exports.playerModel = exports.playerMaxEnergyElement = exports.playerEnergyElement = exports.handElement = exports.everyCloseDialogBtn = exports.entityScan = exports.enemy_box8 = exports.enemy_box7 = exports.enemy_box6 = exports.enemy_box5 = exports.enemy_box4 = exports.enemy_box3 = exports.enemy_box2 = exports.enemyGrid = exports.enemyBoxes = exports.endTurnBtn = exports.drawpileDialog = exports.drawpile = void 0;
 var restOfPage = document.querySelector(".rest-of-page");
 exports.restOfPage = restOfPage;
 var enemyGrid = document.querySelector(".enemy-grid");
@@ -156,9 +156,9 @@ var discardpileDialog = document.querySelector(".discardPile-dialog");
 exports.discardpileDialog = discardpileDialog;
 discardpileDialog.discardCardGrid = discardpileDialog.querySelector(".discard-card-grid");
 discardpileDialog.graveCardGrid = discardpileDialog.querySelector(".grave-card-grid");
-var everuCloseDialogBtn = document.querySelectorAll(".close-dialog-btn"); // all enemy boxes (check side it goes reall long this way => )
+var everyCloseDialogBtn = document.querySelectorAll(".close-dialog-btn"); // all enemy boxes (check side it goes reall long this way => )
 
-exports.everuCloseDialogBtn = everuCloseDialogBtn;
+exports.everyCloseDialogBtn = everyCloseDialogBtn;
 var enemy_box1 = document.querySelector(".enemy-grid").children[0];
 var enemy_box2 = document.querySelector(".enemy-grid").children[1];
 exports.enemy_box2 = enemy_box2;
@@ -499,6 +499,7 @@ function generateEnemyElement(enemy) {
 }
 
 function setUpModal(enemy) {
+  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "enemy";
   var enemyModal = document.createElement("div");
   enemyModal.entity = enemy;
   enemy.modal = enemyModal;
@@ -508,14 +509,16 @@ function setUpModal(enemy) {
   };
 
   enemyModal.classList.add("entity");
-  enemyModal.classList.add("enemy");
+  enemyModal.classList.add(type);
   enemyModal.classList.add(enemy.name);
+  enemyModal.classList.add("alive");
 }
 
 function setUpSelector(enemy) {
+  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "enemySelector";
   var enemySelector = document.createElement("div");
   enemySelector.classList.add("selector");
-  enemySelector.classList.add("enemySelector");
+  enemySelector.classList.add(type);
   enemy.modal.append(enemySelector);
   enemy.selector = enemySelector;
 }
@@ -719,6 +722,8 @@ exports.default = void 0;
 
 var _functions = require("./functions.js");
 
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 var pubsub = function () {
   var turn = 0;
   var battle = null;
@@ -726,20 +731,20 @@ var pubsub = function () {
     "entityDied": []
   };
 
-  function on(event, obj) {
+  function on(event, fnc) {
     events[event] = events[event] || [];
-    events[event].push(obj);
+    events[event].push(fnc);
   }
 
-  function off(event, obj) {
+  function off(event, fnc) {
     if (!(event in events)) {
       alert("trying to off event that doesn't exist");
-      console.log(event, obj);
+      console.log(event, fnc);
       return;
     }
 
     for (var i = 0; i < events[event].length; i++) {
-      if (events[event][i] === obj) {
+      if (events[event][i] === fnc) {
         events[event].splice(i, 1);
         break;
       }
@@ -749,31 +754,21 @@ var pubsub = function () {
   function emit(event, data) {
     events[event] = events[event] || [];
     Array.from(events[event]).forEach(function (evenObject) {
-      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(data);
+      if (_typeof(evenObject) === "object") {
+        evenObject.effect(data);
+      } else if (typeof evenObject === "function") {
+        evenObject(data);
+      }
     });
-  }
-
-  function battleStarted(type_of_battle) {
-    battle = type_of_battle;
-    (0, _functions.defaultBattleStarted)(battle);
-    Array.from(events["battleStarted"]).forEach(function (evenObject) {
-      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(battle);
-    });
-  }
-
-  function battleEnded() {
-    var won = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-    // if (!battle) return // protect against multple enemies triggering this at the same time
-    Array.from(events["battleEnded"]).forEach(function (evenObject) {
-      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(battle);
-    });
-    (0, _functions.defaultBattleEnded)(battle);
-    battle = null;
   }
 
   function turnStarted() {
     Array.from(events["turnStarted"] || []).forEach(function (evenObject) {
-      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
+      if (_typeof(evenObject) === "object") {
+        evenObject.effect(turn);
+      } else if (typeof evenObject === "function") {
+        evenObject(turn);
+      }
     });
     (0, _functions.defaultTurnStarted)();
     turn++;
@@ -781,14 +776,54 @@ var pubsub = function () {
   }
 
   function turnEnded() {
-    Array.from(events["turnEnded"]).forEach(function (evenObject) {
-      evenObject === null || evenObject === void 0 ? void 0 : evenObject.effect(turn);
+    Array.from(events["turnEnded"] || []).forEach(function (evenObject) {
+      if (_typeof(evenObject) === "object") {
+        evenObject.effect(turn);
+      } else if (typeof evenObject === "function") {
+        evenObject(turn);
+      }
     });
     (0, _functions.defaultTurnEnded)();
   }
 
   function resetTurns() {
     turn = 0;
+  }
+
+  function battleStarted() {
+    var type_of_battle = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "enemy";
+    battle = type_of_battle;
+    this.resetTurns();
+    this.turnStarted();
+    (0, _functions.defaultBattleStarted)(battle);
+    Array.from(events["battleStarted"] || []).forEach(function (evenObject) {
+      if (_typeof(evenObject) === "object") {
+        evenObject.effect(battle);
+      } else if (typeof evenObject === "function") {
+        evenObject(battle);
+      }
+    });
+  }
+
+  function battleEnded() {
+    var won = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+    if (!battle) return; // protect against multple enemies triggering this at the same time
+
+    Array.from(events["battleEnded"] || []).forEach(function (evenObject) {
+      if (_typeof(evenObject) === "object") {
+        evenObject.effect(battle);
+      } else if (typeof evenObject === "function") {
+        evenObject(battle);
+      }
+    });
+    setTimeout(function () {
+      (0, _functions.defaultBattleEnded)(battle);
+    }, 1000);
+    battle = null;
+  }
+
+  function battleType() {
+    return battle;
   }
 
   return {
@@ -800,7 +835,8 @@ var pubsub = function () {
     battleEnded: battleEnded,
     turnStarted: turnStarted,
     turnEnded: turnEnded,
-    resetTurns: resetTurns
+    resetTurns: resetTurns,
+    battleType: battleType
   };
 }();
 
@@ -837,6 +873,7 @@ exports.iterateDealDamageEffects = iterateDealDamageEffects;
 exports.iterateEnergyEffects = iterateEnergyEffects;
 exports.iterateGainBlockEffects = iterateGainBlockEffects;
 exports.iterateRecieveDamageEffects = iterateRecieveDamageEffects;
+exports.kill = kill;
 exports.renderEnemyLevel = renderEnemyLevel;
 exports.testEnemies = testEnemies;
 
@@ -870,11 +907,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 var p = Promise.resolve();
 p.then(function () {
-  _pubsub.default.on("entityDied", function () {
-    setTimeout(function () {
-      checkBattleWon();
-    }, 3000);
-  });
+  _pubsub.default.on("entityDied", checkBattleWon);
 
   _pubsub.default.on("battleEnded", function () {
     console.log("everyoone dawn");
@@ -953,13 +986,18 @@ function iterateEnergyEffects(energyObj) {
 
 function checkEntityDeath(entity) {
   if (entity.health > 0) return;
+  kill(entity);
+  return true;
+}
+
+function kill(entity) {
   entity.die(entity);
 
   _pubsub.default.emit("entityDied", entity);
 }
 
 function checkBattleWon() {
-  var enemy = _dom.enemyGrid.querySelector(".enemy");
+  var enemy = _dom.enemyGrid.querySelector(".enemy.alive");
 
   if (enemy) return; // no enemy left
 
@@ -1150,15 +1188,11 @@ exports.selectedCard = selectedCard;
   dom.restOfPage.addEventListener("pointerdown", function (e) {
     deSelectHandler(e);
   });
-  dom.everuCloseDialogBtn.forEach(function (btn) {
+  dom.everyCloseDialogBtn.forEach(function (btn) {
     btn.addEventListener("click", closeModal);
   });
   dom.drawpile.addEventListener("click", displayDrawDialog);
-  dom.discardpile.addEventListener("click", displayDiscardDialog); // windown stuff
-
-  window.addEventListener("resize", function () {
-    scrollBy(0, -100);
-  });
+  dom.discardpile.addEventListener("click", displayDiscardDialog);
 })(); // small renders
 
 
@@ -3020,6 +3054,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 })();
 
 function emitTurnEnded() {
+  if (_pubsub.default.battleType() == null) return;
+
   _pubsub.default.turnEnded();
 } // /init
 // Dom Functions
@@ -3128,21 +3164,26 @@ function selectionHandler() {
 }
 
 function killEntityModal(entity) {
-  if (entity.modal == undefined) {
-    return;
-  }
+  var modal = entity.modal;
 
-  var entity_selector = entity.modal.querySelector(".selector");
+  if (modal == undefined) {
+    return;
+  } // remove selector (hectttoooor)
+
+
+  var entity_selector = modal.querySelector(".selector");
   entity_selector.remove();
-  entity.modal.classList.add("dying");
+  modal.classList.remove("alive");
+  modal.classList.add("dead");
   setTimeout(function () {
-    entity.modal.remove();
+    modal.remove();
   }, entity.deathDelay);
 } // moveBoxes
 
 
 function moveEnemyBox(box) {
-  var _this = this;
+  var _this = this,
+      _boxEnemyEntity$delay;
 
   var boxEnemyModal = this.querySelector(".enemy"); // console.log(domfunctions.findEnemyBoxPosition(this) , this , boxEnemyModal);
 
@@ -3157,7 +3198,7 @@ function moveEnemyBox(box) {
     domfunctions.moveNextEnemyBoxOf(_this);
   },
   /*wait*/
-  boxEnemyEntity.delay);
+  (_boxEnemyEntity$delay = boxEnemyEntity.delay) !== null && _boxEnemyEntity$delay !== void 0 ? _boxEnemyEntity$delay : 500);
 } // /moveBoxes
 // animations
 
@@ -3230,11 +3271,13 @@ function defaultTurnEnded(params) {
 }
 
 function disableEndTurnBtn() {
-  dom.endTurnBtn.removeEventListener("pointerdown", emitTurnEnded);
+  var button = dom.endTurnBtn;
+  button.removeEventListener("pointerdown", emitTurnEnded);
 }
 
 function enableEndTurnBtn() {
-  dom.endTurnBtn.addEventListener("pointerdown", emitTurnEnded);
+  var button = dom.endTurnBtn;
+  button.addEventListener("pointerdown", emitTurnEnded);
 }
 
 function clearBlockOfType(entityType) {
@@ -3484,7 +3527,11 @@ function random() {
 
 
 var p = Promise.resolve();
-p.then(function () {});
+p.then(function () {
+  _player.player.modal.addEventListener("click", function () {
+    _pubsub.default.battleStarted();
+  });
+});
 },{"./player.js":"jscripts/components/player.js","./dom.js":"jscripts/components/dom.js","./functions/battleFunctions.js":"jscripts/components/functions/battleFunctions.js","./functions/cardFunctions.js":"jscripts/components/functions/cardFunctions.js","./functions/domFunctions.js":"jscripts/components/functions/domFunctions.js","./functions/playerFuctions.js":"jscripts/components/functions/playerFuctions.js","./functions/damage_formulas.js":"jscripts/components/functions/damage_formulas.js","./functions/outsideFunctions.js":"jscripts/components/functions/outsideFunctions.js","./buffsManager.js":"jscripts/components/buffsManager.js","./pubsub.js":"jscripts/components/pubsub.js","./enemies/stage1/stage.js":"jscripts/components/enemies/stage1/stage.js","./enemies/stage2/stage.js":"jscripts/components/enemies/stage2/stage.js","./enemies/stage3/stage.js":"jscripts/components/enemies/stage3/stage.js"}],"jscripts/components/cards/attackCardClasses.js":[function(require,module,exports) {
 "use strict";
 
@@ -4057,7 +4104,7 @@ function battleInit() {
   f.cardfunctions.resetDrawPile();
   f.renderHealth(_player.player); // after everything is initialized start turn
 
-  _pubsub.default.turnStarted();
+  _pubsub.default.battleStarted();
 }
 },{"../components/player.js":"jscripts/components/player.js","../components/pubsub.js":"jscripts/components/pubsub.js","../components/functions.js":"jscripts/components/functions.js","../components/dom.js":"jscripts/components/dom.js"}],"jscripts/main.js":[function(require,module,exports) {
 "use strict";
@@ -4111,7 +4158,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56575" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49517" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

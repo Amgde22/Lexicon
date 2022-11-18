@@ -1,8 +1,46 @@
 @use  "./enemies1.scss";
 @use "animations" ;
-.entity.dying{
+
+.enemy-box .entity{
+  position: absolute;
+  inset: 0;margin: auto ;
+  width: 100%;
+  isolation: isolate;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  // border: 3px solid red;
+  transform-origin: bottom left;
+
+  transition:transform 700ms ease-out;
+  transform: translateY(0); opacity: 1;
+
+  & img {
+    display: initial;
+    position: absolute;
+    width: 100%; height: auto;
+    inset: 0;margin: auto;
+    object-fit: contain;
   
-  animation:dyingEntity 700ms ;
+    }
+  
+    & .oneByTwo{
+      height: 200%; transform: translateY(-25%);
+    }
+  
+    & .twoByTwo{ 
+      transform: scale(2);
+    }
+
+
+  }
+
+.entity.dead{
+  pointer-events: none;
+  transition:all 700ms ease-out;
+
+  transform: translateY(50%); opacity: 0;
+  // animation:dyingEntity 700ms ;
 }
 @keyframes dyingEntity{
   to{transform: translateY(50%); opacity: 0;}

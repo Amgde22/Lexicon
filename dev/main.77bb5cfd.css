@@ -333,6 +333,7 @@
   background-repeat: no-repeat;
   background-position: center;
   transform-origin: bottom left;
+  transition: transform 700ms ease-out;
 }
 .enemy-box .entity img {
   display: initial;
@@ -402,8 +403,42 @@
     transform: perspective(1000px) rotateY(360deg);
   }
 }
-.entity.dying {
-  animation: dyingEntity 700ms;
+.enemy-box .entity {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 100%;
+  isolation: isolate;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform-origin: bottom left;
+  transition: transform 700ms ease-out;
+  transform: translateY(0);
+  opacity: 1;
+}
+.enemy-box .entity img {
+  display: initial;
+  position: absolute;
+  width: 100%;
+  height: auto;
+  inset: 0;
+  margin: auto;
+  object-fit: contain;
+}
+.enemy-box .entity .oneByTwo {
+  height: 200%;
+  transform: translateY(-25%);
+}
+.enemy-box .entity .twoByTwo {
+  transform: scale(2);
+}
+
+.entity.dead {
+  pointer-events: none;
+  transition: all 700ms ease-out;
+  transform: translateY(50%);
+  opacity: 0;
 }
 
 @keyframes dyingEntity {

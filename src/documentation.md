@@ -1,4 +1,4 @@
-        [LEVELS]
+#       [LEVELS]
 levels are arrays of [Enemy Groups]
 at start of each run pick a level order at random that ends with a boss
   this all is an [ACT]
@@ -44,4 +44,13 @@ ct            cd
 [card,relic,money,potion]
 
 
+#        [Entities]
+ ## [death]
+EVERY ENTITY spawns with class "alive" [last-class]
+when they die alive is replaced witg "dead"
+dead class has death animation in scss
 
+1. after each damage we check if the all enemies are dead || no living enemies exist 
+2. if that check succeeds end battle
+
+* we give an entityObj that dies the value {dead:true}
